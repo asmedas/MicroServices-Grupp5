@@ -26,7 +26,7 @@ spring:
   keycloak.admin:
     realm: keycloakpadel
     client-id: spring-app-admin
-    client-secret: cAK7lBe5JRYLejV4336GCyvbYosqIN8c # ‰ndra denna n‰r jag har skapat en egen
+    client-secret: cAK7lBe5JRYLejV4336GCyvbYosqIN8c # √§ndra denna n√§r jag har fixat s√• det skapas en egen
 
 management:
   endpoints:
