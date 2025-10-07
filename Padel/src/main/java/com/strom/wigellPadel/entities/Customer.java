@@ -4,7 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "customers")
+@Table(name = "customers", uniqueConstraints = {
+            @UniqueConstraint(name = "uk_customer_username", columnNames = {"username"}),
+            @UniqueConstraint(name = "uk_customer_kc_user_id", columnNames = {"keycloak_user_id"})
+        },
+        indexes = {
+            @Index(name = "idx_customer_kc_user_id", columnList = "keycloak_user_id")
+        }
+)
 public class Customer {
 
     @Id
@@ -14,9 +21,6 @@ public class Customer {
 
     @Column(name = "username", nullable = false, length = 50, unique = true)
     private String username;
-
-    @Column(name = "password", nullable = false, length = 50)
-    private String password;
 
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -29,15 +33,31 @@ public class Customer {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
+    @Column(name = "keycloak_user_id", unique = true, length = 36)
+    private String keycloakUserId;
+
     protected Customer() {
     }
 
-    public Customer(String username, String password, String firstName, String lastName, Address address) {
+    public Customer(String username, String firstName, String lastName, Address address) {
         this.username = username;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+    }
+
+    public Customer(String username, String firstName, String lastName) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Customer(String username, String firstName, String lastName, Address address, String keycloakUserId) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.keycloakUserId = keycloakUserId;
     }
 
     public Long getId() {
@@ -55,15 +75,6 @@ public class Customer {
 
     public Customer setUsername(String username) {
         this.username = username;
-        return this;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Customer setPassword(String password) {
-        this.password = password;
         return this;
     }
 
@@ -91,6 +102,15 @@ public class Customer {
 
     public Customer setAddress(Address address) {
         this.address = address;
+        return this;
+    }
+
+    public String getKeycloakUserId() {
+        return keycloakUserId;
+    }
+
+    public Customer setKeycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
         return this;
     }
 }
