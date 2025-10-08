@@ -29,7 +29,8 @@ public class BookingService {
         existingBooking.setDate(updatedBooking.getDate());
         existingBooking.setGuestCount(updatedBooking.getGuestCount());
         existingBooking.setRoom(updatedBooking.getRoom());
-        existingBooking.setMenuItems(updatedBooking.getMenuItems());
+        existingBooking.setBookingDetails(updatedBooking.getBookingDetails());
+        existingBooking.setCustomer(updatedBooking.getCustomer());
 
         return bookingRepository.save(existingBooking);
     }

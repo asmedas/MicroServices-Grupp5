@@ -2,7 +2,8 @@ package com.zetterlund.wigell_sushi_api.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "bookings")
@@ -26,11 +27,8 @@ public class Booking {
     @Column(nullable = false)
     private int guestCount;
 
-    @ElementCollection
-    @CollectionTable(name = "booking_menu_items", joinColumns = @JoinColumn(name = "booking_id"))
-    @MapKeyColumn(name = "dish_name")
-    @Column(name = "count")
-    private Map<String, Integer> menuItems;
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookingDetails> bookingDetails = new ArrayList<>();
 
     // Getters och setters
     public Long getId() {
@@ -68,10 +66,10 @@ public class Booking {
         this.guestCount = guestCount;
     }
 
-    public Map<String, Integer> getMenuItems() {
-        return menuItems;
+    public List<BookingDetails> getBookingDetails() {
+        return bookingDetails;
     }
-    public void setMenuItems(Map<String, Integer> menuItems) {
-        this.menuItems = menuItems;
+    public void setBookingDetails(List<BookingDetails> bookingDetails) {
+        this.bookingDetails = bookingDetails;
     }
 }

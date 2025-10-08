@@ -16,9 +16,6 @@ public class Customer {
     private String username;
 
     @Column(nullable = false)
-    private String password; // Krypterat med BCrypt
-
-    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,13 +34,6 @@ public class Customer {
     }
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
