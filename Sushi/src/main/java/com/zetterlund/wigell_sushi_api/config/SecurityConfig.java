@@ -24,8 +24,11 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+                .oauth2ResourceServer(oauth2 -> 
+                        oauth2.jwt(jwt -> 
+                                jwt.jwkSetUri("http://localhost:8080/realms/wigell-sushi-realm/protocol/openid-connect/certs")
+                        )
+                );
 
         return http.build();
     }
