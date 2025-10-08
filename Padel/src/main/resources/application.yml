@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/wigell_padel_db?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 12qw34er
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8584/realms/keycloakpadel
+
+  keycloak:
+    server-url: http://localhost:8584
+    realm: keycloakpadel
+
+  keycloak.admin:
+    realm: keycloakpadel
+    client-id: spring-app-admin
+    client-secret: cAK7lBe5JRYLejV4336GCyvbYosqIN8c # ändra denna när jag har fixat så det skapas en egen
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+
+
+
