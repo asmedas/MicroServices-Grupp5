@@ -1,0 +1,36 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: padel-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wigell_padel_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    ports:
+      - "6606:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.2
+    container_name: padel-keycloak
+    restart: unless-stopped
+    command: start-dev
+    environment:
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://mysql:3306/wigell_padel_db
+      KC_DB_USERNAME: user
+      KC_DB_PASSWORD: user
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8584:8080"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
+
