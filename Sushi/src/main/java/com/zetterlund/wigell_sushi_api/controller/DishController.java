@@ -23,7 +23,7 @@ public class DishController {
     }
 
     @PostMapping
-    public ResponseEntity<Dish> addDish(@RequestBody Dish dish) {
+    public ResponseEntity<Dish> createDish(@RequestBody Dish dish) {
         Dish createdDish = dishService.addDish(dish);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDish);
     }

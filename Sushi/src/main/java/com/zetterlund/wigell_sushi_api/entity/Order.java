@@ -15,22 +15,18 @@ public class Order {
     @Column(nullable = false)
     private double totalPriceInSek;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetails> orderDetails = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-    @ManyToMany
-    @JoinTable(
-            name = "order_dishes",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "dish_id")
-    )
-    private List<Dish> dishes = new ArrayList<>();
 
     // Getters och setters
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -38,6 +34,7 @@ public class Order {
     public double getTotalPriceInSek() {
         return totalPriceInSek;
     }
+
     public void setTotalPriceInSek(double totalPriceInSek) {
         this.totalPriceInSek = totalPriceInSek;
     }
@@ -45,14 +42,16 @@ public class Order {
     public Customer getCustomer() {
         return customer;
     }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public List<Dish> getDishes() {
-        return dishes;
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
     }
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }
