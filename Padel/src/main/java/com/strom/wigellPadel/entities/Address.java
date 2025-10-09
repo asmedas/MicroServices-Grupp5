@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "address")
@@ -25,12 +27,23 @@ public class Address {
     private String city;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "address", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
-    private List<Customer> customers = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "customer_address",
+            joinColumns = @JoinColumn(name = "address_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private Set<Customer> customers = new HashSet<>();
 
     protected Address() {}
 
-    public Address(String street, String postalCode, String city, List<Customer> customers) {
+    public Address(String street, String postalCode, String city) {
+        this.street = street;
+        this.postalCode = postalCode;
+        this.city = city;
+    }
+
+    public Address(String street, String postalCode, String city, Set<Customer> customers) {
         this.street = street;
         this.postalCode = postalCode;
         this.city = city;
@@ -73,11 +86,11 @@ public class Address {
         return this;
     }
 
-    public List<Customer> getCustomers() {
+    public Set<Customer> getCustomers() {
         return customers;
     }
 
-    public Address setCustomers(List<Customer> customers) {
+    public Address setCustomers(Set<Customer> customers) {
         this.customers = customers;
         return this;
     }

@@ -1,9 +1,14 @@
 package com.strom.wigellPadel.mapper;
 
+import com.strom.wigellPadel.dto.CustomerCreateDto;
 import com.strom.wigellPadel.dto.CustomerDto;
 import com.strom.wigellPadel.dto.CustomerUpdateDto;
 import com.strom.wigellPadel.dto.CustomerWithAccountCreateDto;
+import com.strom.wigellPadel.entities.Address;
 import com.strom.wigellPadel.entities.Customer;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CustomerMapper {
 
@@ -24,28 +29,32 @@ public class CustomerMapper {
         );
     }
 
-    public static Customer fromCreate(CustomerDto dto) {
+    public static Customer fromCreate(CustomerCreateDto dto) {
         if (dto == null) {
             return null;
         }
-        Customer newCustomer = new Customer(dto.firstName(), dto.lastName(), dto.username(), dto.address());
+        Address address = new Address(dto.street(), dto.postalCode(), dto.city());
+        Set<Address> addresses = new HashSet<>();
+        addresses.add(address);
+        Customer newCustomer = new Customer(dto.firstName(), dto.lastName(), addresses, dto.email(), dto.username(), dto.password());
+        address.setCustomers(new HashSet<>());
+        address.getCustomers().add(newCustomer);
         return newCustomer;
     }
 
-    public static Customer fromCreateWithAccount(CustomerWithAccountCreateDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Customer c = new Customer(dto.firstName(), dto.lastName(), dto.username());
-        return c;
-    }
-
     public static void updateEntity(Customer customer, CustomerUpdateDto dto) {
-        if (dto == null) {
+        if (dto == null || customer == null) {
             return;
         }
         customer.setFirstName(dto.firstName());
         customer.setLastName(dto.lastName());
-        customer.setAddress(dto.address());
+        Address address = new Address(dto.street(), dto.postalCode(), dto.city());
+        Set<Address> addresses = customer.getAddress() != null ? customer.getAddress() : new HashSet<>();
+        addresses.add(address);
+        customer.setAddress(addresses);
+        if (address.getCustomers() == null) {
+            address.setCustomers(new HashSet<>());
+        }
+        address.getCustomers().add(customer);
     }
 }

@@ -3,6 +3,9 @@ package com.strom.wigellPadel.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "customers", uniqueConstraints = {
             @UniqueConstraint(name = "uk_customer_username", columnNames = {"username"}),
@@ -19,9 +22,6 @@ public class Customer {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 50, unique = true)
-    private String username;
-
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
@@ -29,9 +29,14 @@ public class Customer {
     private String lastName;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+    @ManyToMany(mappedBy = "customers", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Address> address = new HashSet<>();
+
+    @Column(name = "email", nullable = false, length = 50)
+    private String email;
+
+    @Column(name = "username", nullable = false, length = 50, unique = true)
+    private String username;
 
     @Column(name = "keycloak_user_id", unique = true, length = 36)
     private String keycloakUserId;
@@ -39,24 +44,20 @@ public class Customer {
     protected Customer() {
     }
 
-    public Customer(String username, String firstName, String lastName, Address address) {
-        this.username = username;
+    public Customer(String firstName, String lastName, Set<Address> address, String email, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        this.email = email;
+        this.username = username;
     }
 
-    public Customer(String username, String firstName, String lastName) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Customer(String username, String firstName, String lastName, Address address, String keycloakUserId) {
-        this.username = username;
+    public Customer(String firstName, String lastName, Set<Address> address, String email, String username, String keycloakUserId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        this.email = email;
+        this.username = username;
         this.keycloakUserId = keycloakUserId;
     }
 
@@ -66,15 +67,6 @@ public class Customer {
 
     public Customer setId(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public Customer setUsername(String username) {
-        this.username = username;
         return this;
     }
 
@@ -96,12 +88,30 @@ public class Customer {
         return this;
     }
 
-    public Address getAddress() {
+    public Set<Address> getAddress() {
         return address;
     }
 
-    public Customer setAddress(Address address) {
+    public Customer setAddress(Set<Address> address) {
         this.address = address;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Customer setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Customer setUsername(String username) {
+        this.username = username;
         return this;
     }
 
