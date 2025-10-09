@@ -1,10 +1,11 @@
 package com.sebbe.cinema.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "address")
@@ -14,13 +15,17 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String street;
+
+    @Column(nullable = false)
     private String city;
+
+    @Column(nullable = false)
     private String postalCode;
 
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<Customer> customer;
+    @ManyToMany(mappedBy = "addresses")
+    Set<Customer> customers = new HashSet<>();
 
     protected Address() {}
 
@@ -58,12 +63,12 @@ public class Address {
         this.postalCode = postalCode;
     }
 
-    public List<Customer> getCustomer() {
-        return customer;
+    public Set<Customer> getCustomers() {
+        return customers;
     }
 
-    public void setCustomer(List<Customer> customer) {
-        this.customer = customer;
+    public void setCustomers(Set<Customer> customer) {
+        this.customers = customer;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class Address {
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
                 ", postalCode='" + postalCode + '\'' +
-                ", customers=" + customer +
+                ", customers=" + customers +
                 '}';
     }
 }

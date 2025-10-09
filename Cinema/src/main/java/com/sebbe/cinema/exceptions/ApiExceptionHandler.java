@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,30 @@ public class ApiExceptionHandler {
         errors.put("errors", fieldErrors);
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(NoMatchException.class)
+    public ResponseEntity<?> handleNoMatch(NoMatchException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.NOT_FOUND,
+                        "error", "No match",
+                        "message", ex.getMessage()
+                )
+        );
+    }
+
+    @ExceptionHandler(UnexpectedError.class)
+    public ResponseEntity<?> handleUnexpectedError(UnexpectedError ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.INTERNAL_SERVER_ERROR,
+                        "error", "Unexpected error",
+                        "message", ex.getMessage()
+                )
+        );
     }
 
 }
