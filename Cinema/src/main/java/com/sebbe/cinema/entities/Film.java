@@ -1,6 +1,11 @@
 package com.sebbe.cinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
+
+import java.util.List;
 
 @Entity
 @Table(name = "film")
@@ -10,9 +15,19 @@ public class Film {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int ageLimit;
+    @Positive
+    @Max(18)
+    private Integer ageLimit;
+
+    @Column(nullable = false, length = 250)
     private String title;
+
+    @Column(nullable = false, length = 100)
     private String genre;
+
+    @OneToMany(mappedBy = "film", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Screening> screenings;
 
 
     protected Film() {}
@@ -27,11 +42,11 @@ public class Film {
         return id;
     }
 
-    public int getAgeLimit() {
+    public Integer getAgeLimit() {
         return ageLimit;
     }
 
-    public void setAgeLimit(int ageLimit) {
+    public void setAgeLimit(Integer ageLimit) {
         this.ageLimit = ageLimit;
     }
 
@@ -49,6 +64,14 @@ public class Film {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public List<Screening> getScreenings() {
+        return screenings;
+    }
+
+    public void setScreenings(List<Screening> screenings) {
+        this.screenings = screenings;
     }
 
     @Override
