@@ -39,16 +39,15 @@ public class CinemaApplication {
             Screening screening = new Screening(BigDecimal.valueOf(5000), LocalDate.of(2025,10,8), List.of(Type.FILM), film, cinemaHall);
             screeningRepository.save(screening);
 
-            Customer customer1 = new Customer("asmedas", "sebbe", 20, Set.of(address1));
+            Customer customer1 = new Customer("cb5fbcfc-4be0-42b2-bc63-6149bfde6106","sebbe", 20, Set.of(address1));
             customerRepository.save(customer1);
 
-            Customer customer2 = new Customer("sademsa", "sebbe", 20, Set.of(address1));
 
             Ticket ticket = new Ticket(screening, BigDecimal.valueOf(75.09), BigDecimal.valueOf(25));
-            ticket.setCustomer(customer2);
-            customer2.setTickets(List.of(ticket));
+            ticket.setCustomer(customer1);
+            customer1.setTickets(List.of(ticket));
 
-            customerRepository.save(customer2);
+            customerRepository.save(customer1);
         };
     }
 

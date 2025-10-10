@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/customers")
-@PreAuthorize( "hasRole('ROLE_CUSTOMER')")
 public class CustomerController {
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public String listCustomers() {
         return "GET /api/v1/customers";
