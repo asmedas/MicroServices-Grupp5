@@ -6,7 +6,7 @@ spring:
     name: cinema
 
   datasource:
-    url: jdbc:mysql://localhost:3306/cinema?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:6606/cinema?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
@@ -16,6 +16,12 @@ spring:
       ddl-auto: create-drop
     show-sql: true
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:8590/realms/cinema_keycloak"
+
 logging:
   file:
     name: logs/cinema.log
@@ -24,5 +30,16 @@ logging:
       max-file-size: 10MB
       max-history: 10
   level:
-    com.sebbe.cinema: DEBUG
+    root: INFO
+    com.sebbe.cinema.services: DEBUG
+    com.sebbe.cinema.controllers: ERROR
     org.springframework: INFO
+
+keycloak:
+  server-url: http://localhost:8090
+  realm: cinema_keycloak
+
+keycloak.admin:
+  realm: cinema_keycloak
+  client-id: spring-app-admin
+  client-secret: 2NOYyjIowI9aMbcI9oNbVGWvbtGTEX0o

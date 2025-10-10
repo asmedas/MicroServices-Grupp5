@@ -19,13 +19,10 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(nullable = false, unique = true)
-//    private String keycloakId;
-
     @Column(nullable = false, unique = true)
-    private String username;
+    private String keycloakId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Positive
@@ -53,16 +50,16 @@ public class Customer {
 
     protected Customer() {}
 
-    public Customer(String username, String name, int age, Set<Address> address) {
-        this.username = username;
+    public Customer(String keycloakId, String name, int age, Set<Address> address) {
+        this.keycloakId = keycloakId;
         this.name = name;
         this.age = age;
         this.addresses = address;
     }
 
-    public Customer(String username, String name, int age, Set<Address> address,
+    public Customer(String keycloakId, String name, int age, Set<Address> address,
                     List<Ticket> tickets, List<Booking> bookings) {
-        this.username = username;
+        this.keycloakId = keycloakId;
         this.name = name;
         this.age = age;
         this.addresses = address;
@@ -74,12 +71,12 @@ public class Customer {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getKeycloakId() {
+        return keycloakId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setKeycloakId(String keycloakId) {
+        this.keycloakId = keycloakId;
     }
 
     public String getName() {
