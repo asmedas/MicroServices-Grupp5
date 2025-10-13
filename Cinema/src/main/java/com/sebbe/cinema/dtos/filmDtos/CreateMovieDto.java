@@ -1,10 +1,9 @@
-package com.sebbe.cinema.dtos;
+package com.sebbe.cinema.dtos.filmDtos;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
 
 public record CreateMovieDto(
         @Positive @Max(18) int ageLimit,

@@ -1,7 +1,7 @@
 package com.sebbe.cinema.controllers;
 
-import com.sebbe.cinema.dtos.CreateMovieDto;
-import com.sebbe.cinema.dtos.FilmDto;
+import com.sebbe.cinema.dtos.filmDtos.CreateMovieDto;
+import com.sebbe.cinema.dtos.filmDtos.FilmDto;
 import com.sebbe.cinema.entities.Film;
 import com.sebbe.cinema.services.FilmService;
 import jakarta.validation.Valid;

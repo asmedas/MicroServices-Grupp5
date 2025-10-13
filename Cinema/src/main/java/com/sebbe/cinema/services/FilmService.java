@@ -1,21 +1,23 @@
 package com.sebbe.cinema.services;
 
-import com.sebbe.cinema.dtos.CreateMovieDto;
-import com.sebbe.cinema.dtos.FilmDto;
+import com.sebbe.cinema.dtos.filmDtos.CreateMovieDto;
+import com.sebbe.cinema.dtos.filmDtos.FilmDto;
 import com.sebbe.cinema.entities.Film;
 import com.sebbe.cinema.exceptions.NoMatchException;
 import com.sebbe.cinema.exceptions.UnexpectedError;
-import com.sebbe.cinema.mapper.FilmMapper;
+import com.sebbe.cinema.mappers.FilmMapper;
 import com.sebbe.cinema.repositories.FilmRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class FilmService {
 
     private final FilmRepository filmRepository;
@@ -26,6 +28,7 @@ public class FilmService {
     }
 
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @Transactional(readOnly = true)
     public List<Film> findAll() {
         List<Film> films = filmRepository.findAll();
@@ -33,6 +36,7 @@ public class FilmService {
         return films;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional(readOnly = true)
     public Film findById(Long id) {
         log.debug("Looking up film with id {}", id);
@@ -48,7 +52,7 @@ public class FilmService {
                 });
     }
 
-    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public FilmDto createFilm(CreateMovieDto dto) {
         log.debug("Creating new film with title {}", dto.title());
         try {
@@ -64,6 +68,7 @@ public class FilmService {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteFilm(Long id) {
         log.debug("Deleting film with id {}", id);
         if(filmRepository.findById(id).isEmpty()) {

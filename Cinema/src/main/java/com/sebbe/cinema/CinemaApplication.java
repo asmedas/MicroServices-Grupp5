@@ -1,5 +1,6 @@
 package com.sebbe.cinema;
 
+import com.sebbe.cinema.dtos.addressDto.CreateAddressDto;
 import com.sebbe.cinema.entities.*;
 import com.sebbe.cinema.enums.TechnicalEquipment;
 import com.sebbe.cinema.enums.Type;
@@ -28,18 +29,20 @@ public class CinemaApplication {
     , CinemaHallRepository cinemaHallRepository, ScreeningRepository screeningRepository, TicketRepository ticketRepository
     , BookingRepository bookingRepository){
         return args -> {
-            Address address1 = addressService.findOrCreateAddress("Kungsgatan 12", "Stockholm", "111 11");
+            Address address1 = addressService.findOrCreateAddress(new CreateAddressDto("kungsgatan 12", "stockholm", "11111"));
 
             Film film = new Film(18, "The Shawshank Redemption", "Drama");
             filmRepository.save(film);
 
-            CinemaHall cinemaHall = new CinemaHall("Theater 1", 100, List.of(TechnicalEquipment.PROJECTOR,TechnicalEquipment.MIC), null);
+            CinemaHall cinemaHall = new CinemaHall("Theater 1", 100, List.of(TechnicalEquipment.PROJECTOR,TechnicalEquipment.MIC));
             cinemaHallRepository.save(cinemaHall);
 
             Screening screening = new Screening(BigDecimal.valueOf(5000), LocalDate.of(2025,10,8), List.of(Type.FILM), film, cinemaHall);
             screeningRepository.save(screening);
 
-            Customer customer1 = new Customer("cb5fbcfc-4be0-42b2-bc63-6149bfde6106","sebbe", 20, Set.of(address1));
+            Customer customer1 = new Customer("cb5fbcfc-4be0-42b2-bc63-6149bfde6106","sebbe", "jonsson",
+                    "sebbe@facebook.com", 20);
+            customer1.addAddress(address1);
             customerRepository.save(customer1);
 
 
