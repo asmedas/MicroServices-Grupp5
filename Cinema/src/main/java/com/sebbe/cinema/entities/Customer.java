@@ -22,8 +22,14 @@ public class Customer {
     @Column(nullable = false, unique = true)
     private String keycloakId;
 
-    @Column(nullable = false, length = 100)
-    private String name;
+    @Column(nullable = false, length = 50)
+    private String firstName;
+
+    @Column(nullable = false, length = 50)
+    private String lastName;
+
+    @Column(nullable = false, length = 50)
+    private String email;
 
     @Positive
     @Column(nullable = false)
@@ -50,21 +56,12 @@ public class Customer {
 
     protected Customer() {}
 
-    public Customer(String keycloakId, String name, int age, Set<Address> address) {
+    public Customer(String keycloakId, String firstName, String lastName, String email, int age) {
         this.keycloakId = keycloakId;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.age = age;
-        this.addresses = address;
-    }
-
-    public Customer(String keycloakId, String name, int age, Set<Address> address,
-                    List<Ticket> tickets, List<Booking> bookings) {
-        this.keycloakId = keycloakId;
-        this.name = name;
-        this.age = age;
-        this.addresses = address;
-        this.tickets = tickets;
-        this.bookings = bookings;
     }
 
     public Long getId() {
@@ -79,12 +76,28 @@ public class Customer {
         this.keycloakId = keycloakId;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getAge() {
@@ -140,9 +153,11 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email ='" + email + '\'' +
                 ", age=" + age +
+                ", addresses=" + addresses +
                 '}';
     }
 }

@@ -1,6 +1,6 @@
-package com.sebbe.cinema.mapper;
+package com.sebbe.cinema.mappers;
 
-import com.sebbe.cinema.dtos.FilmDto;
+import com.sebbe.cinema.dtos.filmDtos.FilmDto;
 import com.sebbe.cinema.entities.Film;
 
 public class FilmMapper {

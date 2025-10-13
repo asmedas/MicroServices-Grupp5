@@ -1,5 +1,6 @@
 package com.sebbe.cinema.exceptions;
 
+import jakarta.persistence.PersistenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,6 +39,18 @@ public class ApiExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(AlreadyExistsError.class)
+    public ResponseEntity<?> handleAlreadyExists(AlreadyExistsError ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.CONFLICT,
+                        "error", "Already exists",
+                        "message", ex.getMessage()
+                )
+        );
+    }
+
     @ExceptionHandler(NoMatchException.class)
     public ResponseEntity<?> handleNoMatch(NoMatchException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -50,6 +63,18 @@ public class ApiExceptionHandler {
         );
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<?> handleIllegalState(IllegalStateException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.BAD_REQUEST,
+                        "error", "Bad Request",
+                        "message", exception.getMessage()
+                )
+        );
+    }
+
     @ExceptionHandler(UnexpectedError.class)
     public ResponseEntity<?> handleUnexpectedError(UnexpectedError ex){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
@@ -57,6 +82,18 @@ public class ApiExceptionHandler {
                         "timestamp", LocalDateTime.now().toString(),
                         "status", HttpStatus.INTERNAL_SERVER_ERROR,
                         "error", "Unexpected error",
+                        "message", ex.getMessage()
+                )
+        );
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public ResponseEntity<?> handlePersistenceException(PersistenceException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.INTERNAL_SERVER_ERROR,
+                        "error", "Persistence error",
                         "message", ex.getMessage()
                 )
         );

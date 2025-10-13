@@ -37,11 +37,10 @@ public class CinemaHall {
         this.maxSeats = maxSeats;
     }
 
-    public CinemaHall(String name, int maxSeats, List<TechnicalEquipment> technicalEquipment, List<Screening> screenings) {
+    public CinemaHall(String name, int maxSeats, List<TechnicalEquipment> technicalEquipment) {
         this.name = name;
         this.maxSeats = maxSeats;
         this.technicalEquipment = technicalEquipment;
-        this.screenings = screenings;
     }
 
     public Long getId() {
