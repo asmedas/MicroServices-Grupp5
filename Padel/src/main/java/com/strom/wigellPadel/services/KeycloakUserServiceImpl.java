@@ -100,7 +100,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
     @Override
     public void updateUserProfile(String userId, UserUpdateProfileDto profile) {
         Objects.requireNonNull(userId, "userId får inte vara null");
-        Objects.requireNonNull(profile, "profile får inte vara null");
+        Objects.requireNonNull(profile, "email får inte vara null");
 
         UserResource ur = user(userId);
         UserRepresentation current = ur.toRepresentation();
