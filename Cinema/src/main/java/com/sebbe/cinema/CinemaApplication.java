@@ -34,7 +34,7 @@ public class CinemaApplication {
             Film film = new Film(18, "The Shawshank Redemption", "Drama");
             filmRepository.save(film);
 
-            CinemaHall cinemaHall = new CinemaHall("Theater 1", 100, List.of(TechnicalEquipment.PROJECTOR,TechnicalEquipment.MIC), null);
+            CinemaHall cinemaHall = new CinemaHall("Theater 1", 100, List.of(TechnicalEquipment.PROJECTOR,TechnicalEquipment.MIC));
             cinemaHallRepository.save(cinemaHall);
 
             Screening screening = new Screening(BigDecimal.valueOf(5000), LocalDate.of(2025,10,8), List.of(Type.FILM), film, cinemaHall);
