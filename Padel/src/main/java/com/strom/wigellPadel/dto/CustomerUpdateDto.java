@@ -13,6 +13,7 @@ public record CustomerUpdateDto(
         @NotBlank @Size(max = 50) String street,
         @NotBlank @Size(max = 50) String postalCode,
         @NotBlank @Size(max = 50) String city,
-        @NotBlank @Email @Size(max = 50) String email
+        @NotBlank @Email @Size(max = 50) String email,
+        @NotBlank @Size(max = 50) String username
 ) {
 }
