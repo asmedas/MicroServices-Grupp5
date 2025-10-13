@@ -46,7 +46,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
             var rep = users.get(existingId).toRepresentation();
             if (email != null && rep.getEmail() != null &&
                     !email.equalsIgnoreCase(rep.getEmail())) {
-                throw new IllegalArgumentException("Användarnamnet finns reda n i Keycloak med en annan e-post");
+                throw new IllegalArgumentException("Användarnamnet finns redan i Keycloak med en annan e-post");
             }
         } else {
             UserRepresentation rep = new UserRepresentation();
