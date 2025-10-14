@@ -94,7 +94,7 @@ public class CustomerService {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCustomer(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("Id inte vara null");
+            throw new IllegalArgumentException("Id är null");
         }
        Customer customer = customerRepo.findById(id)
                .orElseThrow(() -> new EntityNotFoundException("Kund med id " + id + " hittades inte"));
