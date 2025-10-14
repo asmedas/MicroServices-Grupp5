@@ -46,7 +46,7 @@ public class CustomerService {
     @PreAuthorize("hasRole('ADMIN')")
     public CustomerDto createCustomer(CustomerCreateDto dto) {
         if (dto == null) {
-            return null;
+            throw new IllegalArgumentException("Body är null");
         }
         if (dto.firstName() == null ||
                 dto.lastName() == null ||
@@ -93,10 +93,12 @@ public class CustomerService {
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCustomer(Long id) {
-        if (!customerRepo.existsById(id)) {
-            throw new EntityNotFoundException("Kund med id " + id + " hittades inte");
+        if (id == null) {
+            throw new IllegalArgumentException("Id inte vara null");
         }
-        customerRepo.deleteById(id);
+       Customer customer = customerRepo.findById(id)
+               .orElseThrow(() -> new EntityNotFoundException("Kund med id " + id + " hittades inte"));
+        customerRepo.delete(customer);
     }
 
     @Transactional
@@ -106,7 +108,7 @@ public class CustomerService {
             throw new IllegalArgumentException("ID eller body är null");
         }
         Customer updatedCustomer = customerRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Kund med id " + id + " hittades"));
+                .orElseThrow(() -> new EntityNotFoundException("Kund med id " + id + " hittades inte"));
         if (    dto.firstName() == null ||
                 dto.lastName() == null ||
                 dto.street() == null ||
