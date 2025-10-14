@@ -74,6 +74,10 @@ public class Film {
         this.screenings = screenings;
     }
 
+    public void removeScreening(Screening screening){
+        screenings.remove(screening);
+    }
+
     @Override
     public String toString() {
         return "Film{" +

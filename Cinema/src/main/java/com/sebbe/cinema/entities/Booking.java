@@ -109,4 +109,15 @@ public class Booking {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public void removeBookingFromConnections(){
+        if (customer != null) {
+            customer.removeBooking(this);
+            this.customer = null;
+        }
+        if (screening != null) {
+            screening.removeBooking(this);
+            this.screening = null;
+        }
+    }
 }

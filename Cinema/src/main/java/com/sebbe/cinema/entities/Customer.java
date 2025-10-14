@@ -125,6 +125,12 @@ public class Customer {
         address.getCustomers().remove(this);
     }
 
+    public void removeAllAddresses() {
+        for(Address address : Set.copyOf(addresses)){
+            removeAddress(address);
+        }
+    }
+
     public List<Ticket> getTickets() {
         return tickets;
     }
@@ -141,13 +147,12 @@ public class Customer {
         this.bookings = bookings;
     }
 
-    public void addTicket(Ticket ticket) {
-        tickets.add(ticket);
-        ticket.setCustomer(this);
-    }
-    public void removeTicket(Ticket ticket) {
+    public void removeTicket(Ticket ticket){
         tickets.remove(ticket);
-        ticket.setCustomer(null);
+    }
+
+    public void removeBooking(Booking booking){
+        bookings.remove(booking);
     }
 
     @Override

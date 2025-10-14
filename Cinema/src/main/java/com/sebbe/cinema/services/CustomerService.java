@@ -65,17 +65,16 @@ public class CustomerService {
 
             customer.addAddress(address);
             return CustomerMapper.toDto(customerRepository.save(customer));
-        } catch (RuntimeException e) {
+        } catch (DataAccessException | PersistenceException ex) {
             if (keycloakId != null) {
-                log.warn("Failure after Keycloak user creation - rolling back Keycloak user: {}", keycloakId);
-                try {
-                    keycloakUserService.deleteUser(keycloakId);
-                } catch (Exception cleanupEx) {
-                    log.error("Failed to rollback Keycloak user creation", cleanupEx);
-                }
+                safeDeleteKeycloakUser(keycloakId);
             }
-            throw e;
+            throw ex;
+        } catch (RuntimeException ex) {
+            log.error("Unexpected runtime exception during customer creation (Keycloak user left intact):", ex);
+            throw ex;
         }
+
     }
 
     public CustomerDto update(Long id, CustomerUpdateDto dto) {
@@ -95,11 +94,11 @@ public class CustomerService {
 
     public void deleteCustomer(long id){
         log.debug("Deleting customer with id {}", id);
-        if(customerRepository.findById(id).isEmpty()) {
-            throw new NoMatchException("No customer found with id " + id);
-        }
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NoMatchException("No customer found with id " + id));
         try {
-            customerRepository.deleteById(id);
+            customer.removeAllAddresses();
+            customerRepository.delete(customer);
         } catch (DataAccessException e) {
             log.error("Database error deleting customer", e);
             throw new UnexpectedError("Database error deleting customer " + e);
@@ -112,10 +111,16 @@ public class CustomerService {
                     log.error("Customer not found");
                     return new NoMatchException("Customer not found");
                 });
-        Address newAddress = addressService.findOrCreateAddress(address);
-        customer.addAddress(newAddress);
-        customerRepository.save(customer);
-        log.debug("Address added to customer with id {}", customerId);
+        try{
+            Address newAddress = addressService.findOrCreateAddress(address);
+            customer.addAddress(newAddress);
+            customerRepository.save(customer);
+            log.debug("Address added to customer with id {}", customerId);
+        } catch (DataAccessException e){
+            log.error("Database error adding address to customer", e);
+            throw new UnexpectedError("Database error adding address to customer " + e);
+        }
+
     }
 
     public void removeAddress(Long customerId, Long addressId){
@@ -129,10 +134,16 @@ public class CustomerService {
             log.error("Cannot remove last address");
             throw new IllegalStateException("Cannot remove last address");
         }
-        Address address = addressService.findById(addressId);
-        customer.removeAddress(address);
-        customerRepository.save(customer);
-        log.debug("Address with id {} removed from customer with id {}", addressId, customerId);
+        try{
+            Address address = addressService.findById(addressId);
+            customer.removeAddress(address);
+            customerRepository.save(customer);
+            log.debug("Address with id {} removed from customer with id {}", addressId, customerId);
+        } catch (DataAccessException e){
+            log.error("Database error removing address from customer", e);
+            throw new UnexpectedError("Database error removing address from customer " + e);
+        }
+
     }
 
 
@@ -249,6 +260,16 @@ public class CustomerService {
             keycloakUserService.updateUserProfile(customer.getKeycloakId(), rollbackDto);
         } catch (Exception rollbackEx) {
             log.error("Rollback of Keycloak update failed for customer {}", id, rollbackEx);
+        }
+    }
+
+    private void safeDeleteKeycloakUser(String keycloakId){
+        log.warn("Rolling back Keycloak user due to persistence failure: {}", keycloakId);
+        try {
+            keycloakUserService.deleteUser(keycloakId);
+        } catch (Exception cleanupEx) {
+            log.error("Failed to rollback Keycloak user creation", cleanupEx);
+            throw new UnexpectedError("Failed to rollback Keycloak user creation");
         }
     }
 

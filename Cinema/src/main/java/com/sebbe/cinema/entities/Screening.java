@@ -36,7 +36,7 @@ public class Screening {
     @JsonBackReference
     private Film film;
 
-    @Column(name = "speaker_name")
+    @Column(name = "speaker_name", length = 100)
     private String speakerName;
 
     @ManyToOne
@@ -129,4 +129,25 @@ public class Screening {
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
+
+    public void removeTicket(Ticket ticket){
+        this.tickets.remove(ticket);
+    }
+
+    public void removeBooking(Booking booking){
+        this.booking = null;
+    }
+
+    public void removeScreeningFromConnections(){
+        if (film != null) {
+            film.removeScreening(this);
+            this.film = null;
+        }
+        if (cinemaHall != null) {
+            cinemaHall.removeScreening(this);
+            this.cinemaHall = null;
+        }
+    }
+
+
 }
