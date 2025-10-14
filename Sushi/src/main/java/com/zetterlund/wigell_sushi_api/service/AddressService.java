@@ -23,7 +23,7 @@ public class AddressService {
         this.customerRepository = customerRepository;
     }
 
-    public Address addAddress(Long customerId, Address address) {
+    public Address addAddress(Integer customerId, Address address) {
         Optional<Customer> customerOpt = customerRepository.findById(customerId);
         if (customerOpt.isEmpty()) {
             throw new ResourceNotFoundException("Customer not found with id " + customerId);
@@ -38,7 +38,7 @@ public class AddressService {
         return savedAddress;
     }
 
-    public void deleteAddress(Long customerId, Long addressId) {
+    public void deleteAddress(Integer customerId, Integer addressId) {
         Optional<Address> addressOpt = addressRepository.findById(addressId);
         if (addressOpt.isEmpty() || !addressOpt.get().getCustomer().getId().equals(customerId)) {
             throw new ResourceNotFoundException("Address not found or does not belong to the customer");

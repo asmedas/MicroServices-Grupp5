@@ -14,7 +14,7 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public List<Booking> getBookingsByCustomerId(Long customerId) {
+    public List<Booking> getBookingsByCustomerId(Integer customerId) {
         return bookingRepository.findByCustomerId(customerId);
     }
 
@@ -22,7 +22,7 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public Booking updateBooking(Long id, Booking updatedBooking) {
+    public Booking updateBooking(Integer id, Booking updatedBooking) {
         Booking existingBooking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 

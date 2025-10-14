@@ -17,13 +17,13 @@ public class AddressController {
     }
 
     @PostMapping
-    public ResponseEntity<Address> addAddress(@PathVariable Long customerId, @RequestBody Address address) {
+    public ResponseEntity<Address> addAddress(@PathVariable Integer customerId, @RequestBody Address address) {
         Address createdAddress = addressService.addAddress(customerId, address);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAddress);
     }
 
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long customerId, @PathVariable Long addressId) {
+    public ResponseEntity<Void> deleteAddress(@PathVariable Integer customerId, @PathVariable Integer addressId) {
         addressService.deleteAddress(customerId, addressId);
         return ResponseEntity.noContent().build();
     }
