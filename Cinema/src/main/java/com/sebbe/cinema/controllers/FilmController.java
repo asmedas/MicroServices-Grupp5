@@ -27,7 +27,7 @@ public class FilmController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<List<Film>> listFilms() {
+    public ResponseEntity<List<FilmDto>> listFilms() {
         return ResponseEntity.ok(filmService.findAll());
     }
 

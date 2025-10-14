@@ -74,4 +74,15 @@ public class Ticket {
     public BigDecimal getPriceUsd() {
         return priceUsd;
     }
+
+    public void removeTicketFromConnections(){
+        if (customer != null) {
+            customer.removeTicket(this);
+            this.customer = null;
+        }
+        if (screening != null) {
+            screening.removeTicket(this);
+            this.screening = null;
+        }
+    }
 }

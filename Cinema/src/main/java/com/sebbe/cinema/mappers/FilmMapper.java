@@ -8,7 +8,7 @@ public class FilmMapper {
     private FilmMapper() {}
 
     public static FilmDto toDto(Film film) {
-        return new FilmDto(film.getAgeLimit(), film.getTitle(), film.getGenre());
+        return new FilmDto(film.getAgeLimit(), film.getTitle(), film.getGenre(), film.getId());
     }
 
 }

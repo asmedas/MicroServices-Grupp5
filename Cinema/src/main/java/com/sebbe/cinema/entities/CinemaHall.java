@@ -78,4 +78,11 @@ public class CinemaHall {
     public void setScreenings(List<Screening> screenings) {
         this.screenings = screenings;
     }
+
+    public void removeScreening(Screening screening){
+        if(screening == null){
+            return;
+        }
+        screenings.remove(screening);
+    }
 }
