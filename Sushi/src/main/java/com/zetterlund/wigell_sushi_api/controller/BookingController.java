@@ -18,7 +18,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Booking>> getBookingsByCustomerId(@RequestParam Long customerId) {
+    public ResponseEntity<List<Booking>> getBookingsByCustomerId(@RequestParam Integer customerId) {
         List<Booking> bookings = bookingService.getBookingsByCustomerId(customerId);
         return ResponseEntity.ok(bookings);
     }
@@ -30,7 +30,7 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<Booking> updateBooking(@PathVariable Long bookingId, @RequestBody Booking updatedBooking) {
+    public ResponseEntity<Booking> updateBooking(@PathVariable Integer bookingId, @RequestBody Booking updatedBooking) {
         Booking updated = bookingService.updateBooking(bookingId, updatedBooking);
         return ResponseEntity.ok(updated);
     }

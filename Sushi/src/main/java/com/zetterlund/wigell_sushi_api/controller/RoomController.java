@@ -29,17 +29,17 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
+    public ResponseEntity<Room> getRoomById(@PathVariable Integer id) {
         return ResponseEntity.ok(roomService.getRoomById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room room) {
+    public ResponseEntity<Room> updateRoom(@PathVariable Integer id, @RequestBody Room room) {
         return ResponseEntity.ok(roomService.updateRoom(id, room));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable Integer id) {
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();
     }

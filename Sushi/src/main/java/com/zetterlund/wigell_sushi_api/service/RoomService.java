@@ -22,11 +22,11 @@ public class RoomService {
         return roomRepository.save(room);
     }
 
-    public Room getRoomById(Long id) {
+    public Room getRoomById(Integer id) {
         return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found"));
     }
 
-    public Room updateRoom(Long id, Room updatedRoom) {
+    public Room updateRoom(Integer id, Room updatedRoom) {
         Room existingRoom = getRoomById(id);
         existingRoom.setName(updatedRoom.getName());
         existingRoom.setMaxGuests(updatedRoom.getMaxGuests());
@@ -34,7 +34,7 @@ public class RoomService {
         return roomRepository.save(existingRoom);
     }
 
-    public void deleteRoom(Long id) {
+    public void deleteRoom(Integer id) {
         roomRepository.deleteById(id);
     }
 }
