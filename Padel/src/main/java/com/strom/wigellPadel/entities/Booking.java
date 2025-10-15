@@ -2,8 +2,9 @@ package com.strom.wigellPadel.entities;
 
 import jakarta.persistence.*;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 @Entity
 @Table(name = "bookings")
@@ -16,20 +17,19 @@ public class Booking {
 
     private Long customerId;
     private Long courtId;
-    private double totalPrice;
     private int numberOfPlayers;
-    private Date date;
-    private Time time;
+    private LocalDate date;
+    private int timeSlot;
+    private double totalPrice;
 
     protected Booking() {}
 
-    public Booking(Long customerId, Long courtId, double totalPrice, int numberOfPlayers, Date date, Time time) {
+    public Booking(Long customerId, Long courtId, int numberOfPlayers, LocalDate date, int timeSlot) {
         this.customerId = customerId;
         this.courtId = courtId;
-        this.totalPrice = totalPrice;
         this.numberOfPlayers = numberOfPlayers;
         this.date = date;
-        this.time = time;
+        this.timeSlot = timeSlot;
     }
 
     public Long getId() {
@@ -59,15 +59,6 @@ public class Booking {
         return this;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public Booking setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-        return this;
-    }
-
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
@@ -77,21 +68,30 @@ public class Booking {
         return this;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public Booking setDate(Date date) {
+    public Booking setDate(LocalDate date) {
         this.date = date;
         return this;
     }
 
-    public Time getTime() {
-        return time;
+    public int getTimeSlot() {
+        return timeSlot;
     }
 
-    public Booking setTime(Time time) {
-        this.time = time;
+    public Booking setTimeSlot(int timeSlot) {
+        this.timeSlot = timeSlot;
+        return this;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public Booking setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
         return this;
     }
 }

@@ -1,7 +1,10 @@
 package com.strom.wigellPadel.mapper;
 
+import com.strom.wigellPadel.dto.BookingCreateDto;
 import com.strom.wigellPadel.dto.BookingDto;
+import com.strom.wigellPadel.dto.CourtDto;
 import com.strom.wigellPadel.entities.Booking;
+
 
 public class BookingMapper {
 
@@ -16,10 +19,19 @@ public class BookingMapper {
         return new BookingDto(
                 booking.getCustomerId(),
                 booking.getCourtId(),
-                booking.getTotalPrice(),
                 booking.getNumberOfPlayers(),
                 booking.getDate(),
-                booking.getTime()
+                booking.getTimeSlot(),
+                booking.getTotalPrice()
         );
     }
+
+    public static Booking fromCreate (BookingCreateDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Booking newBooking = new Booking(dto.customerId(), dto.courtId(), dto.numberOfPlayers(), dto.date(), dto.timeSlot());
+        return newBooking;
+    }
+
 }

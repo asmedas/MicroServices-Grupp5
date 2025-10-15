@@ -1,5 +1,6 @@
 package com.strom.wigellPadel.mapper;
 
+import com.strom.wigellPadel.dto.CourtCreateDto;
 import com.strom.wigellPadel.dto.CourtDto;
 import com.strom.wigellPadel.entities.Court;
 
@@ -16,16 +17,15 @@ public class CourtMapper {
         return new CourtDto(
                 court.getId(),
                 court.getInformation(),
-                court.getPrice(),
-                court.isAvailable()
+                court.getPrice()
         );
     }
 
-    public static Court fromCreate (CourtDto dto) {
+    public static Court fromCreate (CourtCreateDto dto) {
         if (dto == null) {
             return null;
         }
-        Court newCourt = new Court(dto.information(), dto.price(), dto.available());
+        Court newCourt = new Court(dto.information(), dto.price());
         return newCourt;
     }
 

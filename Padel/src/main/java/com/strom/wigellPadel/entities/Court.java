@@ -17,15 +17,11 @@ public class Court {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @Column(name = "available", nullable = false)
-    private boolean available;
-
     protected Court() {}
 
-    public Court(String information, double price, boolean available) {
+    public Court(String information, double price) {
         this.information = information;
         this.price = price;
-        this.available = available;
     }
 
     public Long getId() {
@@ -55,12 +51,4 @@ public class Court {
         return this;
     }
 
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public Court setAvailable(boolean available) {
-        this.available = available;
-        return this;
-    }
 }
