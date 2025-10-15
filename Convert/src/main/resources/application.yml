@@ -1,0 +1,13 @@
+server:
+  port: 8700
+spring:
+  application:
+    name: converter_microservice
+
+internal:
+  api:
+    key: 123456789
+
+currency:
+  api:
+    url: https://open.er-api.com/v6/latest/SEK
