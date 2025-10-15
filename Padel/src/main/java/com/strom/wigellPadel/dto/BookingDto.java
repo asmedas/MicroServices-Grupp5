@@ -1,14 +1,14 @@
 package com.strom.wigellPadel.dto;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record BookingDto (
         Long customerId,
         Long courtId,
-        double price,
         int numberOfPlayers,
-        Date date,
-        Time time
+        LocalDate date,
+        int timeSlot,
+        double totalPrice
 ){
 }

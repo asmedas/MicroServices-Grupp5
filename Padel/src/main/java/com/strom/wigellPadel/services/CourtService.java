@@ -61,8 +61,7 @@ public class CourtService {
 
         Court court = new Court(
                 dto.information(),
-                dto.price(),
-                true
+                dto.price()
         );
 
         Court savedCourt = courtRepo.save(court);
@@ -84,7 +83,6 @@ public class CourtService {
                         .orElseThrow(() -> new EntityNotFoundException("Padelbana med id " + id + " hittades inte"));
         court.setInformation(dto.information());
         court.setPrice(dto.price());
-        court.setAvailable(dto.available());
         courtRepo.save(court);
 
         return CourtMapper.toDto(court);
