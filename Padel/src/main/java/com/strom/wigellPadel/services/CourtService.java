@@ -40,15 +40,17 @@ public class CourtService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN')")
     public CourtDto getCourt(Long id) {
-        if (courtRepo.findById(id).isPresent()) {
-            return CourtMapper.toDto(courtRepo.findById(id).get());
+        if (id == null) {
+            throw new IllegalArgumentException("Id är null");
         }
-        else throw new EntityNotFoundException("Padelbana med id " + id + " hittades inte");
+        return courtRepo.findById(id)
+                .map(CourtMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Padelbana med id " + id + " hittades inte"));
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public CourtDto createCourt(CourtDto dto) {
+    public CourtDto createCourt(CourtCreateDto dto) {
         if (dto == null) {
             throw new IllegalArgumentException("Body är null");
         }
@@ -92,7 +94,7 @@ public class CourtService {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCourt(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("Id får inte vara null");
+            throw new IllegalArgumentException("Id är null");
         }
         Court court = courtRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Padelbana med id " + id + " hittades inte"));
