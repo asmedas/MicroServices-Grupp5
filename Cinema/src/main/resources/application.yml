@@ -22,6 +22,10 @@ spring:
         jwt:
           issuer-uri: "http://localhost:8590/realms/cinema_keycloak"
 
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+
 logging:
   file:
     name: logs/cinema.log
@@ -36,10 +40,15 @@ logging:
     org.springframework: INFO
 
 keycloak:
-  server-url: http://localhost:8090
+  server-url: http://localhost:8590
   realm: cinema_keycloak
 
 keycloak.admin:
   realm: cinema_keycloak
   client-id: spring-app-admin
   client-secret: 2NOYyjIowI9aMbcI9oNbVGWvbtGTEX0o
+
+currency:
+  api:
+    url: http://localhost:8700/api/convert
+  api-key: 123456789

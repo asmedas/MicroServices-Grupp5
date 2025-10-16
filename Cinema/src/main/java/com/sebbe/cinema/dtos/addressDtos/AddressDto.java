@@ -1,4 +1,4 @@
-package com.sebbe.cinema.dtos.addressDto;
+package com.sebbe.cinema.dtos.addressDtos;
 
 public record AddressDto(
         long id,

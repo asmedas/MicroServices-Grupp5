@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,15 +45,15 @@ public class Customer {
     )
     Set<Address> addresses = new HashSet<>();
 
-    @OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true,
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true,
     fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Ticket> tickets;
+    private List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true,
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true,
     fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
     protected Customer() {}
 

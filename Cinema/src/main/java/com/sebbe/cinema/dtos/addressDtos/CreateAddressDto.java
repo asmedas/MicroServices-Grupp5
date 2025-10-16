@@ -1,4 +1,4 @@
-package com.sebbe.cinema.dtos.addressDto;
+package com.sebbe.cinema.dtos.addressDtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

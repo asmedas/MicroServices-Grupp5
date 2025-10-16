@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ConvertController {
 
-    private CurrencyConverter currencyConverter;
+    private final CurrencyConverter currencyConverter;
 
     public ConvertController(CurrencyConverter currencyConverter) {
         this.currencyConverter = currencyConverter;

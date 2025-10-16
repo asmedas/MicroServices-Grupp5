@@ -1,18 +1,22 @@
 package com.sebbe.cinema.services;
 
-import com.sebbe.cinema.dtos.addressDto.CreateAddressDto;
+import com.sebbe.cinema.dtos.addressDtos.CreateAddressDto;
 import com.sebbe.cinema.dtos.customerDtos.CreateCustomerWithAccountDto;
 import com.sebbe.cinema.dtos.customerDtos.CustomerDto;
 import com.sebbe.cinema.dtos.customerDtos.CustomerUpdateDto;
 import com.sebbe.cinema.dtos.customerDtos.UpdateUserProfileDto;
 import com.sebbe.cinema.entities.Address;
+import com.sebbe.cinema.entities.Booking;
 import com.sebbe.cinema.entities.Customer;
+import com.sebbe.cinema.entities.Ticket;
 import com.sebbe.cinema.exceptions.AlreadyExistsError;
 import com.sebbe.cinema.exceptions.NoMatchException;
 import com.sebbe.cinema.exceptions.UnexpectedError;
 import com.sebbe.cinema.mappers.CustomerMapper;
+import com.sebbe.cinema.repositories.BookingRepository;
 import com.sebbe.cinema.repositories.CustomerRepository;
 
+import com.sebbe.cinema.repositories.TicketRepository;
 import jakarta.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +39,7 @@ public class CustomerService {
     private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
 
     public CustomerService(CustomerRepository customerRepository, KeycloakUserService keycloakUserService
-    , AddressService addressService){
+    , AddressService addressService, TicketRepository ticketRepository, BookingRepository bookingRepository){
         this.customerRepository = customerRepository;
         this.keycloakUserService = keycloakUserService;
         this.addressService = addressService;
@@ -52,7 +57,7 @@ public class CustomerService {
     känner att denna coupling är nödvändig vid skapande av Customer, då de måste ha en address
     och ett keycloak ID för att kunna hantera köp och bokningar mm.
      */
-    public CustomerDto createCustomerWithKeycloakUserAndAddress(CreateCustomerWithAccountDto dto) {
+    public Customer createCustomerWithKeycloakUserAndAddress(CreateCustomerWithAccountDto dto) {
         String keycloakId = null;
         log.debug("Trying to create a Customer with Keycloak User and an Address");
         validateCreationDto(dto);
@@ -64,7 +69,7 @@ public class CustomerService {
             Customer customer = CustomerMapper.buildCustomerFromCreateDto(dto, keycloakId, address);
 
             customer.addAddress(address);
-            return CustomerMapper.toDto(customerRepository.save(customer));
+            return customerRepository.save(customer);
         } catch (DataAccessException | PersistenceException ex) {
             if (keycloakId != null) {
                 safeDeleteKeycloakUser(keycloakId);
@@ -97,8 +102,14 @@ public class CustomerService {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NoMatchException("No customer found with id " + id));
         try {
-            customer.removeAllAddresses();
+            for (Ticket t : new ArrayList<>(customer.getTickets())) {
+                t.removeTicketFromConnections();
+            }
+            for (Booking b : new ArrayList<>(customer.getBookings())) {
+                b.removeBookingFromConnections();
+            }
             customerRepository.delete(customer);
+
         } catch (DataAccessException e) {
             log.error("Database error deleting customer", e);
             throw new UnexpectedError("Database error deleting customer " + e);
@@ -175,6 +186,7 @@ public class CustomerService {
     }
 
     private ProfileChanges detectProfileChanges(Customer customer, CustomerUpdateDto dto) {
+        log.debug("Detecting profile changes for customer with ID: {}", customer.getId());
         boolean emailChanged = dto.email() != null &&
                 !dto.email().equalsIgnoreCase(customer.getEmail());
         boolean firstNameChanged = dto.firstName() != null &&
@@ -186,12 +198,14 @@ public class CustomerService {
     }
 
     private void validateEmailUniqueness(Customer customer, CustomerUpdateDto dto, boolean emailChanged) {
+        log.debug("Validating email uniqueness for customer with ID: {}", customer.getId());
         if (emailChanged && customerRepository.existsByEmailAndIdNot(customer.getEmail(), customer.getId())) {
             throw new AlreadyExistsError("Email används redan");
         }
     }
 
     private void syncKeycloakProfile(Customer customer, CustomerUpdateDto dto, ProfileChanges changes) {
+        log.debug("Syncing Keycloak profile for customer with ID: {}", customer.getId());
         try {
             UpdateUserProfileDto profileDto = buildUpdateProfileDto(dto, changes);
             keycloakUserService.updateUserProfile(customer.getKeycloakId(), profileDto);
@@ -212,6 +226,7 @@ public class CustomerService {
     }
 
     private void updateCustomerFields(Customer customer, CustomerUpdateDto dto) {
+        log.debug("Updating customer fields for customer with ID: {}", customer.getId());
         if (dto.firstName() != null) {
             customer.setFirstName(dto.firstName());
         }
@@ -229,6 +244,7 @@ public class CustomerService {
         String originalLastName = customer.getLastName();
 
         try {
+            log.debug("Updating customer with ID: {}", customer.getId());
             Customer saved = customerRepository.save(customer);
             return CustomerMapper.toDto(saved);
         } catch (DataAccessException ex) {
@@ -239,7 +255,7 @@ public class CustomerService {
                         originalLastName, changes);
             }
 
-            throw new PersistenceException("Failed to save customer", ex);
+            throw new PersistenceException("Failed to update customer", ex);
         }
     }
 
