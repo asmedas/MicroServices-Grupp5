@@ -1,6 +1,8 @@
 package com.zetterlund.wigell_sushi_api.service;
 
+import com.zetterlund.wigell_sushi_api.dto.CustomerCreationRequestDto;
 import com.zetterlund.wigell_sushi_api.entity.Customer;
+import com.zetterlund.wigell_sushi_api.exception.ResourceNotFoundException;
 import com.zetterlund.wigell_sushi_api.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,22 @@ public class CustomerService {
         customer.setKeycloakUserId(keycloakUserId);
 
         return customerRepository.save(customer);
+    }
+
+    public Customer updateCustomer(Integer customerId, CustomerCreationRequestDto customerDto) {
+        Customer existingCustomer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer with id " + customerId + " not found."));
+
+        existingCustomer.setUsername(customerDto.getUsername());
+        existingCustomer.setName(customerDto.getName());
+
+        return customerRepository.save(existingCustomer);
+    }
+
+    public void deleteCustomerById(Integer customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new ResourceNotFoundException("Customer with id " + customerId + " not found.");
+        }
+        customerRepository.deleteById(customerId);
     }
 }
