@@ -1,6 +1,6 @@
 package com.zetterlund.wigell_sushi_api.dto;
 
-public class CustomerCreationRequest {
+public class CustomerCreationRequestDto {
     private String username;
     private String name;
     private String rawPassword;

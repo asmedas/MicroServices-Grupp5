@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +47,10 @@ public class AddressService {
 
         addressRepository.deleteById(addressId);
         logger.info("Address with id {} deleted for customer with id {}", addressId, customerId);
+    }
+
+    public List<Address> getAllAddresses() {
+        logger.info("Fetching all addresses");
+        return addressRepository.findAll();
     }
 }
