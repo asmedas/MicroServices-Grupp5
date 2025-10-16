@@ -82,6 +82,11 @@
             <artifactId>keycloak-spring-boot-starter</artifactId>
             <version>24.0.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>26.0.4</version>
+        </dependency>
         <!-- OAuth2 Resource Server (för JWT-tokens från Keycloak) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
