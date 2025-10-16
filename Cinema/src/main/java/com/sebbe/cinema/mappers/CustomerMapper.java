@@ -1,6 +1,6 @@
 package com.sebbe.cinema.mappers;
 
-import com.sebbe.cinema.dtos.addressDto.AddressDto;
+import com.sebbe.cinema.dtos.addressDtos.AddressDto;
 import com.sebbe.cinema.dtos.customerDtos.CreateCustomerWithAccountDto;
 import com.sebbe.cinema.dtos.customerDtos.CustomerDto;
 import com.sebbe.cinema.entities.Address;

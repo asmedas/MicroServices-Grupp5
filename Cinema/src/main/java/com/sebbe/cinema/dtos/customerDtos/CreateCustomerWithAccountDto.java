@@ -1,6 +1,6 @@
 package com.sebbe.cinema.dtos.customerDtos;
 
-import com.sebbe.cinema.dtos.addressDto.CreateAddressDto;
+import com.sebbe.cinema.dtos.addressDtos.CreateAddressDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;

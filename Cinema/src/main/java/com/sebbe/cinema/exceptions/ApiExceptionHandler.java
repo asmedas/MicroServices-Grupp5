@@ -1,5 +1,6 @@
 package com.sebbe.cinema.exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,18 @@ public class ApiExceptionHandler {
         );
     }
 
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<?> handleInvalidFormat(InvalidFormatException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.BAD_REQUEST,
+                        "error", "Invalid format",
+                        "message", ex.getMessage()
+                )
+        );
+    }
+
     @ExceptionHandler(NoMatchException.class)
     public ResponseEntity<?> handleNoMatch(NoMatchException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -94,6 +107,18 @@ public class ApiExceptionHandler {
                         "timestamp", LocalDateTime.now().toString(),
                         "status", HttpStatus.INTERNAL_SERVER_ERROR,
                         "error", "Persistence error",
+                        "message", ex.getMessage()
+                )
+        );
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of(
+                        "timestamp", LocalDateTime.now().toString(),
+                        "status", HttpStatus.BAD_REQUEST,
+                        "error", "Bad Request",
                         "message", ex.getMessage()
                 )
         );

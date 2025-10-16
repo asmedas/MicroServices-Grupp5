@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,59 +20,74 @@ public class Screening {
     private Long id;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal priceSek;
+
+    @Column(nullable = false)
+    private BigDecimal priceUsd;
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "screening_type", joinColumns = @JoinColumn(name = "screening_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private List<Type> type;
-
     @ManyToOne
     @JoinColumn(name = "film_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Film film;
 
     @Column(name = "speaker_name", length = 100)
     private String speakerName;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "cinemaHall_id", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private CinemaHall cinemaHall;
 
-    @OneToOne(mappedBy = "screening", optional = true)
+    @OneToMany(mappedBy = "screening",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonBackReference
-    private Booking booking;
+    private List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "screening", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonManagedReference
-    private List<Ticket> tickets;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "booking_type", joinColumns = @JoinColumn(name = "booking_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private List<Type> type = new ArrayList<>();
 
     protected Screening() {}
 
-    public Screening(BigDecimal price, LocalDate date, List<Type> type, Film film, CinemaHall cinemaHall) {
-        this.price = price;
+    public Screening(LocalDate date, Film film, CinemaHall cinemaHall, List<Type> type) {
         this.date = date;
-        this.type = type;
         this.film = film;
         this.cinemaHall = cinemaHall;
+        this.type = type;
+    }
+
+    public Screening(LocalDate date, String speakerName, CinemaHall cinemaHall, List<Type> type) {
+        this.date = date;
+        this.speakerName = speakerName;
+        this.cinemaHall = cinemaHall;
+        this.type = type;
     }
 
     public Long getId() {
         return id;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceSek() {
+        return priceSek;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setPriceSek(BigDecimal priceSek) {
+        this.priceSek = priceSek;
+    }
+
+    public BigDecimal getPriceUsd() {
+        return priceUsd;
+    }
+
+    public void setPriceUsd(BigDecimal priceUsd) {
+        this.priceUsd = priceUsd;
     }
 
     public LocalDate getDate() {
@@ -80,14 +96,6 @@ public class Screening {
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public List<Type> getType() {
-        return type;
-    }
-
-    public void setType(List<Type> type) {
-        this.type = type;
     }
 
     public Film getFilm() {
@@ -114,14 +122,6 @@ public class Screening {
         this.cinemaHall = cinemaHall;
     }
 
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking bookings) {
-        this.booking = bookings;
-    }
-
     public List<Ticket> getTickets() {
         return tickets;
     }
@@ -134,8 +134,14 @@ public class Screening {
         this.tickets.remove(ticket);
     }
 
-    public void removeBooking(Booking booking){
-        this.booking = null;
+    public void addTicket(Ticket ticket){this.tickets.add(ticket);}
+
+    public List<Type> getType() {
+        return type;
+    }
+
+    public void setType(List<Type> type) {
+        this.type = type;
     }
 
     public void removeScreeningFromConnections(){

@@ -1,6 +1,6 @@
 package com.sebbe.cinema.controllers;
 
-import com.sebbe.cinema.dtos.filmDtos.CreateMovieDto;
+import com.sebbe.cinema.dtos.filmDtos.CreateFilmDto;
 import com.sebbe.cinema.dtos.filmDtos.FilmDto;
 import com.sebbe.cinema.entities.Film;
 import com.sebbe.cinema.services.FilmService;
@@ -39,7 +39,7 @@ public class FilmController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<FilmDto> addFilm(@Valid @RequestBody CreateMovieDto dto) {
+    public ResponseEntity<FilmDto> addFilm(@Valid @RequestBody CreateFilmDto dto) {
         log.info("User tries adding new film {}", dto);
         FilmDto created = filmService.createFilm(dto);
         URI location = URI.create("/api/v1/films/" + created);

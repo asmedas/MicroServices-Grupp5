@@ -1,6 +1,6 @@
 package com.sebbe.cinema.dtos.customerDtos;
 
-import com.sebbe.cinema.dtos.addressDto.AddressDto;
+import com.sebbe.cinema.dtos.addressDtos.AddressDto;
 
 import java.util.Set;
 

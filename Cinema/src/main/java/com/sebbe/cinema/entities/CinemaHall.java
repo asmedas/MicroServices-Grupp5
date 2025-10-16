@@ -1,9 +1,14 @@
 package com.sebbe.cinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sebbe.cinema.enums.TechnicalEquipment;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,33 +19,34 @@ public class CinemaHall {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
     @Column(nullable = false)
-    private int maxSeats;
+    private BigDecimal price;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "cinema_hall_equipment", joinColumns = @JoinColumn(name = "cinema_hall_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "technical_equipment")
-    private List<TechnicalEquipment> technicalEquipment;
+    @Column(nullable = false)
+    @Positive
+    @Max(5000)
+    private Integer maxSeats;
 
-    @OneToMany(mappedBy = "cinemaHall", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Screening> screenings;
+    @OneToMany(mappedBy = "cinemaHall",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonBackReference
+    private List<Screening> screenings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cinemaHall",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
 
     protected CinemaHall() {}
 
-    public CinemaHall(String name, int maxSeats) {
+    public CinemaHall(String name, Integer maxSeats) {
         this.name = name;
         this.maxSeats = maxSeats;
-    }
-
-    public CinemaHall(String name, int maxSeats, List<TechnicalEquipment> technicalEquipment) {
-        this.name = name;
-        this.maxSeats = maxSeats;
-        this.technicalEquipment = technicalEquipment;
+        this.price = BigDecimal.valueOf(maxSeats * 100);
     }
 
     public Long getId() {
@@ -51,24 +57,20 @@ public class CinemaHall {
         return name;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getMaxSeats() {
+    public Integer getMaxSeats() {
         return maxSeats;
     }
 
-    public void setMaxSeats(int maxSeats) {
+    public void setMaxSeats(Integer maxSeats) {
         this.maxSeats = maxSeats;
-    }
-
-    public List<TechnicalEquipment> getTechnicalEquipment() {
-        return technicalEquipment;
-    }
-
-    public void setTechnicalEquipment(List<TechnicalEquipment> technicalEquipment) {
-        this.technicalEquipment = technicalEquipment;
     }
 
     public List<Screening> getScreenings() {
@@ -79,10 +81,27 @@ public class CinemaHall {
         this.screenings = screenings;
     }
 
-    public void removeScreening(Screening screening){
-        if(screening == null){
-            return;
-        }
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public void addScreening(Screening screening) {
+        screenings.add(screening);
+    }
+
+    public void removeScreening(Screening screening) {
         screenings.remove(screening);
+    }
+
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+    }
+
+    public void removeBooking(Booking booking) {
+        bookings.remove(booking);
     }
 }

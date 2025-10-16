@@ -1,6 +1,6 @@
 package com.sebbe.cinema.services;
 
-import com.sebbe.cinema.dtos.filmDtos.CreateMovieDto;
+import com.sebbe.cinema.dtos.filmDtos.CreateFilmDto;
 import com.sebbe.cinema.dtos.filmDtos.FilmDto;
 import com.sebbe.cinema.entities.Film;
 import com.sebbe.cinema.entities.Screening;
@@ -8,6 +8,7 @@ import com.sebbe.cinema.exceptions.NoMatchException;
 import com.sebbe.cinema.exceptions.UnexpectedError;
 import com.sebbe.cinema.mappers.FilmMapper;
 import com.sebbe.cinema.repositories.FilmRepository;
+import com.sebbe.cinema.repositories.ScreeningRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -22,12 +23,10 @@ import java.util.List;
 public class FilmService {
 
     private final FilmRepository filmRepository;
-    private final ScreeningService screeningService;
     private static final Logger log = LoggerFactory.getLogger(FilmService.class);
 
-    public FilmService(FilmRepository filmRepository, ScreeningService screeningService) {
+    public FilmService(FilmRepository filmRepository) {
         this.filmRepository = filmRepository;
-        this.screeningService = screeningService;
     }
 
 
@@ -58,10 +57,10 @@ public class FilmService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public FilmDto createFilm(CreateMovieDto dto) {
+    public FilmDto createFilm(CreateFilmDto dto) {
         log.debug("Creating new film with title {}", dto.title());
         try {
-            Film film = new Film(dto.ageLimit(), dto.title(), dto.genre());
+            Film film = new Film(dto.ageLimit(), dto.title(), dto.genre(), dto.length());
             filmRepository.save(film);
             return FilmMapper.toDto(film);
         } catch (DataAccessException e) {
@@ -79,10 +78,7 @@ public class FilmService {
         Film film = filmRepository.findById(id)
                 .orElseThrow(() -> new NoMatchException("No film found with id " + id));
         try {
-            for(Screening screening : List.copyOf(film.getScreenings())) {
-                screeningService.deleteScreening(screening.getId());
-            }
-            filmRepository.deleteById(id);
+            filmRepository.delete(film);
         } catch (DataAccessException e) {
             log.error("Database error deleting film", e);
             throw new UnexpectedError("Database error deleting film " + e);

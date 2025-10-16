@@ -1,6 +1,7 @@
 package com.sebbe.cinema.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 
@@ -14,14 +15,14 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     @JsonBackReference
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "screening_id", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Screening screening;
 
     @Positive
@@ -34,10 +35,9 @@ public class Ticket {
 
     protected Ticket() {}
 
-    public Ticket(Screening screening, BigDecimal priceSek, BigDecimal priceUsd) {
+    public Ticket(Screening screening, Customer customer) {
         this.screening = screening;
-        this.priceSek = priceSek;
-        this.priceUsd = priceUsd;
+        this.customer = customer;
     }
     public Long getId() {
         return id;

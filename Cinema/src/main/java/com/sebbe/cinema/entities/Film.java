@@ -1,10 +1,13 @@
 package com.sebbe.cinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,17 +28,33 @@ public class Film {
     @Column(nullable = false, length = 100)
     private String genre;
 
-    @OneToMany(mappedBy = "film", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Screening> screenings;
+    @Positive
+    @Min(1)
+    @Max(300)
+    @Column(nullable = false)
+    private int length;
+
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<Screening> screenings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
 
 
     protected Film() {}
 
-    public Film(int ageLimit, String title, String genre) {
+    public Film(String title, String genre, int length){
+        this.title = title;
+        this.genre = genre;
+        this.length = length;
+    }
+
+    public Film(int ageLimit, String title, String genre, int length) {
         this.ageLimit = ageLimit;
         this.title = title;
         this.genre = genre;
+        this.length = length;
     }
 
     public Long getId() {
@@ -66,6 +85,14 @@ public class Film {
         this.genre = genre;
     }
 
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
     public List<Screening> getScreenings() {
         return screenings;
     }
@@ -77,6 +104,16 @@ public class Film {
     public void removeScreening(Screening screening){
         screenings.remove(screening);
     }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public void removeBooking(Booking booking){bookings.remove(booking);}
 
     @Override
     public String toString() {
