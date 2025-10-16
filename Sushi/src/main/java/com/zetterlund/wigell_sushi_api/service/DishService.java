@@ -9,13 +9,20 @@ import java.util.List;
 @Service
 public class DishService {
     private final DishRepository dishRepository;
+    private final CurrencyConverterService currencyConverterService;
 
-    public DishService(DishRepository dishRepository) {
+    public DishService(DishRepository dishRepository, CurrencyConverterService currencyConverterService) {
         this.dishRepository = dishRepository;
+        this.currencyConverterService = currencyConverterService;
     }
 
     public List<Dish> getAllDishes() {
-        return dishRepository.findAll();
+        List<Dish> dishes = dishRepository.findAll();
+        dishes.forEach(dish -> {
+            double convertedPrice = currencyConverterService.convertCurrency("JPY", dish.getPriceInSek());
+            dish.setPriceInJpy(convertedPrice);
+        });
+        return dishes;
     }
 
     public Dish addDish(Dish dish) {

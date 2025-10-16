@@ -1,5 +1,6 @@
 package com.zetterlund.wigell_sushi_api.controller;
 
+import com.zetterlund.wigell_sushi_api.dto.CustomerCreationRequest;
 import com.zetterlund.wigell_sushi_api.entity.Customer;
 import com.zetterlund.wigell_sushi_api.service.CustomerService;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
-        Customer createdCustomer = customerService.addCustomer(customer);
+    public ResponseEntity<Customer> addCustomer(@RequestBody CustomerCreationRequest request) {
+        Customer customer = new Customer();
+        customer.setUsername(request.getUsername());
+        customer.setName(request.getName());
+
+        Customer createdCustomer = customerService.addCustomer(customer, request.getRawPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
     }
 }

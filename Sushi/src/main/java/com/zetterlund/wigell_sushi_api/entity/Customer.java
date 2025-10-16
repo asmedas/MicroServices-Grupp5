@@ -18,6 +18,9 @@ public class Customer {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String keycloakUserId;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
@@ -41,6 +44,13 @@ public class Customer {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKeycloakUserId() {
+        return keycloakUserId;
+    }
+    public void setKeycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
     }
 
     public List<Address> getAddresses() {
