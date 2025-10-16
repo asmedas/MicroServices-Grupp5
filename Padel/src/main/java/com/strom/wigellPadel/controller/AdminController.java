@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class AdminController {
 
-    private final Logger log = LoggerFactory.getLogger(AdminController.class);
+    private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     private final CustomerService customerService;
     private final AddressService addressService;
@@ -39,126 +39,126 @@ public class AdminController {
     @GetMapping("/customers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CustomerDto>> getCustomers() {
-        log.info("Mottog begäran om att hämta alla kunder");
+        logger.info("Mottog begäran om att hämta alla kunder");
         List<CustomerDto> customerList = customerService.getAllCustomers();
-        log.debug("Returnerar {} kunder", customerList.size());
+        logger.debug("Returnerar {} kunder", customerList.size());
         return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 
     @PostMapping("/customers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerCreateDto dto) {
-        log.info("Mottog begäran om att skapa en ny kund");
+        logger.info("Mottog begäran om att skapa en ny kund");
         CustomerDto customerDto = customerService.createCustomer(dto);
-        log.debug("Skapade ny kund med id {}", customerDto.id());
+        logger.debug("Skapade ny kund med id {}", customerDto.id());
         return new ResponseEntity<>(customerDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/customers/{customerId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCustomer (@PathVariable Long customerId) {
-        log.info("Mottog begäran om att ta bort kund med id {}", customerId);
+        logger.info("Mottog begäran om att ta bort kund med id {}", customerId);
         customerService.deleteCustomer(customerId);
-        log.debug("Tog bort kund med id {}", customerId);
+        logger.debug("Tog bort kund med id {}", customerId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/customers/{customerId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long customerId, @RequestBody CustomerUpdateDto dto) {
-        log.info("Mottog begäran om att uppdatera kund med id {}", customerId);
+        logger.info("Mottog begäran om att uppdatera kund med id {}", customerId);
         CustomerDto customerDto = customerService.updateCustomer(customerId, dto);
-        log.debug("Uppdaterade kund med id {}", customerId);
+        logger.debug("Uppdaterade kund med id {}", customerId);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
     @GetMapping("/courts")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CourtDto>> getCourts() {
-        log.info("Mottog begäran om att hämta alla padelbanor");
+        logger.info("Mottog begäran om att hämta alla padelbanor");
         List<CourtDto> courtList = courtService.getAllCourts();
-        log.debug("Returnerar {} padelbanor", courtList.size());
+        logger.debug("Returnerar {} padelbanor", courtList.size());
         return new ResponseEntity<>(courtList, HttpStatus.OK);
     }
 
     @GetMapping("/courts/{courtId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourtDto> getCourt(@PathVariable Long courtId) {
-        log.info("Mottog begäran om att hämta padelbana md id {}", courtId);
+        logger.info("Mottog begäran om att hämta padelbana md id {}", courtId);
         CourtDto courtDto = courtService.getCourt(courtId);
-        log.debug("Returnerar padelbana med id {}", courtDto.id());
+        logger.debug("Returnerar padelbana med id {}", courtDto.id());
         return new ResponseEntity<>(courtDto, HttpStatus.OK);
     }
 
     @PostMapping("courts")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourtDto> createCourt(@RequestBody CourtCreateDto dto) {
-        log.info("Mottog begäran om att skapa en ny padelbana");
+        logger.info("Mottog begäran om att skapa en ny padelbana");
         CourtDto newCourt = courtService.createCourt(dto);
-        log.debug("Skapade ny padelbana med id {}", newCourt.id());
+        logger.debug("Skapade ny padelbana med id {}", newCourt.id());
         return new ResponseEntity<>(newCourt, HttpStatus.CREATED);
     }
 
     @PutMapping("/courts/{courtId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourtDto> updateCourt(@PathVariable Long courtId, @RequestBody CourtUpdateDto dto) {
-        log.info("Mottog begäran om att uppdatera padelbana med id {}", courtId);
+        logger.info("Mottog begäran om att uppdatera padelbana med id {}", courtId);
         CourtDto updatedCourt = courtService.updateCourt(courtId, dto);
-        log.debug("Uppdaterade padelbana med id {}", updatedCourt.id());
+        logger.debug("Uppdaterade padelbana med id {}", updatedCourt.id());
         return new ResponseEntity<>(updatedCourt, HttpStatus.OK);
     }
 
     @DeleteMapping("/courts/{courtId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCourt(@PathVariable Long courtId) {
-        log.info("Mottog begäran om att ta bort padelbana med id {}", courtId);
+        logger.info("Mottog begäran om att ta bort padelbana med id {}", courtId);
         courtService.deleteCourt(courtId);
-        log.debug("Tog bort padelbana med id {}", courtId);
+        logger.debug("Tog bort padelbana med id {}", courtId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/bookings/{bookingId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long bookingId) {
-        log.info("Mottog begäran om att ta bort bokning med id {}", bookingId);
+        logger.info("Mottog begäran om att ta bort bokning med id {}", bookingId);
         bookingService.deleteBooking(bookingId);
-        log.debug("Tog bort bokning med id {}", bookingId);
+        logger.debug("Tog bort bokning med id {}", bookingId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/bookings")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BookingDto>> getBookings() {
-        log.info("Mottog begäran om att hämta alla bokningar");
+        logger.info("Mottog begäran om att hämta alla bokningar");
         List<BookingDto> bookingList = bookingService.getAllBookings();
-        log.debug("Returnerar {} bokningar", bookingList.size());
+        logger.debug("Returnerar {} bokningar", bookingList.size());
         return new ResponseEntity<>(bookingList, HttpStatus.OK);
     }
 
     @GetMapping("/bookings/{bookingId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookingDto> getBooking(@PathVariable Long bookingId) {
-        log.info("Mottog begäran om att hämta bokning med id {}", bookingId);
+        logger.info("Mottog begäran om att hämta bokning med id {}", bookingId);
         BookingDto bookingDto = bookingService.getBooking(bookingId);
-        log.debug("Returnerar bokning med id {}", bookingDto.id());
+        logger.debug("Returnerar bokning med id {}", bookingDto.id());
         return new ResponseEntity<>(bookingDto, HttpStatus.OK);
     }
 
     @PostMapping("/customers/{customerId}/addresses")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerDto> createAddress(@PathVariable Long customerId, @RequestBody AddressCreateDto dto) {
-        log.info("Mottog begäran om att skapa en ny adress till kund med id {}", customerId);
+        logger.info("Mottog begäran om att skapa en ny adress till kund med id {}", customerId);
         CustomerDto customer = addressService.createAddress(customerId, dto);
-        log.debug("Skapade ny adress till kund med id {} ", customer.id());
+        logger.debug("Skapade ny adress till kund med id {} ", customer.id());
         return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/customers/{customerId}/addresses/{addressId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerDto> deleteAddress(@PathVariable Long customerId, @PathVariable Long addressId) {
-        log.info("Mottog begäran om att ta bort adress med id {} från kund med id {}", addressId, customerId);
+        logger.info("Mottog begäran om att ta bort adress med id {} från kund med id {}", addressId, customerId);
         addressService.deleteAddressFromCustomer(addressId, customerId);
-        log.debug("Tog bort adress med id {} från kund med id {}", addressId, customerId);
+        logger.debug("Tog bort adress med id {} från kund med id {}", addressId, customerId);
         return ResponseEntity.noContent().build();
     }
 

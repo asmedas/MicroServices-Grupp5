@@ -17,6 +17,7 @@ public class BookingMapper {
         }
 
         return new BookingDto(
+                booking.getId(),
                 booking.getCustomerId(),
                 booking.getCourtId(),
                 booking.getNumberOfPlayers(),
