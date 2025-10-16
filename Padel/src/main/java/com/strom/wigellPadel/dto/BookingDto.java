@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record BookingDto (
+        Long id,
         Long customerId,
         Long courtId,
         int numberOfPlayers,
