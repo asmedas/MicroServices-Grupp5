@@ -9,6 +9,8 @@ import com.strom.wigellPadel.mapper.CustomerMapper;
 import com.strom.wigellPadel.repositories.BookingRepo;
 import com.strom.wigellPadel.repositories.CourtRepo;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,87 +18,132 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//TODO Lägg till loggning som sparas till fil på samtliga metoder!!!
-
 @Service
 public class CourtService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CourtService.class);
     private final CourtRepo courtRepo;
     private final BookingRepo bookingRepo;
 
     public CourtService(CourtRepo courtRepo, BookingRepo bookingRepo) {
         this.courtRepo = courtRepo;
         this.bookingRepo = bookingRepo;
+        logger.debug("CourtService initialized");
     }
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN')")
     public List<CourtDto> getAllCourts() {
-        return courtRepo.findAll().stream()
-                .map(CourtMapper::toDto)
-                .toList();
+        logger.info("Hämtar alla padelbanor");
+        try {
+            List<CourtDto> courts = courtRepo.findAll().stream()
+                    .map(CourtMapper::toDto)
+                    .toList();
+            logger.debug("Lyckades hämta {} padelbanor", courts.size());
+            return courts;
+        } catch (Exception e) {
+            logger.error("Error vid hämtning av padelbanor", e);
+            throw e;
+        }
     }
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ADMIN')")
     public CourtDto getCourt(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id är null");
+        logger.info("Hämtar padelbana med id: {}", id);
+        try {
+            if (id == null) {
+                logger.error("Id är null");
+                throw new IllegalArgumentException("Id är null");
+            }
+            CourtDto courtDto = courtRepo.findById(id)
+                    .map(CourtMapper::toDto)
+                    .orElseThrow(() -> {
+                        logger.error("Padelbana med id {} hittades inte", id);
+                        return new EntityNotFoundException("Padelbana med id " + id + " hittades inte");
+                    });
+            logger.debug("Lyckades hämta padelbana med id: {}", id);
+            return courtDto;
+        } catch (Exception e) {
+            logger.error("Error vid hämtning av padelbana med id: {}", id, e);
+            throw e;
         }
-        return courtRepo.findById(id)
-                .map(CourtMapper::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("Padelbana med id " + id + " hittades inte"));
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public CourtDto createCourt(CourtCreateDto dto) {
-        if (dto == null) {
-            throw new IllegalArgumentException("Body är null");
-        }
-        if (dto.information() == null || dto.information().isEmpty()
-        || dto.price() < 0) {
-            throw new IllegalArgumentException("Information är null eller pris lägre än 0");
-        }
+        logger.info("Skapar ny padelbana med information: {}", dto.information());
+        try {
+            if (dto == null) {
+                logger.error("Body är null");
+                throw new IllegalArgumentException("Body är null");
+            }
+            if (dto.information() == null || dto.information().isEmpty() || dto.price() < 0) {
+                logger.error("Error: Information är null eller pris lägre än 0");
+                throw new IllegalArgumentException("Information är null eller pris lägre än 0");
+            }
 
-        Court court = new Court(
-                dto.information(),
-                dto.price()
-        );
-
-        Court savedCourt = courtRepo.save(court);
-        return CourtMapper.toDto(savedCourt);
+            Court court = new Court(dto.information(), dto.price());
+            Court savedCourt = courtRepo.save(court);
+            logger.info("Lyckades skapa padelbana med id: {}", savedCourt.getId());
+            return CourtMapper.toDto(savedCourt);
+        } catch (Exception e) {
+            logger.error("Error vid skapande av padelbana", e);
+            throw e;
+        }
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public CourtDto updateCourt(Long id, CourtUpdateDto dto) {
-        if (dto == null) {
-            throw new IllegalArgumentException("Body är null");
-        }
-        if (dto.information() == null || dto.information().isEmpty()
-                || dto.price() < 0) {
-            throw new IllegalArgumentException("Information är null eller pris lägre än 0");
-        }
+        logger.info("Uppdaterar padelbana med id: {}", id);
+        try {
+            if (dto == null) {
+                logger.error("Body är null");
+                throw new IllegalArgumentException("Body är null");
+            }
+            if (dto.information() == null || dto.information().isEmpty() || dto.price() < 0) {
+                logger.error("Error: Information är null eller pris lägre än 0");
+                throw new IllegalArgumentException("Information är null eller pris lägre än 0");
+            }
 
-        Court court = courtRepo.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Padelbana med id " + id + " hittades inte"));
-        court.setInformation(dto.information());
-        court.setPrice(dto.price());
-        courtRepo.save(court);
-
-        return CourtMapper.toDto(court);
+            Court court = courtRepo.findById(id)
+                    .orElseThrow(() -> {
+                        logger.error("Padelbana med id {} hittades inte", id);
+                        return new EntityNotFoundException("Padelbana med id " + id + " hittades inte");
+                    });
+            court.setInformation(dto.information());
+            court.setPrice(dto.price());
+            courtRepo.save(court);
+            logger.info("Lyckades uppdatera padelbana med id: {}", id);
+            return CourtMapper.toDto(court);
+        } catch (Exception e) {
+            logger.error("Error vid uppdatering av padelbana med id: {}", id, e);
+            throw e;
+        }
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCourt(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id är null");
+        logger.info("Tar bort padelbana med id: {}", id);
+        try {
+            if (id == null) {
+                logger.error("Id är null");
+                throw new IllegalArgumentException("Id är null");
+            }
+            Court court = courtRepo.findById(id)
+                    .orElseThrow(() -> {
+                        logger.error("Padelbana med id {} hittades inte", id);
+                        return new EntityNotFoundException("Padelbana med id " + id + " hittades inte");
+                    });
+            courtRepo.delete(court);
+            logger.info("Lyckades ta bort padelbana med id: {}", id);
+        } catch (Exception e) {
+            logger.error("Error vid borttag av padelbana med id: {}", id, e);
+            throw e;
         }
-        Court court = courtRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Padelbana med id " + id + " hittades inte"));
-        courtRepo.delete(court);
     }
 
 }
