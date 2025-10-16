@@ -1,9 +1,6 @@
 package com.strom.wigellPadel.mapper;
 
-import com.strom.wigellPadel.dto.CustomerCreateDto;
-import com.strom.wigellPadel.dto.CustomerDto;
-import com.strom.wigellPadel.dto.CustomerUpdateDto;
-import com.strom.wigellPadel.dto.CustomerWithAccountCreateDto;
+import com.strom.wigellPadel.dto.*;
 import com.strom.wigellPadel.entities.Address;
 import com.strom.wigellPadel.entities.Customer;
 
@@ -19,12 +16,16 @@ public class CustomerMapper {
         if (customer == null) {
             return null;
         }
+        Set<AddressDto> addressDtoList = new HashSet<>();
+        for (Address address : customer.getAddress()) {
+            addressDtoList.add(new AddressDto(address.getStreet(), address.getPostalCode(), address.getCity()));
+        }
         return new CustomerDto(
                 customer.getId(),
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getUsername(),
-                customer.getAddress(),
+                addressDtoList,
                 customer.getKeycloakUserId()
         );
     }

@@ -9,7 +9,7 @@ public record CustomerDto(
         String username,
         String firstName,
         String lastName,
-        Set<Address> address,
+        Set<AddressDto> address,
         String keycloakUserId
 
 ) {
