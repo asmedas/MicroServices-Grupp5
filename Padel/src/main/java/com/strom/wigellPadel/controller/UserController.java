@@ -57,7 +57,7 @@ public class UserController {
         return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 
-    @GetMapping("/bookings")
+    @GetMapping(value = "/bookings", params = "customerId")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<BookingDto>> getBookings(@RequestParam Long customerId) {
         logger.info("Mottog begäran om att hämta bokningar för kund-ID {}", customerId);
