@@ -37,7 +37,7 @@ public class KeycloakAdminService {
         }
 
         // Hämta skapad användare och sätter lösenord
-        String userId = realm().users().search(username).get(0).getId();
+        String userId = realm().users().search(username).getFirst().getId();
         setPassword(userId, password);
     }
 
