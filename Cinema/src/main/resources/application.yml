@@ -6,7 +6,7 @@ spring:
     name: cinema
 
   datasource:
-    url: jdbc:mysql://localhost:6606/cinema?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:6606/wigell_cinema_db?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
@@ -46,7 +46,7 @@ keycloak:
 keycloak.admin:
   realm: cinema_keycloak
   client-id: spring-app-admin
-  client-secret: 2NOYyjIowI9aMbcI9oNbVGWvbtGTEX0o
+  client-secret: P4mi2b1oo34gNxk832MNQR24KjksJhrP
 
 currency:
   api:

@@ -94,10 +94,10 @@ public class CinemaApplication {
             // 5 kunder
             Customer customer1 = customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
                     "sebbe", "jonsson", 30, "sebbe", "jonsson",
-                    "sebbe@hotmail.com", new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353")));
+                    "sebbfgrgee@hotmail.com", new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353")));
             Customer customer2 = customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
                     "Gabbi", "Landegren", 27, "gabbi", "landegren",
-                    "gabbi@hotmail.com", new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353")));
+                    "gabbidsf@hotmail.com", new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353")));
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
                     "Gunnar", "Jonsson", 50, "Gunnar", "Jonsson",
                     "Gunnar@hotmail.com", new CreateAddressDto("Russvägen 18", "sundsvall", "85752")));

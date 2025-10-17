@@ -504,6 +504,22 @@
       },
       "notBefore": 0,
       "groups": []
+    },
+    {
+      "username": "admin",
+      "email": "admin@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "credentials": [{"type": "password", "value": "admin", "temporary": false}],
+      "realmRoles": ["USER", "ADMIN"]
+    },
+    {
+      "username": "user",
+      "email": "user@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "credentials": [{"type": "password", "value": "user", "temporary": false}],
+      "realmRoles": ["USER"]
     }
   ],
   "scopeMappings": [
@@ -896,7 +912,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "P4mi2b1oo34gNxk832MNQR24KjksJhrP",
       "redirectUris": [
         "/*"
       ],

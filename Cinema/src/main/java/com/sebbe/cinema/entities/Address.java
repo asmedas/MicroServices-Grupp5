@@ -1,5 +1,6 @@
 package com.sebbe.cinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -25,6 +26,7 @@ public class Address {
     private String postalCode;
 
     @ManyToMany(mappedBy = "addresses")
+    @JsonBackReference
     Set<Customer> customers = new HashSet<>();
 
     protected Address() {}

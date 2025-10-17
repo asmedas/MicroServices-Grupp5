@@ -38,7 +38,7 @@ services:
     volumes:
       - ./keycloak/cinema_realm.json:/opt/keycloak/data/import/cinema_realm.json
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
       interval: 10s
       timeout: 5s
       retries: 10

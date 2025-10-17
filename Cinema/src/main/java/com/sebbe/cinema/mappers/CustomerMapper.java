@@ -13,7 +13,7 @@ public class CustomerMapper {
     private CustomerMapper(){}
 
     public static CustomerDto toDto(Customer customer){
-        Set<AddressDto> addressDto = AddressMapper.toDtoSet(customer.getAddress());
+        Set<AddressDto> addressDto = AddressMapper.toDtoSet(customer.getAddresses());
         return new CustomerDto(customer.getId(), customer.getKeycloakId(), customer.getFirstName(),
                 customer.getLastName(), customer.getEmail(), customer.getAge(), addressDto);
     }
