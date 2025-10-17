@@ -33,9 +33,12 @@ public class CinemaApplication {
     public CommandLineRunner loadData(AddressService addressService, CustomerRepository customerRepository, FilmRepository filmRepository
     , CinemaHallRepository cinemaHallRepository, ScreeningRepository screeningRepository, TicketRepository ticketRepository
     , BookingService bookingService, TicketService ticketService, BookingRepository bookingRepository, AddressRepository addressRepository,
-                                      CustomerService customerService, ScreeningService screeningService)
+                                      CustomerService customerService, ScreeningService screeningService,
+                                      KeycloakUserServiceImpl keycloakUserServiceImpl)
     {
         return args -> {
+
+            keycloakUserServiceImpl.initializeUsersOnStartup();
             Authentication adminAuth =
                     new TestingAuthenticationToken("system", null, List.of(
                             new SimpleGrantedAuthority("ROLE_ADMIN"),
@@ -68,17 +71,23 @@ public class CinemaApplication {
 
             // 3 visningar
             Screening screening = new Screening(LocalDate.of(2025,10,8), film, cinemaHall, List.of(Type.FILM));
-            screening.setPriceSek(screeningService.calculatePriceSek(cinemaHall));
-            screening.setPriceUsd(screeningService.calculatePriceUsd(screening.getPriceSek()));
+            screening.setPriceSek(BigDecimal.valueOf(100));
+            screening.setPriceUsd(BigDecimal.valueOf(10));
+//            screening.setPriceSek(screeningService.calculatePriceSek(cinemaHall));
+//            screening.setPriceUsd(screeningService.calculatePriceUsd(screening.getPriceSek()));
             screeningRepository.save(screening);
             Screening screening1 = new Screening(LocalDate.of(2023,10,8), film2, cinemaHall2, List.of(Type.FILM));
-            screening1.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
-            screening1.setPriceUsd(screeningService.calculatePriceUsd(screening1.getPriceSek()));
+            screening1.setPriceSek(BigDecimal.valueOf(100));
+            screening1.setPriceUsd(BigDecimal.valueOf(10));
+//            screening1.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
+//            screening1.setPriceUsd(screeningService.calculatePriceUsd(screening1.getPriceSek()));
             screeningRepository.save(screening1);
             Screening screening2 = new Screening(
                     LocalDate.of(2023,10,8), "Tomas Wigell", cinemaHall2, List.of(Type.SPEAKER));
-            screening2.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
-            screening2.setPriceUsd(screeningService.calculatePriceUsd(screening2.getPriceSek()));
+            screening2.setPriceSek(BigDecimal.valueOf(100));
+            screening2.setPriceUsd(BigDecimal.valueOf(10));
+//            screening2.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
+//            screening2.setPriceUsd(screeningService.calculatePriceUsd(screening2.getPriceSek()));
             screeningRepository.save(screening2);
 
 
