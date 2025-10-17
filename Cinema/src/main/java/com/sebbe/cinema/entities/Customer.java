@@ -1,10 +1,8 @@
 package com.sebbe.cinema.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 import java.util.ArrayList;
@@ -43,6 +41,7 @@ public class Customer {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id")
     )
+    @JsonManagedReference
     Set<Address> addresses = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true,
@@ -109,7 +108,7 @@ public class Customer {
         this.age = age;
     }
 
-    public Set<Address> getAddress() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 

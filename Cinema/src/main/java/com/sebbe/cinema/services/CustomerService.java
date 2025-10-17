@@ -143,7 +143,7 @@ public class CustomerService {
                     log.error("Customer not found");
                     return new NoMatchException("Customer not found");
                 });
-        if(customer.getAddress().size() == 1){
+        if(customer.getAddresses().size() == 1){
             log.error("Cannot remove last address");
             throw new IllegalStateException("Cannot remove last address");
         }

@@ -147,6 +147,8 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
         return existingId;
     }
 
+
+
     @Override
     public void updateUserProfile(String userId, UpdateUserProfileDto profile) {
         Objects.requireNonNull(userId, "userId får inte vara null");
