@@ -30,6 +30,16 @@ public class Booking {
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetails> bookingDetails = new ArrayList<>();
 
+    public Booking() {}
+
+    public Booking(Integer id, LocalDateTime date, Room room, Customer customer, int guestCount) {
+        this.id = id;
+        this.date = date;
+        this.room = room;
+        this.customer = customer;
+        this.guestCount = guestCount;
+    }
+
     // Getters och setters
     public Integer getId() {
         return id;

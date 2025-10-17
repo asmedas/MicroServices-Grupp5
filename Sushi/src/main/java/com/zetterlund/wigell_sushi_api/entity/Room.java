@@ -24,6 +24,16 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
+    public Room() {}
+
+    public Room(Integer id, String name, int maxGuests, boolean hasTechnicalEquipment, List<Booking> bookings) {
+        this.id = id;
+        this.name = name;
+        this.maxGuests = maxGuests;
+        this.hasTechnicalEquipment = hasTechnicalEquipment;
+        this.bookings = bookings != null ? bookings : new ArrayList<>();
+    }
+
     // Getters och setters
     public Integer getId() {
         return id;
@@ -51,5 +61,12 @@ public class Room {
     }
     public void setHasTechnicalEquipment(boolean hasTechnicalEquipment) {
         this.hasTechnicalEquipment = hasTechnicalEquipment;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+    public void setBookings(List<Booking> bookings) {
+       this.bookings = bookings != null ? bookings : new ArrayList<>();
     }
 }

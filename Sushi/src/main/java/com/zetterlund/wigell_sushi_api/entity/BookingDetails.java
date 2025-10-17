@@ -21,6 +21,15 @@ public class BookingDetails {
     @Column(nullable = false)
     private int count;
 
+    public BookingDetails() {}
+
+    public BookingDetails(Integer id, Booking booking, Dish dish, int count) {
+        this.id = id;
+        this.booking = booking;
+        this.dish = dish;
+        this.count = count;
+    }
+
     // Getters och setters
     public Integer getId() {
         return id;

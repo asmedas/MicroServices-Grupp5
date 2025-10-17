@@ -16,13 +16,33 @@ public class Customer {
     private String username;
 
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String phoneNumber;
 
     @Column
     private String keycloakUserId;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
+
+    public Customer() {}
+
+    public Customer(Integer id, String username, String firstname, String lastname, String mail, String phoneNumber) {
+        this.id = id;
+        this.username = username;
+        this.firstName = firstname;
+        this.lastName = lastname;
+        this.email = mail;
+        this.phoneNumber = phoneNumber;
+    }
 
     // Getters och setters
     public Integer getId() {
@@ -39,11 +59,32 @@ public class Customer {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getKeycloakUserId() {
@@ -56,7 +97,6 @@ public class Customer {
     public List<Address> getAddresses() {
         return addresses;
     }
-
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
