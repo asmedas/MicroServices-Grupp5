@@ -112,6 +112,12 @@ public class CustomerService {
                         logger.error("Kund med id {} hittades inte", id);
                         return new EntityNotFoundException("Kund med id " + id + " hittades inte");
                     });
+            Set<Address> addresses = new HashSet<>(customer.getAddress());
+            for (Address address : addresses) {
+                address.getCustomers().remove(customer);
+                customer.getAddress().remove(address);
+            }
+
             customerRepo.delete(customer);
             logger.info("Lyckades ta bort kund med id: {}", id);
         } catch (Exception e) {
