@@ -30,7 +30,7 @@ import java.util.List;
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -82,7 +82,7 @@ public class CustomerService {
 
     }
 
-    public CustomerDto update(Long id, CustomerUpdateDto dto) {
+    public CustomerDto updateCustomer(Long id, CustomerUpdateDto dto) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NoMatchException("Customer not found"));
 
@@ -97,6 +97,7 @@ public class CustomerService {
         return saveCustomerWithRollback(customer, id, changes);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCustomer(long id){
         log.debug("Deleting customer with id {}", id);
         Customer customer = customerRepository.findById(id)
@@ -116,7 +117,7 @@ public class CustomerService {
         }
     }
 
-    public void addAddress(Long customerId, CreateAddressDto address){
+    public CustomerDto addAddress(Long customerId, CreateAddressDto address){
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> {
                     log.error("Customer not found");
@@ -131,6 +132,7 @@ public class CustomerService {
             log.error("Database error adding address to customer", e);
             throw new UnexpectedError("Database error adding address to customer " + e);
         }
+        return CustomerMapper.toDto(customer);
 
     }
 
@@ -235,6 +237,9 @@ public class CustomerService {
         }
         if (dto.email() != null) {
             customer.setEmail(dto.email());
+        }
+        if(dto.age() != null){
+            customer.setAge(dto.age());
         }
     }
 

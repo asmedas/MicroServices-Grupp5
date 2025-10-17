@@ -3,6 +3,7 @@ package com.sebbe.cinema.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,8 +33,19 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/api/v1/customers").permitAll()
+                        .requestMatchers("/actuator/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/movies").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/bookings").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/tickets").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/tickets**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/screenings**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH,"/api/v1/bookings/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/bookings**").hasRole("USER")
+
+                        .requestMatchers("/api/v1/customers", "api/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/movies", "/api/v1/movies/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/rooms", "/api/v1/rooms/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/screenings", "/api/v1/screenings/**").hasRole("ADMIN")
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())))
                 .exceptionHandling(e -> e

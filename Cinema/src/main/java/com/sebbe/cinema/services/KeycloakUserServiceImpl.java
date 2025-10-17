@@ -16,12 +16,15 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class KeycloakUserServiceImpl implements KeycloakUserService {
 
     private final Keycloak keycloak;
     private final String realm;
+    private static final String[] PROTECTED_USERNAMES = {"admin", "user"};
     private static final Logger log = LoggerFactory.getLogger(KeycloakUserServiceImpl.class);
 
     public KeycloakUserServiceImpl(Keycloak keycloak,
@@ -30,46 +33,102 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
         this.realm = realm;
     }
 
+    /**
+     * då jag kör create-drop så är såklart keycloaks databas ej påverkad när min applikation stängs ner.
+     * därför körs denna vid startup så min User data återställs till endast två användare vid startup;
+     * user och admin
+     */
+    @Override
+    public void initializeUsersOnStartup() {
+        log.debug("Resetting keycloak user-database to only user and admin");
+        var usersResource = realm().users();
+        var allUsers = usersResource.list();
+
+        log.debug("Found {} total users in Keycloak", allUsers.size());
+
+        var usersToDelete = allUsers.stream()
+                .filter(user -> {
+                    String username = user.getUsername();
+                    boolean isProtected = username != null &&
+                            Stream.of(PROTECTED_USERNAMES)
+                                    .anyMatch(protectedUser -> protectedUser.equalsIgnoreCase(username));
+                    return !isProtected;
+                })
+                .toList();
+
+        log.debug("Found {} users to delete (excluding protected: {})",
+                usersToDelete.size(), String.join(", ", PROTECTED_USERNAMES));
+
+        for (UserRepresentation user : usersToDelete) {
+            String username = user.getUsername();
+            String userId = user.getId();
+
+            try {
+                log.debug("Deleting user: {} (ID: {})", username, userId);
+                usersResource.delete(userId);
+                log.info("Successfully deleted user: {}", username);
+            } catch (Exception e) {
+                log.warn("Failed to delete user {} (ID: {}): {}", username, userId, e.getMessage());
+            }
+        }
+
+        var remainingUsers = usersResource.list();
+        var remainingUsernames = remainingUsers.stream()
+                .map(UserRepresentation::getUsername)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        log.info("=== Keycloak initialization complete ===");
+        log.info("Remaining users: {}", String.join(", ", remainingUsernames));
+    }
+
 
     @Override
     public String createUserForCustomer(String username, String email, String rawPassword) {
         log.debug("Trying to create user in keycloak");
         var users = realm().users();
+
         var existingId = users.searchByUsername(username, false).stream()
                 .filter(u -> username.equalsIgnoreCase(u.getUsername()))
                 .map(UserRepresentation::getId)
                 .findFirst()
                 .orElse(null);
-        if(existingId != null){
-            var rep = users.get(existingId).toRepresentation();
-            if(email != null && !email.isEmpty() && !email.equalsIgnoreCase(rep.getEmail())){
+        if (existingId != null) {
+            log.error("Username already exists");
+            throw new AlreadyExistsError("Username already exists: " + username);
+        }
+
+        if (email != null && !email.isEmpty()) {
+            var usersWithEmail = users.searchByEmail(email, false);
+            if (!usersWithEmail.isEmpty()) {
                 log.error("Email already exists");
                 throw new AlreadyExistsError("Email already exists: " + email);
             }
-        } else {
-            log.debug("Creating User rep");
-            UserRepresentation rep = new UserRepresentation();
-            rep.setUsername(username);
-            rep.setEmail(email);
-            rep.setEnabled(true);
-
-            log.debug("Creating User");
-            var resp = users.create(rep);
-            int status = resp.getStatus();
-            if(status == 409){
-                existingId = users.searchByUsername(username, true).stream()
-                        .filter(u -> username.equalsIgnoreCase(u.getUsername()))
-                        .map(UserRepresentation::getId)
-                        .findFirst()
-                        .orElseThrow(() -> new AlreadyExistsError("Username already in use: " + username));
-            } else if(status >= 300){
-                throw new IllegalStateException("Failed to create user. HTTP status: " + status);
-            } else {
-                log.debug("Extracting keycloak userId");
-                existingId = extractIdFromLocation(resp);
-            }
-            resp.close();
         }
+
+        log.debug("Creating User rep");
+        UserRepresentation rep = new UserRepresentation();
+        rep.setUsername(username);
+        rep.setEmail(email);
+        rep.setEnabled(true);
+
+        log.debug("Creating User");
+        var resp = users.create(rep);
+        int status = resp.getStatus();
+        if (status == 409) {
+            existingId = users.searchByUsername(username, true).stream()
+                    .filter(u -> username.equalsIgnoreCase(u.getUsername()))
+                    .map(UserRepresentation::getId)
+                    .findFirst()
+                    .orElseThrow(() -> new AlreadyExistsError("Username already in use: " + username));
+        } else if (status >= 300) {
+            throw new IllegalStateException("Failed to create user. HTTP status: " + status);
+        } else {
+            log.debug("Extracting keycloak userId");
+            existingId = extractIdFromLocation(resp);
+        }
+        resp.close();
+
 
         log.debug("Creating CredentialRepresentation for User");
         var cred = new CredentialRepresentation();

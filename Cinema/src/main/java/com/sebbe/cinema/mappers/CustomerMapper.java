@@ -14,8 +14,8 @@ public class CustomerMapper {
 
     public static CustomerDto toDto(Customer customer){
         Set<AddressDto> addressDto = AddressMapper.toDtoSet(customer.getAddress());
-        return new CustomerDto(customer.getId(), customer.getFirstName(),
-                customer.getLastName(), customer.getEmail(), addressDto);
+        return new CustomerDto(customer.getId(), customer.getKeycloakId(), customer.getFirstName(),
+                customer.getLastName(), customer.getEmail(), customer.getAge(), addressDto);
     }
 
     public static Customer buildCustomerFromCreateDto(CreateCustomerWithAccountDto dto, String keycloakId, Address address) {

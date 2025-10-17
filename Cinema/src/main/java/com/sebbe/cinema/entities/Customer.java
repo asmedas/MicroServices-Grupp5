@@ -35,7 +35,7 @@ public class Customer {
     @Positive
     @Column(nullable = false)
     @Max(120)
-    private int age;
+    private Integer age;
 
     @ManyToMany
     @JoinTable(
