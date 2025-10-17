@@ -21,6 +21,15 @@ public class OrderDetails {
     @Column(nullable = false)
     private int count;
 
+    public OrderDetails() {}
+
+    public OrderDetails(Integer id, Order order, Dish dish, int count) {
+        this.id = id;
+        this.order = order;
+        this.dish = dish;
+        this.count = count;
+    }
+
     // Getters och setters
     public Integer getId() {
         return id;

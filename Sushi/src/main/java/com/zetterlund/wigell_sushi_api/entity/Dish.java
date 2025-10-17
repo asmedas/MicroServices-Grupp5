@@ -2,6 +2,8 @@ package com.zetterlund.wigell_sushi_api.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "dishes")
 public class Dish {
@@ -21,6 +23,13 @@ public class Dish {
 
     @Column
     private String description;
+
+    public Dish() {}
+
+    public Dish(Integer id, String name, BigDecimal priceInSek, BigDecimal PriceInJpy, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     // Getters och setters
     public Integer getId() {

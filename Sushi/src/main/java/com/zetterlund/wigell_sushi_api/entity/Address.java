@@ -27,6 +27,14 @@ public class Address {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    public Address() {}
+
+    public Address(String street, String postalCode, String city) {
+        this.street = street;
+        this.postalCode = postalCode;
+        this.city = city;
+    }
+
     // Getters och setters
     public Integer getId() {
         return id;

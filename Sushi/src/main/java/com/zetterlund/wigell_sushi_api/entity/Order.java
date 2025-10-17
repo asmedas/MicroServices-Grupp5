@@ -1,6 +1,8 @@
 package com.zetterlund.wigell_sushi_api.entity;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,14 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    public Order() {}
+
+    public Order(Integer id, BigDecimal bigDecimal, Customer customer) {
+        this.id = id;
+        this.totalPriceInSek = bigDecimal.doubleValue();
+        this.customer = customer;
+    }
 
     // Getters och setters
     public Integer getId() {
