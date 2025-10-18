@@ -5,7 +5,6 @@ import com.strom.wigellPadel.dto.CourtDto;
 import com.strom.wigellPadel.dto.CourtUpdateDto;
 import com.strom.wigellPadel.entities.Court;
 import com.strom.wigellPadel.mapper.CourtMapper;
-import com.strom.wigellPadel.mapper.CustomerMapper;
 import com.strom.wigellPadel.repositories.BookingRepo;
 import com.strom.wigellPadel.repositories.CourtRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CourtService {
@@ -24,10 +22,12 @@ public class CourtService {
     private static final Logger logger = LoggerFactory.getLogger(CourtService.class);
     private final CourtRepo courtRepo;
     private final BookingRepo bookingRepo;
+    private final CurrencyConverterClient converterClient;
 
-    public CourtService(CourtRepo courtRepo, BookingRepo bookingRepo) {
+    public CourtService(CourtRepo courtRepo, BookingRepo bookingRepo, CurrencyConverterClient converterClient) {
         this.courtRepo = courtRepo;
         this.bookingRepo = bookingRepo;
+        this.converterClient = converterClient;
         logger.debug("CourtService initialized");
     }
 
@@ -37,7 +37,7 @@ public class CourtService {
         logger.info("Hämtar alla padelbanor");
         try {
             List<CourtDto> courts = courtRepo.findAll().stream()
-                    .map(CourtMapper::toDto)
+                    .map(this::toDtoWithEURPrice)
                     .toList();
             logger.debug("Lyckades hämta {} padelbanor", courts.size());
             return courts;
@@ -56,14 +56,12 @@ public class CourtService {
                 logger.error("Id är null");
                 throw new IllegalArgumentException("Id är null");
             }
-            CourtDto courtDto = courtRepo.findById(id)
-                    .map(CourtMapper::toDto)
+            Court court = courtRepo.findById(id)
                     .orElseThrow(() -> {
                         logger.error("Padelbana med id {} hittades inte", id);
                         return new EntityNotFoundException("Padelbana med id " + id + " hittades inte");
                     });
-            logger.debug("Lyckades hämta padelbana med id: {}", id);
-            return courtDto;
+            return toDtoWithEURPrice(court);
         } catch (Exception e) {
             logger.error("Error vid hämtning av padelbana med id: {}", id, e);
             throw e;
@@ -87,7 +85,7 @@ public class CourtService {
             Court court = new Court(dto.information(), dto.price());
             Court savedCourt = courtRepo.save(court);
             logger.info("Lyckades skapa padelbana med id: {}", savedCourt.getId());
-            return CourtMapper.toDto(savedCourt);
+            return toDtoWithEURPrice(savedCourt);
         } catch (Exception e) {
             logger.error("Error vid skapande av padelbana", e);
             throw e;
@@ -115,9 +113,9 @@ public class CourtService {
                     });
             court.setInformation(dto.information());
             court.setPrice(dto.price());
-            courtRepo.save(court);
+            Court savedCourt = courtRepo.save(court);
             logger.info("Lyckades uppdatera padelbana med id: {}", id);
-            return CourtMapper.toDto(court);
+            return toDtoWithEURPrice(savedCourt);
         } catch (Exception e) {
             logger.error("Error vid uppdatering av padelbana med id: {}", id, e);
             throw e;
@@ -146,4 +144,14 @@ public class CourtService {
         }
     }
 
+    private CourtDto toDtoWithEURPrice(Court court) {
+        double priceInEUR;
+        try {
+            priceInEUR = converterClient.convertToEUR(court.getPrice());
+        } catch (Exception e) {
+            logger.warn("Failed to convert price to EUR for court id: {}. Setting to 0.0", court.getId(), e);
+            priceInEUR = 0.0;  // Fallback
+        }
+        return CourtMapper.toDto(court, priceInEUR);
+    }
 }
