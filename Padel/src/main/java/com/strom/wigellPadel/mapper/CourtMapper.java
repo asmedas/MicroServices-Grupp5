@@ -9,7 +9,7 @@ public class CourtMapper {
     public CourtMapper() {
     }
 
-    public static CourtDto toDto(Court court) {
+    public static CourtDto toDto(Court court, double priceInEUR) {
         if (court == null) {
             return null;
         }
@@ -17,7 +17,8 @@ public class CourtMapper {
         return new CourtDto(
                 court.getId(),
                 court.getInformation(),
-                court.getPrice()
+                court.getPrice(),
+                priceInEUR
         );
     }
 

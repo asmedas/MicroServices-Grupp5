@@ -48,3 +48,10 @@ logging:
     org.springframework: DEBUG
     org.springframework.security: DEBUG
     com.strom.wigellPadel: DEBUG
+
+converter:
+  service:
+    url: http://localhost:8700/api/convert
+internal:
+  api:
+    key: 123456789
