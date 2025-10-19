@@ -30,32 +30,4 @@ public class CustomerMapper {
         );
     }
 
-    public static Customer fromCreate(CustomerCreateDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Address address = new Address(dto.street(), dto.postalCode(), dto.city());
-        Set<Address> addresses = new HashSet<>();
-        addresses.add(address);
-        Customer newCustomer = new Customer(dto.firstName(), dto.lastName(), addresses, dto.email(), dto.username(), dto.password());
-        address.setCustomers(new HashSet<>());
-        address.getCustomers().add(newCustomer);
-        return newCustomer;
-    }
-
-    public static void updateEntity(Customer customer, CustomerUpdateDto dto) {
-        if (dto == null || customer == null) {
-            return;
-        }
-        customer.setFirstName(dto.firstName());
-        customer.setLastName(dto.lastName());
-        Address address = new Address(dto.street(), dto.postalCode(), dto.city());
-        Set<Address> addresses = customer.getAddress() != null ? customer.getAddress() : new HashSet<>();
-        addresses.add(address);
-        customer.setAddress(addresses);
-        if (address.getCustomers() == null) {
-            address.setCustomers(new HashSet<>());
-        }
-        address.getCustomers().add(customer);
-    }
 }
