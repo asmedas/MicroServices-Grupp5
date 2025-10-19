@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,9 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingCreateDto dto) {
         logger.info("Mottog begäran om att skapa bokning för kund-ID {}", dto.customerId());
-        BookingDto newBooking = bookingService.createBooking(dto);
-        logger.debug("Skapade bokning med ID {} för kund-ID {}", newBooking.id(), dto.customerId());
-        return new ResponseEntity<>(newBooking, HttpStatus.CREATED);
+        BookingDto bookingDto = bookingService.createBooking(dto);
+        logger.debug("Skapade bokning med ID {} för kund-ID {}", bookingDto.id(), dto.customerId());
+        return ResponseEntity.created(URI.create("/api/v1/bookings/" + bookingDto.id())).body(bookingDto);
     }
 
     @PatchMapping("/bookings/{courtId}")
