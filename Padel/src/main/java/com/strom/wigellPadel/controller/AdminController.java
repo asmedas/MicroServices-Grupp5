@@ -157,7 +157,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerDto> deleteAddress(@PathVariable Long customerId, @PathVariable Long addressId) {
         logger.info("Mottog begäran om att ta bort adress med id {} från kund med id {}", addressId, customerId);
-        addressService.deleteAddressFromCustomer(addressId, customerId);
+        addressService.deleteAddressFromCustomer(customerId, addressId);
         logger.debug("Tog bort adress med id {} från kund med id {}", addressId, customerId);
         return ResponseEntity.noContent().build();
     }

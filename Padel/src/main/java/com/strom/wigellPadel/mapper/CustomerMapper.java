@@ -18,7 +18,7 @@ public class CustomerMapper {
         }
         Set<AddressDto> addressDtoList = new HashSet<>();
         for (Address address : customer.getAddress()) {
-            addressDtoList.add(new AddressDto(address.getStreet(), address.getPostalCode(), address.getCity()));
+            addressDtoList.add(new AddressDto(address.getId(), address.getStreet(), address.getPostalCode(), address.getCity()));
         }
         return new CustomerDto(
                 customer.getId(),
