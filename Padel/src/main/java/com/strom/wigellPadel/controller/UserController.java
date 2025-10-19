@@ -34,7 +34,7 @@ public class UserController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam Long courtId) {
         logger.info("Mottog begäran om att hämta tillgängliga tider för datum {} och bana {}", date, courtId);
-        List<AvailableDto> availableSlots = new ArrayList<>();
+        List<AvailableDto> availableSlots = bookingService.availableTimeSlots(date, courtId);
         logger.debug("Returnerar {} tillgängliga tider för datum {} och bana {}", availableSlots.size(), date, courtId);
         return new ResponseEntity<>(availableSlots, HttpStatus.OK);
     }

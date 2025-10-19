@@ -4,6 +4,7 @@ import com.strom.wigellPadel.dto.*;
 import com.strom.wigellPadel.entities.Booking;
 import com.strom.wigellPadel.entities.Court;
 import com.strom.wigellPadel.entities.Customer;
+import com.strom.wigellPadel.mapper.AvailableMapper;
 import com.strom.wigellPadel.mapper.BookingMapper;
 import com.strom.wigellPadel.mapper.CourtMapper;
 import com.strom.wigellPadel.mapper.CustomerMapper;
@@ -179,7 +180,16 @@ public class BookingService {
             List<Integer> allTimeSlots = IntStream.rangeClosed(9, 21).boxed().toList();
             List<AvailableDto> availableSlots = allTimeSlots.stream()
                     .filter(timeSlot -> !bookedTimeSlots.contains(timeSlot))
-                    .map(timeSlot -> new AvailableDto(courtId, date, timeSlot, court.getPrice()))
+                    .map(timeSlot -> {
+                        double priceInEUR;
+                        try {
+                            priceInEUR = converterClient.convertToEUR(court.getPrice());
+                        } catch (Exception e) {
+                            logger.warn("Misslyckades att konvertera pris till EUR för padelbana med id: {}. Sätter pris till 0.0", court.getId(), e);
+                            priceInEUR = 0.0;
+                        }
+                        return AvailableMapper.toDto(court, date, timeSlot, priceInEUR);
+                    })
                     .toList();
             logger.debug("Hittade {} lediga starttider för courtId: {} datum: {}", availableSlots.size(), courtId, date);
             return availableSlots;
@@ -311,6 +321,17 @@ public class BookingService {
             priceInEUR = 0.0;
         }
         return BookingMapper.toDto(booking, priceInEUR);
+    }
+
+    private AvailableDto toDtoWithEURPrice(Court court, LocalDate date, int timeSlot) {
+        double priceInEUR;
+        try {
+            priceInEUR = converterClient.convertToEUR(court.getPrice());
+        } catch (Exception e) {
+            logger.warn("Misslyckades att konvertera pris till EUR för padelbana med id: {}. Sätter pris till 0.0", court.getId(), e);
+            priceInEUR = 0.0;
+        }
+        return AvailableMapper.toDto(court, date, timeSlot, priceInEUR);
     }
 
 }

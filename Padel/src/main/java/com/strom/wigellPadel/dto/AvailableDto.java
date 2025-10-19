@@ -6,6 +6,7 @@ public record AvailableDto(
         Long courtId,
         LocalDate date,
         int timeSlot,
-        double price
+        double price,
+        double priceInEUR
 ) {
 }
