@@ -307,7 +307,7 @@ public class BookingService {
         try {
             priceInEUR = converterClient.convertToEUR(booking.getTotalPrice());
         } catch (Exception e) {
-            logger.warn("Misslyckades att konvertera pris till EUR för padelbana med id: {}. Sätter pris till 0.0", booking.getId(), e);
+            logger.warn("Misslyckades att konvertera pris till EUR för bokning med id: {}. Sätter pris till 0.0", booking.getId(), e);
             priceInEUR = 0.0;
         }
         return BookingMapper.toDto(booking, priceInEUR);
