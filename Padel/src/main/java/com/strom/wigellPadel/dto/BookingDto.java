@@ -10,6 +10,7 @@ public record BookingDto (
         int numberOfPlayers,
         LocalDate date,
         int timeSlot,
-        double totalPrice
+        double totalPrice,
+        double priceInEUR
 ){
 }

@@ -1,13 +1,11 @@
 package com.strom.wigellPadel.services;
 
-import com.strom.wigellPadel.dto.AvailableDto;
-import com.strom.wigellPadel.dto.BookingCreateDto;
-import com.strom.wigellPadel.dto.BookingDto;
-import com.strom.wigellPadel.dto.BookingUpdateDto;
+import com.strom.wigellPadel.dto.*;
 import com.strom.wigellPadel.entities.Booking;
 import com.strom.wigellPadel.entities.Court;
 import com.strom.wigellPadel.entities.Customer;
 import com.strom.wigellPadel.mapper.BookingMapper;
+import com.strom.wigellPadel.mapper.CourtMapper;
 import com.strom.wigellPadel.mapper.CustomerMapper;
 import com.strom.wigellPadel.repositories.BookingRepo;
 import com.strom.wigellPadel.repositories.CourtRepo;
@@ -33,11 +31,13 @@ public class BookingService {
     private final BookingRepo bookingRepo;
     private final CourtRepo courtRepo;
     private final CustomerRepo customerRepo;
+    private final CurrencyConverterClient converterClient;
 
-    public BookingService(BookingRepo bookingRepo, CourtRepo courtRepo, CustomerRepo customerRepo) {
+    public BookingService(BookingRepo bookingRepo, CourtRepo courtRepo, CustomerRepo customerRepo, CurrencyConverterClient converterClient) {
         this.bookingRepo = bookingRepo;
         this.courtRepo = courtRepo;
         this.customerRepo = customerRepo;
+        this.converterClient = converterClient;
         logger.debug("BookingService initialized");
     }
 
@@ -69,7 +69,7 @@ public class BookingService {
         logger.info("Hämtar alla bokningar");
         try {
             List<BookingDto> bookings = bookingRepo.findAll().stream()
-                    .map(BookingMapper::toDto)
+                    .map(this::toDtoWithEURPrice)
                     .toList();
             logger.debug("Lyckades hämta {} bokningar", bookings.size());
             return bookings;
@@ -88,14 +88,13 @@ public class BookingService {
                 logger.error("Id är null");
                 throw new IllegalArgumentException("Id är null");
             }
-            BookingDto bookingDto = bookingRepo.findById(id)
-                    .map(BookingMapper::toDto)
+            Booking booking = bookingRepo.findById(id)
                     .orElseThrow(() -> {
                         logger.error("Bokning med id {} hittades inte", id);
                         return new EntityNotFoundException("Bokning med id " + id + " hittades inte");
                     });
             logger.debug("Lyckades hämta bokning med id: {}", id);
-            return bookingDto;
+            return toDtoWithEURPrice(booking);
         } catch (Exception e) {
             logger.error("Error vid hämtning av bokning med id: {}", id, e);
             throw e;
@@ -151,7 +150,7 @@ public class BookingService {
             booking.setTotalPrice(court.getPrice());
             Booking savedBooking = bookingRepo.save(booking);
             logger.info("Lyckades skapa bokning med id: {}", savedBooking.getId());
-            return BookingMapper.toDto(savedBooking);
+            return toDtoWithEURPrice(savedBooking);
         } catch (Exception e) {
             logger.error("Error vid skapande av bokning", e);
             throw e;
@@ -270,7 +269,7 @@ public class BookingService {
             }
             Booking savedBooking = bookingRepo.save(bookingToUpdate);
             logger.info("Lyckades patcha bokning med id: {}", id);
-            return BookingMapper.toDto(savedBooking);
+            return toDtoWithEURPrice(savedBooking);
         } catch (Exception e) {
             logger.error("Error vid patchning av bokning med id: {}", id, e);
             throw e;
@@ -292,7 +291,7 @@ public class BookingService {
                         return new EntityNotFoundException("Kund med id " + customerId + " hittades inte");
                     });
             List<BookingDto> bookings = bookingRepo.findAll().stream()
-                    .map(BookingMapper::toDto)
+                    .map(this::toDtoWithEURPrice)
                     .filter(booking -> booking.customerId().equals(customerId))
                     .toList();
             logger.debug("Lyckades hämta {} bokningar för kund med id: {}", bookings.size(), customerId);
@@ -301,6 +300,17 @@ public class BookingService {
             logger.error("Error vid hämtning av bokningar för kund med id: {}", customerId, e);
             throw e;
         }
+    }
+
+    private BookingDto toDtoWithEURPrice(Booking booking) {
+        double priceInEUR;
+        try {
+            priceInEUR = converterClient.convertToEUR(booking.getTotalPrice());
+        } catch (Exception e) {
+            logger.warn("Misslyckades att konvertera pris till EUR för padelbana med id: {}. Sätter pris till 0.0", booking.getId(), e);
+            priceInEUR = 0.0;
+        }
+        return BookingMapper.toDto(booking, priceInEUR);
     }
 
 }
