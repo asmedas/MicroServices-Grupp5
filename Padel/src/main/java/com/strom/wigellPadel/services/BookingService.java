@@ -323,15 +323,4 @@ public class BookingService {
         return BookingMapper.toDto(booking, priceInEUR);
     }
 
-    private AvailableDto toDtoWithEURPrice(Court court, LocalDate date, int timeSlot) {
-        double priceInEUR;
-        try {
-            priceInEUR = converterClient.convertToEUR(court.getPrice());
-        } catch (Exception e) {
-            logger.warn("Misslyckades att konvertera pris till EUR för padelbana med id: {}. Sätter pris till 0.0", court.getId(), e);
-            priceInEUR = 0.0;
-        }
-        return AvailableMapper.toDto(court, date, timeSlot, priceInEUR);
-    }
-
 }
