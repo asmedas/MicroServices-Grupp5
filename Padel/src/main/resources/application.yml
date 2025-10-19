@@ -45,8 +45,7 @@ server:
 
 logging:
   level:
-    org.springframework: DEBUG
-    org.springframework.security: DEBUG
+    root: INFO
     com.strom.wigellPadel: DEBUG
 
 converter:
