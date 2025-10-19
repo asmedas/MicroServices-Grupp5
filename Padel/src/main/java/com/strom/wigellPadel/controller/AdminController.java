@@ -6,6 +6,7 @@ import com.strom.wigellPadel.services.AddressService;
 import com.strom.wigellPadel.services.BookingService;
 import com.strom.wigellPadel.services.CourtService;
 import com.strom.wigellPadel.services.CustomerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -51,7 +53,7 @@ public class AdminController {
         logger.info("Mottog begäran om att skapa en ny kund");
         CustomerDto customerDto = customerService.createCustomer(dto);
         logger.debug("Skapade ny kund med id {}", customerDto.id());
-        return new ResponseEntity<>(customerDto, HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/api/v1/customers/" + customerDto.id())).body(customerDto);
     }
 
     @DeleteMapping("/customers/{customerId}")
@@ -94,9 +96,9 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourtDto> createCourt(@RequestBody CourtCreateDto dto) {
         logger.info("Mottog begäran om att skapa en ny padelbana");
-        CourtDto newCourt = courtService.createCourt(dto);
-        logger.debug("Skapade ny padelbana med id {}", newCourt.id());
-        return new ResponseEntity<>(newCourt, HttpStatus.CREATED);
+        CourtDto courtDto = courtService.createCourt(dto);
+        logger.debug("Skapade ny padelbana med id {}", courtDto.id());
+        return ResponseEntity.created(URI.create("/api/v1/courts/" + courtDto.id())).body(courtDto);
     }
 
     @PutMapping("/courts/{courtId}")
@@ -150,7 +152,12 @@ public class AdminController {
         logger.info("Mottog begäran om att skapa en ny adress till kund med id {}", customerId);
         CustomerDto customer = addressService.createAddress(customerId, dto);
         logger.debug("Skapade ny adress till kund med id {} ", customer.id());
-        return new ResponseEntity<>(customer, HttpStatus.CREATED);
+        Long addressId = customer.address().stream()
+                .filter(a -> a.street().equals(dto.street()) && a.postalCode().equals(dto.postalCode()) && a.city().equals(dto.city()))
+                .findFirst()
+                .map(AddressDto::id)
+                .orElseThrow(() -> new EntityNotFoundException("Ny adress finns inte på kunden"));
+        return ResponseEntity.created(URI.create("/api/v1/customers/" + customerId + "/addresses/" + addressId)).body(customer);
     }
 
     @DeleteMapping("/customers/{customerId}/addresses/{addressId}")

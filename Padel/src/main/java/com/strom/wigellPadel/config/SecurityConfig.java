@@ -34,17 +34,16 @@ public class SecurityConfig {
 
                         .requestMatchers("/actuator/**").authenticated()
 
-                        .requestMatchers(HttpMethod.GET, "/api/v1/availability").hasRole("USER") //Kanske måste göra en @PreAuthorize-logik på denna
-                        .requestMatchers(HttpMethod.GET, "/api/v1/bookings/{id}").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/availability").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bookings").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bookings/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/bookings").hasRole("USER")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/bookings/{id}").hasRole("USER")
 
                         .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/courts/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/bookings/**").hasRole("ADMIN")
-
                         .requestMatchers("/error").permitAll()
-
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())))
