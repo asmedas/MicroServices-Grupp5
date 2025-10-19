@@ -149,8 +149,8 @@ public class CourtService {
         try {
             priceInEUR = converterClient.convertToEUR(court.getPrice());
         } catch (Exception e) {
-            logger.warn("Failed to convert price to EUR for court id: {}. Setting to 0.0", court.getId(), e);
-            priceInEUR = 0.0;  // Fallback
+            logger.warn("Misslyckades att konvertera pris till EUR för padelbana med id: {}. Sätter pris till 0.0", court.getId(), e);
+            priceInEUR = 0.0;
         }
         return CourtMapper.toDto(court, priceInEUR);
     }

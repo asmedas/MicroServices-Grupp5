@@ -11,7 +11,7 @@ public class BookingMapper {
     public BookingMapper() {
     }
 
-    public static BookingDto toDto (Booking booking) {
+    public static BookingDto toDto (Booking booking, double priceInEUR) {
         if (booking == null) {
             return null;
         }
@@ -23,7 +23,8 @@ public class BookingMapper {
                 booking.getNumberOfPlayers(),
                 booking.getDate(),
                 booking.getTimeSlot(),
-                booking.getTotalPrice()
+                booking.getTotalPrice(),
+                priceInEUR
         );
     }
 
