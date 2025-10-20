@@ -36,6 +36,21 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.listCustomers());
     }
 
+    /**
+     * {
+     *     "firstName": "sebbe",
+     *     "lastName": "jonsson",
+     *     "age": 30,
+     *     "username": "sebbesuser",
+     *     "password": "sebbespassword",
+     *     "email": "sebbe@email.se",
+     *     "address": {
+         *     "street": "hårdvallsgatan 18",
+         *     "city": "Sundsvall",
+         *     "postalCode": "11456"
+     *   }
+     * }
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody @Valid CreateCustomerWithAccountDto createCustomerWithAccountDto) {
@@ -53,6 +68,14 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * {
+     *     "firstName": "sebbe",
+     *     "lastName": "jonsson",
+     *     "email": "sebbeasd@gmail.com",
+     *     "age": 35
+     * }
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDto> updateCustomer(
@@ -61,6 +84,15 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.updateCustomer(customerId, customerUpdateDto));
     }
 
+    /**
+     * {
+     *     "address": {
+     *          "street": "hårdvallsgatan 18",
+     *          "city": "Sundsvall",
+     *          "postalCode": "11456"
+     *        }
+     * }
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{customerId}/addresses")
     public ResponseEntity<CustomerDto> addAddressToCustomer(

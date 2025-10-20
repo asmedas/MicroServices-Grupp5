@@ -122,6 +122,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
                     .findFirst()
                     .orElseThrow(() -> new AlreadyExistsError("Username already in use: " + username));
         } else if (status >= 300) {
+            log.error("Failed to create user. HTTP status: " + status);
             throw new IllegalStateException("Failed to create user. HTTP status: " + status);
         } else {
             log.debug("Extracting keycloak userId");

@@ -36,6 +36,7 @@ public class CinemaHall {
     @OneToMany(mappedBy = "cinemaHall",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
+    @JsonBackReference
     private List<Booking> bookings = new ArrayList<>();
 
     protected CinemaHall() {}

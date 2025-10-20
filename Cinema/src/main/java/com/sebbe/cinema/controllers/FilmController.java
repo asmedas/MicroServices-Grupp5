@@ -2,7 +2,6 @@ package com.sebbe.cinema.controllers;
 
 import com.sebbe.cinema.dtos.filmDtos.CreateFilmDto;
 import com.sebbe.cinema.dtos.filmDtos.FilmDto;
-import com.sebbe.cinema.entities.Film;
 import com.sebbe.cinema.services.FilmService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -37,9 +36,17 @@ public class FilmController {
         return ResponseEntity.ok(filmService.findById(movieId));
     }
 
+    /**
+     * {
+     *     "ageLimit": 15/null,
+     *     "title": "sebbesfilm",
+     *     "genre": "action",
+     *     "length": 250
+     * }
+     */
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<FilmDto> addFilm(@RequestBody @Valid CreateFilmDto dto) {
+    public ResponseEntity<FilmDto> createFilm(@RequestBody @Valid CreateFilmDto dto) {
         log.info("User tries adding new film {}", dto);
         FilmDto created = filmService.createFilm(dto);
         URI location = URI.create("/api/v1/films/" + created.id());

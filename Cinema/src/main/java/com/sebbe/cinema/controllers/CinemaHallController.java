@@ -38,6 +38,12 @@ public class CinemaHallController {
         return cinemaHallService.findById(roomId);
     }
 
+    /**
+     * {
+     *     "name": "sebbe",
+     *     "maxSeats": 2543
+     * }
+     */
     @PostMapping
     public ResponseEntity<CinemaHallDto> createRoom(@RequestBody @Valid CreateCinemaHallDto dto) {
         log.info("Admin creates a cinemahall {}", dto);
@@ -46,6 +52,12 @@ public class CinemaHallController {
         return ResponseEntity.created(location).body(created);
     }
 
+    /**
+     * {
+     *     "name": "sebbe",
+     *     "maxSeats": 2543
+     * }
+     */
     @PutMapping("/{roomId}")
     public ResponseEntity<CinemaHallDto> updateRoom(
             @PathVariable Long roomId,
