@@ -41,7 +41,8 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer with id " + customerId + " not found."));
 
         existingCustomer.setUsername(customerDto.getUsername());
-        existingCustomer.setName(customerDto.getName());
+        existingCustomer.setFirstName(customerDto.getName());
+        existingCustomer.setLastName(null);
 
         return customerRepository.save(existingCustomer);
     }
