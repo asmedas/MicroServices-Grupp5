@@ -13,6 +13,7 @@ public record ScreeningDto(
         LocalDate date,
         List<Type> type,
         FilmDto film,
+        String speaker,
         CinemaHallDto cinemaHall
 ) {
 }

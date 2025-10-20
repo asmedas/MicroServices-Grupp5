@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,19 +48,14 @@ public class ScreeningService {
     public List<ScreeningDto> findAll(){
         log.debug("Fetching all screenings");
         return screeningRepository.findAll().stream()
-                .map(ScreeningMapper::toDto)
+                .map(s -> {
+                    if(s.getFilm() != null){
+                        return ScreeningMapper.toFilmDto(s);
+                    } else {
+                        return ScreeningMapper.toSpeakerDto(s);
+                    }
+                })
                 .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public ScreeningDto getScreeningById(Long id, LocalDate localDate){
-        log.debug("Fetching screening with movie id: {} on date: {}", id, localDate);
-        Screening screening = screeningRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Screening with id {} not found", id);
-                    return new NoMatchException("Screening not found");
-                });
-        return ScreeningMapper.toDto(screening);
     }
 
     @Transactional(readOnly = true)
@@ -78,9 +72,9 @@ public class ScreeningService {
         log.debug("Creating screening with filmId: {}, speakerName: {}, cinemaHallId: {}",
                 createScreeningDto.filmId(), createScreeningDto.speakerName(), createScreeningDto.cinemaHallId());
 
-        Optional<Film> film = filmRepository.findById(createScreeningDto.filmId());
-        if(film.isEmpty() && createScreeningDto.speakerName() == null) {
-            throw new IllegalStateException("Film and speaker name cannot be null, select one of them.");
+        if((createScreeningDto.filmId() == null && createScreeningDto.speakerName() == null)
+        || (createScreeningDto.filmId() != null && createScreeningDto.speakerName() != null)) {
+            throw new IllegalStateException("Can only create a Screening with either a Film or a Speaker");
         }
 
         CinemaHall cinemaHall = cinemaHallRepository.findById(createScreeningDto.cinemaHallId())
@@ -93,17 +87,18 @@ public class ScreeningService {
             screening.setPriceSek(calculatePriceSek(cinemaHall));
             screening.setPriceUsd(calculatePriceUsd(screening.getPriceSek()));
             screeningRepository.save(screening);
-            return ScreeningMapper.toDto(screening);
+            return ScreeningMapper.toSpeakerDto(screening);
         }
 
-        Film film1 = film.orElseThrow();
+        Film film1 = filmRepository.findById(createScreeningDto.filmId())
+                .orElseThrow(() -> new NoMatchException("Film with id " + createScreeningDto.filmId() + " not found"));
         log.debug("Creating screening with film: {}", film1.getTitle());
         Screening screening = new Screening(createScreeningDto.date(), film1, cinemaHall
         , List.of(Type.FILM));
         screening.setPriceSek(calculatePriceSek(cinemaHall));
         screening.setPriceUsd(calculatePriceUsd(screening.getPriceSek()));
         screeningRepository.save(screening);
-        return ScreeningMapper.toDto(screening);
+        return ScreeningMapper.toFilmDto(screening);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

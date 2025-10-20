@@ -26,28 +26,28 @@ public class FilmController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<List<FilmDto>> listFilms() {
         return ResponseEntity.ok(filmService.findAll());
     }
 
     @GetMapping("/{movieId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Film> getFilm(@PathVariable Long movieId) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<FilmDto> getFilm(@PathVariable Long movieId) {
         return ResponseEntity.ok(filmService.findById(movieId));
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<FilmDto> addFilm(@Valid @RequestBody CreateFilmDto dto) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<FilmDto> addFilm(@RequestBody @Valid CreateFilmDto dto) {
         log.info("User tries adding new film {}", dto);
         FilmDto created = filmService.createFilm(dto);
-        URI location = URI.create("/api/v1/films/" + created);
+        URI location = URI.create("/api/v1/films/" + created.id());
         return ResponseEntity.created(location).body(created);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteFilm(@PathVariable Long id) {
         log.info("User tries deleting film {}", id);
         filmService.deleteFilm(id);

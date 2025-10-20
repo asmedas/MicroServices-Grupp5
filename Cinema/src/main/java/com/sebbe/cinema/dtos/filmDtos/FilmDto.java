@@ -1,4 +1,4 @@
 package com.sebbe.cinema.dtos.filmDtos;
 
-public record FilmDto(int ageLimit, String title, String genre, long id) {
+public record FilmDto(Integer ageLimit, String title, String genre, long id) {
 }

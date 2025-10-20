@@ -1,11 +1,15 @@
 package com.sebbe.cinema.controllers;
 
+import com.sebbe.cinema.dtos.screeningDtos.CreateScreeningDto;
 import com.sebbe.cinema.dtos.screeningDtos.CustomerScreeningDto;
-import com.sebbe.cinema.entities.Screening;
+import com.sebbe.cinema.dtos.screeningDtos.ScreeningDto;
 import com.sebbe.cinema.services.ScreeningService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,24 +24,29 @@ public class ScreeningController {
     }
 
     @GetMapping
-    public List<Screening> listScreenings() {
-        return null;
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<ScreeningDto> listScreenings() {
+        return screeningService.findAll();
     }
 
     @GetMapping("/screenings") //api/v1/screenings?filmId=42&date=2025-10-25
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<CustomerScreeningDto>> getScreeningsByFilmIdAndDate(
             @RequestParam Long filmId, @RequestParam LocalDate date) {
         return ResponseEntity.ok(screeningService.getScreeningsByFilmIdAndDate(filmId, date));
     }
 
     @PostMapping
-    public String addScreening() {
-        return "POST /api/v1/screenings";
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ScreeningDto> createScreening(@RequestBody @Valid CreateScreeningDto dto) {
+        return ResponseEntity.created(URI.create("/api/v1/screenings")).body(screeningService.createScreening(dto));
     }
 
     @DeleteMapping("/{screeningId}")
-    public String deleteScreening(@PathVariable Long screeningId) {
-        return "DELETE /api/v1/screenings/" + screeningId;
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteScreening(@PathVariable Long screeningId) {
+        screeningService.deleteScreening(screeningId);
+        return ResponseEntity.noContent().build();
     }
 
 }
