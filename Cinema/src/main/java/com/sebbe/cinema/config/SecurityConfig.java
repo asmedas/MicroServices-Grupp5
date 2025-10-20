@@ -1,4 +1,4 @@
-package com.sebbe.cinema.security;
+package com.sebbe.cinema.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

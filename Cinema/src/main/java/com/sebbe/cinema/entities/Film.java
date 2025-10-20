@@ -32,13 +32,14 @@ public class Film {
     @Min(1)
     @Max(300)
     @Column(nullable = false)
-    private int length;
+    private Integer length;
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Screening> screenings = new ArrayList<>();
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Booking> bookings = new ArrayList<>();
 
 

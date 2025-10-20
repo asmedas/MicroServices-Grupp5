@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CinemaHallService {
 
     private final CinemaHallRepository cinemaHallRepository;

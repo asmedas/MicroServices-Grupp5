@@ -1,6 +1,5 @@
 package com.sebbe.cinema.controllers;
 
-import com.sebbe.cinema.dtos.addressDtos.AddressDto;
 import com.sebbe.cinema.dtos.addressDtos.CreateAddressDto;
 import com.sebbe.cinema.dtos.customerDtos.CreateCustomerWithAccountDto;
 import com.sebbe.cinema.dtos.customerDtos.CustomerDto;
@@ -16,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -38,8 +38,10 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<Customer> addCustomer(@RequestBody @Valid CreateCustomerWithAccountDto createCustomerWithAccountDto) {
-        return ResponseEntity.ok(customerService.createCustomerWithKeycloakUserAndAddress(createCustomerWithAccountDto));
+    public ResponseEntity<Customer> createCustomer(@RequestBody @Valid CreateCustomerWithAccountDto createCustomerWithAccountDto) {
+        log.info("Creating customer with account: {}", createCustomerWithAccountDto);
+        return ResponseEntity.created(URI.create("api/v1/customers"))
+                .body(customerService.createCustomerWithKeycloakUserAndAddress(createCustomerWithAccountDto));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

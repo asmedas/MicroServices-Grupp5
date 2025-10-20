@@ -49,7 +49,7 @@ public class Screening {
     private List<Ticket> tickets = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "booking_type", joinColumns = @JoinColumn(name = "booking_id"))
+    @CollectionTable(name = "screening_type", joinColumns = @JoinColumn(name = "screening_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private List<Type> type = new ArrayList<>();

@@ -38,7 +38,7 @@ public class CinemaApplication {
     {
         return args -> {
 
-            keycloakUserServiceImpl.initializeUsersOnStartup();
+
             Authentication adminAuth =
                     new TestingAuthenticationToken("system", null, List.of(
                             new SimpleGrantedAuthority("ROLE_ADMIN"),
@@ -46,14 +46,15 @@ public class CinemaApplication {
                     ));
             SecurityContextHolder.getContext().setAuthentication(adminAuth);
             if(customerRepository.count() > 0 && addressRepository.count() > 0 && screeningRepository.count() > 0 && ticketRepository.count() > 0
-             && bookingRepository.count() > 0){
+             && bookingRepository.count() > 0 && filmRepository.count() > 0){
                 System.out.println("Database already contains data");
                 return;
             }
+            keycloakUserServiceImpl.initializeUsersOnStartup();
 
 
             // 5 filmer
-            Film film = new Film(18, "The Shawshank Redemption", "Drama", 200);
+            Film film = new Film( "The Shawshank Redemption", "Drama", 200);
             filmRepository.save(film);
             Film film2 = new Film(18, "Mission Impossible", "Action", 130);
             filmRepository.save(film2);
@@ -71,33 +72,39 @@ public class CinemaApplication {
 
             // 3 visningar
             Screening screening = new Screening(LocalDate.of(2025,10,8), film, cinemaHall, List.of(Type.FILM));
-            screening.setPriceSek(BigDecimal.valueOf(100));
-            screening.setPriceUsd(BigDecimal.valueOf(10));
-//            screening.setPriceSek(screeningService.calculatePriceSek(cinemaHall));
-//            screening.setPriceUsd(screeningService.calculatePriceUsd(screening.getPriceSek()));
+            screening.setPriceSek(screeningService.calculatePriceSek(cinemaHall));
+            screening.setPriceUsd(screeningService.calculatePriceUsd(screening.getPriceSek()));
             screeningRepository.save(screening);
             Screening screening1 = new Screening(LocalDate.of(2023,10,8), film2, cinemaHall2, List.of(Type.FILM));
-            screening1.setPriceSek(BigDecimal.valueOf(100));
-            screening1.setPriceUsd(BigDecimal.valueOf(10));
-//            screening1.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
-//            screening1.setPriceUsd(screeningService.calculatePriceUsd(screening1.getPriceSek()));
+            screening1.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
+            screening1.setPriceUsd(screeningService.calculatePriceUsd(screening1.getPriceSek()));
             screeningRepository.save(screening1);
             Screening screening2 = new Screening(
                     LocalDate.of(2023,10,8), "Tomas Wigell", cinemaHall2, List.of(Type.SPEAKER));
-            screening2.setPriceSek(BigDecimal.valueOf(100));
-            screening2.setPriceUsd(BigDecimal.valueOf(10));
-//            screening2.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
-//            screening2.setPriceUsd(screeningService.calculatePriceUsd(screening2.getPriceSek()));
+            screening2.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
+            screening2.setPriceUsd(screeningService.calculatePriceUsd(screening2.getPriceSek()));
             screeningRepository.save(screening2);
 
 
-            // 5 kunder
-            Customer customer1 = customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
-                    "sebbe", "jonsson", 30, "sebbe", "jonsson",
-                    "sebbfgrgee@hotmail.com", new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353")));
-            Customer customer2 = customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
-                    "Gabbi", "Landegren", 27, "gabbi", "landegren",
-                    "gabbidsf@hotmail.com", new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353")));
+            /**
+             * 5 kunder
+             * skapar min keycloak från cinema_realm.json med
+             * förinställda inställningar och två användare, admin och user som används nedan
+             * admin - direkt från keycloak
+             */
+            Customer customer1 = new Customer("7c52dbe1-1e8a-4d9a-8f92-fc07e1a3c417",
+                    "Sebbe", "Jonsson", "admin@hotmail.com", 30);
+            Address address = addressService
+                    .findOrCreateAddress(new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353"));
+            customer1.addAddress(address);
+            customerRepository.save(customer1);
+
+            // user - direkt från keycloak
+            Customer customer2 = new Customer("e3b0a6d4-5d9b-4a3f-8f07-91c3a6de7f45",
+                    "Gabbi", "Landegren", "user@hotmail.com", 27);
+            customer2.addAddress(address);
+            customerRepository.save(customer2);
+
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
                     "Gunnar", "Jonsson", 50, "Gunnar", "Jonsson",
                     "Gunnar@hotmail.com", new CreateAddressDto("Russvägen 18", "sundsvall", "85752")));

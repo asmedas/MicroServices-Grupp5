@@ -23,9 +23,6 @@ public class CinemaHall {
     private String name;
 
     @Column(nullable = false)
-    private BigDecimal price;
-
-    @Column(nullable = false)
     @Positive
     @Max(5000)
     private Integer maxSeats;
@@ -46,7 +43,6 @@ public class CinemaHall {
     public CinemaHall(String name, Integer maxSeats) {
         this.name = name;
         this.maxSeats = maxSeats;
-        this.price = BigDecimal.valueOf(maxSeats * 100);
     }
 
     public Long getId() {
@@ -55,10 +51,6 @@ public class CinemaHall {
 
     public String getName() {
         return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
     }
 
     public void setName(String name) {

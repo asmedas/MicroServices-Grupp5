@@ -506,16 +506,22 @@
       "groups": []
     },
     {
+      "id": "7c52dbe1-1e8a-4d9a-8f92-fc07e1a3c417",
       "username": "admin",
-      "email": "admin@example.com",
+      "email": "admin@hotmail.com",
+      "firstName": "Sebbe",
+      "lastName": "Jonsson",
       "emailVerified": true,
       "enabled": true,
       "credentials": [{"type": "password", "value": "admin", "temporary": false}],
       "realmRoles": ["USER", "ADMIN"]
     },
     {
+      "id": "e3b0a6d4-5d9b-4a3f-8f07-91c3a6de7f45",
       "username": "user",
-      "email": "user@example.com",
+      "email": "user@hotmail.com",
+      "firstName": "Gabbi",
+      "lastName": "Landegren",
       "emailVerified": true,
       "enabled": true,
       "credentials": [{"type": "password", "value": "user", "temporary": false}],

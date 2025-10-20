@@ -97,7 +97,6 @@ public class CustomerService {
         return saveCustomerWithRollback(customer, id, changes);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCustomer(long id){
         log.debug("Deleting customer with id {}", id);
         Customer customer = customerRepository.findById(id)

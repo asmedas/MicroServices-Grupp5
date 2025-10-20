@@ -12,7 +12,7 @@ public record CreateScreeningDto(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         @NotNull LocalDate date,
         @NotNull Type type,
-        @Positive Long filmId,
+        Long filmId,
         @Size(max = 100) String speakerName,
         @NotNull Long cinemaHallId
         ) {

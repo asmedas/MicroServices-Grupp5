@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -100,6 +101,13 @@ public class BookingService {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     public Booking patchBookingById(Long bookingId, PatchBookingDto patchBookingDto){
+        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(() -> {
+                    log.error("Customer not found");
+                    return new NoMatchException("Customer not found");
+                });
+        log.debug("Updating booking with id: {} for user {}", bookingId, customer.getId());
         Booking existingBooking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> {
                     log.error("Booking not found");
@@ -114,7 +122,7 @@ public class BookingService {
         return bookingRepository.save(existingBooking);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Booking> getBookingsByCustomerId(Long customerId){
         log.debug("Fetching bookings by customerId: {}", customerId);
         if(customerRepository.findById(customerId).isEmpty()){
