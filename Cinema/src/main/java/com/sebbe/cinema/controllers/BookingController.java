@@ -23,12 +23,27 @@ public class BookingController {
     }
 
 
+    /**
+     * {
+     *   "date": "2025-11-15",
+     *   "cinemaHallId": 3,
+     *   "filmId": 2,
+     *   "speaker": "Dr. Jane Doe",
+     *   "technicalEquipment": ["PROJECTOR", "AUDIO", "MIC"]
+     * }
+     */
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Booking> createBooking(@RequestBody @Valid CreateBookingDto bookingRequest) {
         return ResponseEntity.created(URI.create("/api/v1/bookings")).body(bookingService.createBooking(bookingRequest));
     }
 
+    /**
+     * {
+     *     "date": "2025-11-15",
+     *     "technicalEquipment": ["Projector", "Audio", "Mic"]
+     * }
+     */
     @PatchMapping("/{bookingId}")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Booking> updateBooking(@PathVariable Long bookingId,
@@ -36,7 +51,8 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.patchBookingById(bookingId, dto));
     }
 
-    @GetMapping
+    // släpps endast igenom om customerId stämmer överens med den nuvarande användaren
+    @GetMapping(params = "customerId")
     @PreAuthorize("hasRole('ROLE_USER')")
     public List<Booking> listBookingsByCustomer(@RequestParam Long customerId) {
         return bookingService.getBookingsByCustomerId(customerId);

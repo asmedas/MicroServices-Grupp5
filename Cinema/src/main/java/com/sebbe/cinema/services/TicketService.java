@@ -58,10 +58,10 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
-    @PreAuthorize("hasRole('USER') and @ownership.isSelf(authentication, #customerid)")
-    public List<Ticket> getTicketsByCustomerId(Long customerid){
+    @PreAuthorize("hasRole('USER') and @ownership.isSelf(authentication, #customerId)")
+    public List<Ticket> getTicketsByCustomerId(Long customerId){
         log.debug("Fetching tickets for current user");
-        return ticketRepository.findByCustomerId(customerid);
+        return ticketRepository.findByCustomerId(customerId);
     }
 
     public void deleteTicket(Long id){
@@ -80,7 +80,7 @@ public class TicketService {
     }
 
     private BigDecimal calculatePriceSek(Screening screening){
-        return BigDecimal.valueOf(screening.getCinemaHall().getMaxSeats() * 100);
+        return BigDecimal.valueOf(100);
     }
 
     private BigDecimal calculatePriceUsd(BigDecimal priceSek){
@@ -90,7 +90,7 @@ public class TicketService {
     public Ticket commandLineRunner(Screening screening, Customer customer){
         Ticket ticket = new Ticket(screening, customer);
         ticket.setPriceSek(calculatePriceSek(screening));
-        ticket.setPriceUsd(calculatePriceUsd(ticket.getPriceSek()));
+        ticket.setPriceUsd(BigDecimal.valueOf(ticket.getPriceSek().doubleValue() /10));
         return ticketRepository.save(ticket);
     }
 

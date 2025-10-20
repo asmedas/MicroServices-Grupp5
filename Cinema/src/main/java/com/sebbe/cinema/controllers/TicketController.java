@@ -1,5 +1,6 @@
 package com.sebbe.cinema.controllers;
 
+import com.sebbe.cinema.dtos.ticketDtos.CreateTicketDto;
 import com.sebbe.cinema.entities.Ticket;
 import com.sebbe.cinema.services.TicketService;
 import jakarta.validation.Valid;
@@ -21,12 +22,12 @@ public class TicketController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<Ticket> buyTicket(@RequestParam Long screenindId) {
-        return ResponseEntity.ok(ticketService.createTicket(screenindId));
+    public ResponseEntity<Ticket> buyTicket(@RequestBody @Valid CreateTicketDto dto) {
+        return ResponseEntity.ok(ticketService.createTicket(dto.screeningId()));
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER') and @ownership(authentication, customerId)")
+    @GetMapping(params = "customerId")
+    @PreAuthorize("hasRole('ROLE_USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Ticket> listTickets(@RequestParam Long customerId) {
         return ticketService.getTicketsByCustomerId(customerId);
     }

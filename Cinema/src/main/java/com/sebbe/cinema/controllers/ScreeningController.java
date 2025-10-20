@@ -23,19 +23,28 @@ public class ScreeningController {
         this.screeningService = screeningService;
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<ScreeningDto> listScreenings() {
-        return screeningService.findAll();
-    }
-
-    @GetMapping("/screenings") //api/v1/screenings?filmId=42&date=2025-10-25
+    //api/v1/screenings?filmId=1&date=2025-10-08
+    @GetMapping(params = {"filmId", "date"})
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<CustomerScreeningDto>> getScreeningsByFilmIdAndDate(
             @RequestParam Long filmId, @RequestParam LocalDate date) {
         return ResponseEntity.ok(screeningService.getScreeningsByFilmIdAndDate(filmId, date));
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<ScreeningDto> listScreenings() {
+        return screeningService.findAll();
+    }
+
+    /**
+     * {
+     *     "date": "2025-10-08",
+     *     "filmId": 234, - antingen film ELLER speakerName
+     *     "speakerName": "asdeffe",
+     *     "cinemaHallId": 1
+     * }
+     */
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ScreeningDto> createScreening(@RequestBody @Valid CreateScreeningDto dto) {
