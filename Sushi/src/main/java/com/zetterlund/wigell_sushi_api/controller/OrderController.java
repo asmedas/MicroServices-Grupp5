@@ -33,7 +33,7 @@ public class OrderController {
 
         OrderOverviewDto dto = new OrderOverviewDto();
         dto.setOrderId(order.getId());
-        dto.setCustomerName(order.getCustomer().getName());
+        dto.setCustomerName(order.getCustomer().getFirstName());
         dto.setTotalPriceInSek(order.getTotalPriceInSek());
 
         return ResponseEntity.ok(dto);

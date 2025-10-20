@@ -41,7 +41,8 @@ public class CustomerController {
 
         Customer customer = new Customer();
         customer.setUsername(request.getUsername());
-        customer.setName(request.getName());
+        customer.setFirstName(request.getName());
+        customer.setLastName(request.getName());
 
         Customer createdCustomer = customerService.addCustomer(customer, request.getRawPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);

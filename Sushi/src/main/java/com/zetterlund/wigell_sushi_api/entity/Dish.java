@@ -26,8 +26,11 @@ public class Dish {
 
     public Dish() {}
 
-    public Dish(Integer id, String name, BigDecimal priceInSek, BigDecimal PriceInJpy, String description) {
+    public Dish(Integer id, String name, BigDecimal priceInSek, BigDecimal priceInJpy, String description) {
+        this.id = id;
         this.name = name;
+        if (priceInSek != null) this.priceInSek = priceInSek.doubleValue();
+        if (priceInJpy != null) this.priceInJpy = priceInJpy.doubleValue();
         this.description = description;
     }
 

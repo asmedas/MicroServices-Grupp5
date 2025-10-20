@@ -29,10 +29,11 @@ public class Address {
 
     public Address() {}
 
-    public Address(String street, String postalCode, String city) {
+    public Address(String street, String postalCode, String city, Customer customer) {
         this.street = street;
         this.postalCode = postalCode;
         this.city = city;
+        this.customer = customer;
     }
 
     // Getters och setters

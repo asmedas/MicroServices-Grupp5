@@ -29,10 +29,17 @@ public class DatabaseInitializer {
             BookingDetailRepository bookingDetailRepo) {
 
         return args -> {
-            // Kolla om tabellerna är tomma
-            if (custRepo.count() == 0 && addrRepo.count() == 0
-                    && dishRepo.count() == 0 && roomRepo.count() == 0
-                    && orderRepo.count() == 0 && bookingRepo.count() == 0) {
+                log.info("=== Clearing all tables ===");
+                bookingDetailRepo.deleteAll();
+                bookingRepo.deleteAll();
+                orderDetailRepo.deleteAll();
+                orderRepo.deleteAll();
+                addrRepo.deleteAll();
+                custRepo.deleteAll();
+                dishRepo.deleteAll();
+                roomRepo.deleteAll();
+
+                log.info("=== Seeding database ===");
 
                 // 5 kunder
                 Customer legolas = custRepo.save(new Customer(null, "Legolas", "Legolas", "Greenleaf",
@@ -47,11 +54,11 @@ public class DatabaseInitializer {
                         "pippin@middleearth.com", "046222004"));
 
                 // 5 adresser
-                addrRepo.save(new Address("Royal Halls of Thranduil", "334 777", "Mirkwood"));
-                addrRepo.save(new Address("The Lonley Mountain", "444 222", "Erebor"));
-                addrRepo.save(new Address("Unknown", "999 999", "c/o The Roads of Middle-earth"));
-                addrRepo.save(new Address("Brandy Hall, Buckland", "221 118", "The Shire"));
-                addrRepo.save(new Address("Great Smials, Tuckborough", "220 555", "The Shire"));
+                addrRepo.save(new Address("Royal Halls of Thranduil", "334 777", "Mirkwood", legolas));
+                addrRepo.save(new Address("The Lonley Mountain", "444 222", "Erebor", gimli));
+                addrRepo.save(new Address("Unknown", "999 999", "c/o The Roads of Middle-earth", gandalf));
+                addrRepo.save(new Address("Brandy Hall, Buckland", "221 118", "The Shire", merry));
+                addrRepo.save(new Address("Great Smials, Tuckborough", "220 555", "The Shire", pippin));
 
                 // 5 rätter
                 Dish sushi   = dishRepo.save(new Dish(null, "Sushi Combo", new BigDecimal("150.00"),
@@ -95,11 +102,8 @@ public class DatabaseInitializer {
                 bookingDetailRepo.save(new BookingDetails(null, book2, tempura, 1));
                 bookingDetailRepo.save(new BookingDetails(null, book3, ramen, 2));
 
-                log.info("Seed‑data added – customers: {}, dishes: {}, rooms: {}", custRepo.count(), dishRepo.count(), roomRepo.count());
-            } else {
-                log.info("Database already contains data – seeding skipped (customers: {}, dishes: {}, rooms: {})",
-                        custRepo.count(), dishRepo.count(), roomRepo.count());
-            }
+            log.info("Seed-data added – customers: {}, dishes: {}, orders: {}, rooms: {}",
+                    custRepo.count(), dishRepo.count(), orderRepo.count(), roomRepo.count());
         };
     }
 }
