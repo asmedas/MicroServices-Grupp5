@@ -932,7 +932,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "K7jn3q9pp56hTyz214LMVW89XrtsFguJ",
+      "secret": "************",
       "redirectUris": [
         "/*"
       ],
@@ -990,7 +990,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "N2xk8m4ii78vRqp456JHYZ01CdefWstU",
+      "secret": "***********************",
       "redirectUris": [
         "/*"
       ],
@@ -1216,7 +1216,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "T9pl5r2uu12gMnb789KQXW34AhjkVyzI",
+      "secret": "****************",
       "redirectUris": [
         "/*"
       ],
@@ -1276,7 +1276,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "F6hm7y3oo45kPqr123NXYZ67BcdtJvwL",
+      "secret": "*******************",
       "redirectUris": [
         "/*"
       ],
