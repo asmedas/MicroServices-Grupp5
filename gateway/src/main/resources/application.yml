@@ -29,6 +29,12 @@ spring:
             - Path=/cinema/**
           filters:
             - StripPrefix=1
+        - id: sushi-service
+          uri: http://localhost:8582
+          predicates:
+            - Path=/sushi/**
+          filters:
+            - StripPrefix=1
 
 
   security:

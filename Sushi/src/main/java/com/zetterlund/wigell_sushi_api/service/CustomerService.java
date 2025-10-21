@@ -7,10 +7,12 @@ import com.zetterlund.wigell_sushi_api.entity.Customer;
 import com.zetterlund.wigell_sushi_api.exception.ResourceNotFoundException;
 import com.zetterlund.wigell_sushi_api.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final KeycloakUserService keycloakUserService;

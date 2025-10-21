@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>24</java.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
+        <spring-boot-admin.version>3.5.0</spring-boot-admin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -87,6 +88,11 @@
             <artifactId>keycloak-admin-client</artifactId>
             <version>26.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>3.5.1</version>
+        </dependency>
         <!-- OAuth2 Resource Server (för JWT-tokens från Keycloak) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,6 +108,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-dependencies</artifactId>
+                <version>${spring-boot-admin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
