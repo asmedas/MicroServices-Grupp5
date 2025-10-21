@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/actuator/**").authenticated()
+                        .requestMatchers("/actuator/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/availability").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/bookings").hasRole("USER")

@@ -8,6 +8,8 @@ spring:
     user:
       name: admin
       password: admin
+  csrf:
+    enabled: false
 
 management:
   endpoints:
