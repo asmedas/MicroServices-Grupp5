@@ -1,6 +1,8 @@
 package com.zetterlund.wigell_sushi_api.service;
 
+import com.zetterlund.wigell_sushi_api.dto.AddressDto;
 import com.zetterlund.wigell_sushi_api.dto.CustomerCreationRequestDto;
+import com.zetterlund.wigell_sushi_api.dto.CustomerDto;
 import com.zetterlund.wigell_sushi_api.entity.Customer;
 import com.zetterlund.wigell_sushi_api.exception.ResourceNotFoundException;
 import com.zetterlund.wigell_sushi_api.repository.CustomerRepository;
@@ -52,5 +54,26 @@ public class CustomerService {
             throw new ResourceNotFoundException("Customer with id " + customerId + " not found.");
         }
         customerRepository.deleteById(customerId);
+    }
+
+    public CustomerDto mapToDto(Customer customer) {
+        CustomerDto dto = new CustomerDto();
+        dto.setId(customer.getId());
+        dto.setUsername(customer.getUsername());
+        dto.setFirstName(customer.getFirstName());
+        dto.setLastName(customer.getLastName());
+        dto.setEmail(customer.getEmail());
+        dto.setPhoneNumber(customer.getPhoneNumber());
+
+        List<AddressDto> addressDtos = customer.getAddresses().stream().map(address -> {
+            AddressDto adto = new AddressDto();
+            adto.setStreet(address.getStreet());
+            adto.setPostalCode(address.getPostalCode());
+            adto.setCity(address.getCity());
+            return adto;
+        }).toList();
+
+        dto.setAddresses(addressDtos);
+        return dto;
     }
 }
