@@ -35,6 +35,13 @@ spring:
             - Path=/sushi/**
           filters:
             - StripPrefix=1
+        - id: convert-service
+          uri: http://localhost:8700
+          predicates:
+            - Path=/convert/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=Authorization, Bearer 123456789
 
 
   security:

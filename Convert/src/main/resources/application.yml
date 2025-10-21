@@ -3,6 +3,14 @@ server:
 spring:
   application:
     name: converter_microservice
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        username: admin
+        password: admin
+        instance:
+          management-base-url: http://localhost:8700
 
 internal:
   api:
@@ -11,3 +19,13 @@ internal:
 currency:
   api:
     url: https://open.er-api.com/v6/latest/SEK
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
