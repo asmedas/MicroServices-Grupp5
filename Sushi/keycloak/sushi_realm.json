@@ -428,7 +428,7 @@
   "groups": [],
   "defaultRole": {
     "id": "d144e3f4-9ad5-4168-8692-07149aa32493",
-    "name": "default-roles-cinema_keycloak",
+    "name": "default-roles-sushi_keycloak",
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
