@@ -8,11 +8,11 @@ spring:
   boot:
     admin:
       client:
-        url: http://host.docker.internal:9090
+        url: http://localhost:9090
         username: admin
         password: admin
         instance:
-          management-base-url: http://host.docker.internal:8080
+          management-base-url: http://localhost:8080
 
   cloud:
     gateway:
