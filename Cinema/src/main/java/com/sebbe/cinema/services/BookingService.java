@@ -144,7 +144,7 @@ public class BookingService {
         Booking booking = new Booking(customer, cinemaHall, film,
                 List.of(TechnicalEquipment.AUDIO, TechnicalEquipment.SCREEN, TechnicalEquipment.SUBTITLES), date);
         booking.setTotalPriceSek(calculatePriceSek(cinemaHall));
-        booking.setTotalPriceUsd(BigDecimal.valueOf(booking.getTotalPriceSek().doubleValue()/10));
+        booking.setTotalPriceUsd(calculatePriceUsd(booking.getTotalPriceSek()));
         return bookingRepository.save(booking);
     }
 
@@ -152,7 +152,7 @@ public class BookingService {
         Booking booking = new Booking(customer, cinemaHall, speaker,
                 List.of(TechnicalEquipment.AUDIO, TechnicalEquipment.SCREEN, TechnicalEquipment.SUBTITLES), date);
         booking.setTotalPriceSek(calculatePriceSek(cinemaHall));
-        booking.setTotalPriceUsd(BigDecimal.valueOf(booking.getTotalPriceSek().doubleValue()/10));
+        booking.setTotalPriceUsd(calculatePriceUsd(booking.getTotalPriceSek()));
         return bookingRepository.save(booking);
     }
 }

@@ -24,7 +24,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
 
     private final Keycloak keycloak;
     private final String realm;
-    private static final String[] PROTECTED_USERNAMES = {"admin", "user"};
+    private static final String[] USERS_TO_DELETE = {"gunnar", "ingrid", "gabbi"};
     private static final Logger log = LoggerFactory.getLogger(KeycloakUserServiceImpl.class);
 
     public KeycloakUserServiceImpl(Keycloak keycloak,
@@ -49,15 +49,14 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
         var usersToDelete = allUsers.stream()
                 .filter(user -> {
                     String username = user.getUsername();
-                    boolean isProtected = username != null &&
-                            Stream.of(PROTECTED_USERNAMES)
+                    return username != null &&
+                            Stream.of(USERS_TO_DELETE)
                                     .anyMatch(protectedUser -> protectedUser.equalsIgnoreCase(username));
-                    return !isProtected;
                 })
                 .toList();
 
         log.debug("Found {} users to delete (excluding protected: {})",
-                usersToDelete.size(), String.join(", ", PROTECTED_USERNAMES));
+                usersToDelete.size(), String.join(", ", USERS_TO_DELETE));
 
         for (UserRepresentation user : usersToDelete) {
             String username = user.getUsername();

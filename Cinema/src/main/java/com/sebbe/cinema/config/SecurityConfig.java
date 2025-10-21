@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH,"/api/v1/bookings/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET,"/api/v1/bookings**").hasRole("USER")
 
-                        .requestMatchers("/api/v1/customers", "api/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/customers", "/api/v1/customers/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/movies", "/api/v1/movies/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/rooms", "/api/v1/rooms/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/screenings", "/api/v1/screenings/**").hasRole("ADMIN")

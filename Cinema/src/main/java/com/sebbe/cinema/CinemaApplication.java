@@ -73,16 +73,16 @@ public class CinemaApplication {
             // 3 visningar
             Screening screening = new Screening(LocalDate.of(2025,10,8), film, cinemaHall, List.of(Type.FILM));
             screening.setPriceSek(screeningService.calculatePriceSek(cinemaHall));
-            screening.setPriceUsd(BigDecimal.valueOf(screening.getPriceSek().doubleValue()/10));
+            screening.setPriceUsd(screeningService.calculatePriceUsd(screening.getPriceSek()));
             screeningRepository.save(screening);
             Screening screening1 = new Screening(LocalDate.of(2023,10,8), film2, cinemaHall2, List.of(Type.FILM));
             screening1.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
-            screening1.setPriceUsd(BigDecimal.valueOf(screening.getPriceSek().doubleValue()/10));
+            screening1.setPriceUsd(screeningService.calculatePriceUsd(screening1.getPriceSek()));
             screeningRepository.save(screening1);
             Screening screening2 = new Screening(
                     LocalDate.of(2023,10,8), "Tomas Wigell", cinemaHall2, List.of(Type.SPEAKER));
             screening2.setPriceSek(screeningService.calculatePriceSek(cinemaHall2));
-            screening2.setPriceUsd(BigDecimal.valueOf(screening.getPriceSek().doubleValue()/10));
+            screening2.setPriceUsd(screeningService.calculatePriceUsd(screening2.getPriceSek()));
             screeningRepository.save(screening2);
 
 
@@ -106,13 +106,13 @@ public class CinemaApplication {
             customerRepository.save(customer2);
 
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
-                    "Gunnar", "Jonsson", 50, "Gunnar", "Jonsson",
+                    "Gunnar", "Jonsson", 50, "gunnar", "jonsson",
                     "Gunnar@hotmail.com", new CreateAddressDto("Russvägen 18", "sundsvall", "85752")));
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
-                    "Ingrid", "Nordström", 50, "Ingrid", "Nordström",
+                    "Ingrid", "Nordström", 50, "ingrid", "nordstrom",
                     "Ingrid@hotmail.com", new CreateAddressDto("Kolstavägen 37", "sundsvall", "65233")));
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
-                    "Tomas", "Wigell", 50, "wigell", "wigell",
+                    "Tomas", "Wigell", 50, "gabbi", "gabbi",
                     "wigell@hotmail.com", new CreateAddressDto("högomsvägen 13", "sundsvall", "54311")));
 
 
