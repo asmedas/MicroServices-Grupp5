@@ -1,0 +1,72 @@
+server:
+  port: 8583
+
+spring:
+  application:
+    name: cinema
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        username: admin
+        password: admin
+        instance:
+          management-base-url: http://localhost:8583
+
+  datasource:
+    url: jdbc:mysql://localhost:6606/wigell_cinema_db?createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:8590/realms/keycloak"
+
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  file:
+    name: logs/cinema.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
+  level:
+    root: INFO
+    com.sebbe.cinema.services: DEBUG
+    com.sebbe.cinema.controllers: ERROR
+
+keycloak:
+  server-url: http://localhost:8590
+  realm: keycloak
+
+keycloak.admin:
+  realm: keycloak
+  client-id: cinema-admin
+  client-secret: P4mi2b1oo34gNxk832MNQR24KjksJhrP
+
+currency:
+  api:
+    url: http://localhost:8700/api/convert
+  api-key: 123456789

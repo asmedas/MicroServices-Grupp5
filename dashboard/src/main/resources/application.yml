@@ -1,0 +1,18 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: dashboard
+  security:
+    user:
+      name: admin
+      password: admin
+  csrf:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
