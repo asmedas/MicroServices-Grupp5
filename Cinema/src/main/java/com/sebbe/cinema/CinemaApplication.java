@@ -93,7 +93,7 @@ public class CinemaApplication {
              * admin - direkt från keycloak
              */
             Customer customer1 = new Customer("7c52dbe1-1e8a-4d9a-8f92-fc07e1a3c417",
-                    "Sebbe", "Jonsson", "admin@hotmail.com", 30);
+                    "admin", "admin", "admin@hotmail.com", 30);
             Address address = addressService
                     .findOrCreateAddress(new CreateAddressDto("hårdvallsgatan 18", "sundsvall", "85353"));
             customer1.addAddress(address);
@@ -101,7 +101,7 @@ public class CinemaApplication {
 
             // user - direkt från keycloak
             Customer customer2 = new Customer("e3b0a6d4-5d9b-4a3f-8f07-91c3a6de7f45",
-                    "Gabbi", "Landegren", "user@hotmail.com", 27);
+                    "user", "user", "user@hotmail.com", 27);
             customer2.addAddress(address);
             customerRepository.save(customer2);
 

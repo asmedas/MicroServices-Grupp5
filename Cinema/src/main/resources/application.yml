@@ -20,7 +20,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://localhost:8590/realms/cinema_keycloak"
+          issuer-uri: "http://localhost:8590/realms/keycloak"
 
   jackson:
     mapper:
@@ -41,11 +41,11 @@ logging:
 
 keycloak:
   server-url: http://localhost:8590
-  realm: cinema_keycloak
+  realm: keycloak
 
 keycloak.admin:
-  realm: cinema_keycloak
-  client-id: spring-app-admin
+  realm: keycloak
+  client-id: cinema-admin
   client-secret: P4mi2b1oo34gNxk832MNQR24KjksJhrP
 
 currency:
