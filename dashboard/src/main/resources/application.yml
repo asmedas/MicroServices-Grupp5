@@ -3,7 +3,11 @@ server:
 
 spring:
   application:
-    name: admin-dashboard
+    name: dashboard
+  security:
+    user:
+      name: admin
+      password: admin
 
 management:
   endpoints:
