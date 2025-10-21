@@ -20,7 +20,7 @@ spring:
           issuer-uri: "http://localhost:8590/realms/keycloak"
 
   keycloak:
-    server-url: http://localhost:8590
+    server-url: http://host.docker.internal:8590/realms/keycloak
     realm: keycloak
 
   keycloak.admin:
@@ -30,6 +30,15 @@ spring:
 
   application:
     name: WigellPadel
+
+  boot:
+    admin:
+      client:
+        url: http://host.docker.internal:9090
+        username: admin
+        password: admin
+        instance:
+          management-base-url: http://host.docker.internal:8584
 
 
 management:
