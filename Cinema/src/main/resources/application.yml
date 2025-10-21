@@ -37,7 +37,6 @@ logging:
     root: INFO
     com.sebbe.cinema.services: DEBUG
     com.sebbe.cinema.controllers: ERROR
-    org.springframework: INFO
 
 keycloak:
   server-url: http://localhost:8590
