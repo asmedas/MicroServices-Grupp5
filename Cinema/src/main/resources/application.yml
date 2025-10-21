@@ -26,6 +26,16 @@ spring:
     mapper:
       accept-case-insensitive-enums: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+
 logging:
   file:
     name: logs/cinema.log
@@ -37,7 +47,6 @@ logging:
     root: INFO
     com.sebbe.cinema.services: DEBUG
     com.sebbe.cinema.controllers: ERROR
-    org.springframework: INFO
 
 keycloak:
   server-url: http://localhost:8590
