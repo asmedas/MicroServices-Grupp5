@@ -90,7 +90,7 @@ public class TicketService {
     public Ticket commandLineRunner(Screening screening, Customer customer){
         Ticket ticket = new Ticket(screening, customer);
         ticket.setPriceSek(calculatePriceSek(screening));
-        ticket.setPriceUsd(BigDecimal.valueOf(ticket.getPriceSek().doubleValue() /10));
+        ticket.setPriceUsd(BigDecimal.valueOf(calculatePriceUsd(ticket.getPriceSek()).doubleValue()));
         return ticketRepository.save(ticket);
     }
 
