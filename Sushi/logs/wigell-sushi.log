@@ -4779,3 +4779,115 @@ Action:
 
 Identify and stop the process that's listening on port 8582 or configure this application to listen on another port.
 
+2025-10-21 19:43:27 INFO  c.z.w.WigellSushiApiApplication - Starting WigellSushiApiApplication using Java 24.0.2 with PID 32208 (C:\Users\Tzakyra\IdeaProjects\MicroServices-Grupp5\Sushi\target\classes started by Tzakyra in C:\Users\Tzakyra\IdeaProjects\MicroServices-Grupp5\Sushi)
+2025-10-21 19:43:27 INFO  c.z.w.WigellSushiApiApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-21 19:43:28 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-21 19:43:28 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 68 ms. Found 8 JPA repository interfaces.
+2025-10-21 19:43:28 INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=aafc7841-c842-3ec2-a0ad-ebb4dc4421c5
+2025-10-21 19:43:29 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8582 (http)
+2025-10-21 19:43:29 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-10-21 19:43:29 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-21 19:43:29 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-10-21 19:43:29 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1662 ms
+2025-10-21 19:43:29 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-21 19:43:29 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-21 19:43:29 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-21 19:43:29 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-21 19:43:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-21 19:43:30 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@332fa1c
+2025-10-21 19:43:30 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-21 19:43:30 WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-21 19:43:30 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.43
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-21 19:43:31 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-21 19:43:31 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:43:31 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-21 19:43:32 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoints beneath base path '/actuator'
+2025-10-21 19:43:32 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-10-21 19:43:32 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:43:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-21 19:43:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-21 19:43:32 INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-21 19:43:32 ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8582 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8582 or configure this application to listen on another port.
+
+2025-10-21 19:44:08 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@74f85ad3 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:44:14 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@6d6efe4b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:44:18 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@573b7c59 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:44:28 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@331778f6 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:44:49 INFO  c.z.w.WigellSushiApiApplication - Starting WigellSushiApiApplication using Java 24.0.2 with PID 18012 (C:\Users\Tzakyra\IdeaProjects\MicroServices-Grupp5\Sushi\target\classes started by Tzakyra in C:\Users\Tzakyra\IdeaProjects\MicroServices-Grupp5\Sushi)
+2025-10-21 19:44:49 INFO  c.z.w.WigellSushiApiApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-21 19:44:50 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-21 19:44:50 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 56 ms. Found 8 JPA repository interfaces.
+2025-10-21 19:44:51 INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=aafc7841-c842-3ec2-a0ad-ebb4dc4421c5
+2025-10-21 19:44:51 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8582 (http)
+2025-10-21 19:44:51 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-10-21 19:44:51 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-21 19:44:51 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-10-21 19:44:51 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1699 ms
+2025-10-21 19:44:51 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-21 19:44:51 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-21 19:44:51 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-21 19:44:52 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-21 19:44:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-21 19:44:52 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3346e906
+2025-10-21 19:44:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-21 19:44:52 WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-21 19:44:52 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.43
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-21 19:44:53 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-21 19:44:53 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:44:54 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-21 19:44:54 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoints beneath base path '/actuator'
+2025-10-21 19:44:55 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-10-21 19:44:55 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:44:55 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-21 19:44:55 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-21 19:44:55 INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-21 19:44:55 ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8582 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8582 or configure this application to listen on another port.
+
+2025-10-21 19:44:56 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@54ac7d4b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:45:01 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@50210902 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:45:02 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@444140fb (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:45:23 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@547962c2 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:45:29 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7e65e389 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2025-10-21 19:45:31 WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2f1d299b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
