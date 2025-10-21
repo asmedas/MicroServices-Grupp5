@@ -17,17 +17,19 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9584/realms/PadelRealm
-          audiences: spring-app, account
+          issuer-uri: "http://localhost:8590/realms/keycloak"
 
   keycloak:
-    server-url: http://localhost:9584
-    realm: PadelRealm
+    server-url: http://localhost:8590
+    realm: keycloak
 
   keycloak.admin:
-    realm: PadelRealm
-    client-id: spring-app-admin
-    client-secret: 8MU6EBGSG6mB7DNYn9YUlhuR3goDuo8K
+    realm: keycloak
+    client-id: padel-admin
+    client-secret: N2xk8m4ii78vRqp456JHYZ01CdefWstU
+
+  application:
+    name: WigellPadel
 
 
 management:
