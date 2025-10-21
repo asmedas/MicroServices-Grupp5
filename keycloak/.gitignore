@@ -1,0 +1,8 @@
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# MySQL container data
+mysql_data/
+data/
+*.sql
