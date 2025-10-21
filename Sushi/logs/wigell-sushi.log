@@ -4779,6 +4779,93 @@ Action:
 
 Identify and stop the process that's listening on port 8582 or configure this application to listen on another port.
 
+2025-10-21 19:45:20 INFO  c.z.w.WigellSushiApiApplication - Starting WigellSushiApiApplication using Java 24.0.2 with PID 200916 (E:\JavaProjects\MicroServices-Grupp5\Sushi\target\classes started by marcu in E:\JavaProjects\MicroServices-Grupp5\Sushi)
+2025-10-21 19:45:20 INFO  c.z.w.WigellSushiApiApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-21 19:45:20 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-21 19:45:20 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 34 ms. Found 8 JPA repository interfaces.
+2025-10-21 19:45:20 INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=aafc7841-c842-3ec2-a0ad-ebb4dc4421c5
+2025-10-21 19:45:21 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8582 (http)
+2025-10-21 19:45:21 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-10-21 19:45:21 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-21 19:45:21 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-10-21 19:45:21 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 874 ms
+2025-10-21 19:45:21 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-21 19:45:21 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-21 19:45:21 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-21 19:45:21 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-21 19:45:21 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-21 19:45:22 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2419a5db
+2025-10-21 19:45:22 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-21 19:45:22 WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-21 19:45:22 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.43
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-21 19:45:22 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-21 19:45:23 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:45:23 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-21 19:45:24 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoints beneath base path '/actuator'
+2025-10-21 19:45:24 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8582 (http) with context path '/'
+2025-10-21 19:45:24 INFO  c.z.w.WigellSushiApiApplication - Started WigellSushiApiApplication in 4.276 seconds (process running for 4.812)
+2025-10-21 19:45:24 INFO  c.z.w.config.DatabaseInitializer - === Clearing all tables ===
+2025-10-21 19:45:24 INFO  c.z.w.config.DatabaseInitializer - === Seeding database ===
+2025-10-21 19:45:24 INFO  c.z.w.config.DatabaseInitializer - Seed-data added – customers: 5, dishes: 5, orders: 2, rooms: 3
+2025-10-21 19:45:24 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-21 19:45:24 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-10-21 19:45:24 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-10-21 19:51:07 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-21 19:51:07 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-10-21 19:51:07 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:51:07 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-21 19:51:07 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-10-21 19:52:31 INFO  c.z.w.WigellSushiApiApplication - Starting WigellSushiApiApplication using Java 24.0.2 with PID 205024 (E:\JavaProjects\MicroServices-Grupp5\Sushi\target\classes started by marcu in E:\JavaProjects\MicroServices-Grupp5\Sushi)
+2025-10-21 19:52:31 INFO  c.z.w.WigellSushiApiApplication - No active profile set, falling back to 1 default profile: "default"
+2025-10-21 19:52:31 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-21 19:52:31 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 26 ms. Found 8 JPA repository interfaces.
+2025-10-21 19:52:31 INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=0c5d0d15-470f-36d7-870c-7c14393ea226
+2025-10-21 19:52:32 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8582 (http)
+2025-10-21 19:52:32 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-10-21 19:52:32 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-21 19:52:32 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-10-21 19:52:32 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 838 ms
+2025-10-21 19:52:32 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-21 19:52:32 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.29.Final
+2025-10-21 19:52:32 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-10-21 19:52:32 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-21 19:52:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-10-21 19:52:32 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2c978637
+2025-10-21 19:52:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-10-21 19:52:32 WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-21 19:52:32 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.43
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-10-21 19:52:33 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-21 19:52:33 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:52:33 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-21 19:52:33 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoints beneath base path '/actuator'
+2025-10-21 19:52:34 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8582 (http) with context path '/'
+2025-10-21 19:52:34 INFO  c.z.w.WigellSushiApiApplication - Started WigellSushiApiApplication in 3.031 seconds (process running for 3.428)
+2025-10-21 19:52:34 INFO  c.z.w.config.DatabaseInitializer - === Clearing all tables ===
+2025-10-21 19:52:34 INFO  c.z.w.config.DatabaseInitializer - === Seeding database ===
+2025-10-21 19:52:34 INFO  c.z.w.config.DatabaseInitializer - Seed-data added – customers: 5, dishes: 5, orders: 2, rooms: 3
+2025-10-21 19:52:34 INFO  d.c.b.a.c.r.ApplicationRegistrator - Application registered itself as aad4712a48cc
+2025-10-21 19:52:34 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-21 19:52:34 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-10-21 19:52:34 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-10-21 19:59:19 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-21 19:59:19 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-10-21 19:59:19 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-21 19:59:19 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-10-21 19:59:19 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
 2025-10-21 19:43:27 INFO  c.z.w.WigellSushiApiApplication - Starting WigellSushiApiApplication using Java 24.0.2 with PID 32208 (C:\Users\Tzakyra\IdeaProjects\MicroServices-Grupp5\Sushi\target\classes started by Tzakyra in C:\Users\Tzakyra\IdeaProjects\MicroServices-Grupp5\Sushi)
 2025-10-21 19:43:27 INFO  c.z.w.WigellSushiApiApplication - No active profile set, falling back to 1 default profile: "default"
 2025-10-21 19:43:28 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.

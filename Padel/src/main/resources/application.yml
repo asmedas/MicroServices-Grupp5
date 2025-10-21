@@ -20,7 +20,7 @@ spring:
           issuer-uri: "http://localhost:8590/realms/keycloak"
 
   keycloak:
-    server-url: http://localhost:8590/realms/keycloak
+    server-url: http://localhost:8590
     realm: keycloak
 
   keycloak.admin:
