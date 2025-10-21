@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").authenticated()
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/movies").hasRole("USER")
                         .requestMatchers(HttpMethod.POST,"/api/v1/bookings").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/v1/tickets").hasRole("USER")

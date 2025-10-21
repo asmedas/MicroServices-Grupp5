@@ -23,6 +23,12 @@ spring:
             - Path=/padel/**
           filters:
             - StripPrefix=1
+        - id: cinema-service
+          uri: http://localhost:8583
+          predicates:
+            - Path=/cinema/**
+          filters:
+            - StripPrefix=1
 
 
   security:

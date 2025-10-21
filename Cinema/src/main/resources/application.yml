@@ -5,6 +5,15 @@ spring:
   application:
     name: cinema
 
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        username: admin
+        password: admin
+        instance:
+          management-base-url: http://localhost:8583
+
   datasource:
     url: jdbc:mysql://localhost:6606/wigell_cinema_db?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
