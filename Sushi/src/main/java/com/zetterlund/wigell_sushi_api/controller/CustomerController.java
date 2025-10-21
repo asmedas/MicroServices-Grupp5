@@ -1,6 +1,7 @@
 package com.zetterlund.wigell_sushi_api.controller;
 
 import com.zetterlund.wigell_sushi_api.dto.CustomerCreationRequestDto;
+import com.zetterlund.wigell_sushi_api.dto.CustomerDto;
 import com.zetterlund.wigell_sushi_api.entity.Customer;
 import com.zetterlund.wigell_sushi_api.exception.BadRequestException;
 import com.zetterlund.wigell_sushi_api.exception.ConflictException;
@@ -23,8 +24,13 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
-        return ResponseEntity.ok(customerService.getAllCustomers());
+    public ResponseEntity<List<CustomerDto>> getAllCustomers() {
+        List<CustomerDto> dtos = customerService.getAllCustomers()
+                .stream()
+                .map(customerService::mapToDto) // Mappningsmetod i service
+                .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
