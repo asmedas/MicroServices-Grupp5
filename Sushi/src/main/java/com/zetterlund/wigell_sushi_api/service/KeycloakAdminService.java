@@ -1,9 +1,12 @@
 package com.zetterlund.wigell_sushi_api.service;
 
+import com.zetterlund.wigell_sushi_api.exception.AlreadyExistsError;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,7 @@ import java.util.List;
 @Service
 public class KeycloakAdminService {
 
+    private static final Logger logger = LoggerFactory.getLogger(KeycloakAdminService.class);
     private final Keycloak keycloak;
     private final String realm;
 
@@ -30,6 +34,24 @@ public class KeycloakAdminService {
         user.setLastName(lastName);
         user.setEnabled(true);
 
+        var users = realm().users();
+        var existingId = users.searchByUsername(username, false).stream()
+                .filter(u -> username.equalsIgnoreCase(u.getUsername()))
+                .map(UserRepresentation::getId)
+                .findFirst()
+                .orElse(null);
+        if (existingId != null) {
+            logger.error("Username already exists");
+            throw new AlreadyExistsError("Username already exists: " + username);
+        }
+
+        if (email != null && !email.isEmpty()) {
+            var usersWithEmail = users.searchByEmail(email, false);
+            if (!usersWithEmail.isEmpty()) {
+                logger.error("Email already exists");
+                throw new AlreadyExistsError("Email already exists: " + email);
+            }
+        }
         // Skapa användaren
         var response = realm().users().create(user);
         if (response.getStatus() != 201) {

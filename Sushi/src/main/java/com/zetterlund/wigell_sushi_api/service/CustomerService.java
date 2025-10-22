@@ -3,9 +3,14 @@ package com.zetterlund.wigell_sushi_api.service;
 import com.zetterlund.wigell_sushi_api.dto.AddressDto;
 import com.zetterlund.wigell_sushi_api.dto.CustomerCreationRequestDto;
 import com.zetterlund.wigell_sushi_api.dto.CustomerDto;
+import com.zetterlund.wigell_sushi_api.entity.Address;
 import com.zetterlund.wigell_sushi_api.entity.Customer;
 import com.zetterlund.wigell_sushi_api.exception.ResourceNotFoundException;
+import com.zetterlund.wigell_sushi_api.exception.UnexpectedError;
 import com.zetterlund.wigell_sushi_api.repository.CustomerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +19,7 @@ import java.util.List;
 @Service
 @Transactional
 public class CustomerService {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
     private final CustomerRepository customerRepository;
     private final KeycloakUserService keycloakUserService;
 
@@ -23,21 +29,51 @@ public class CustomerService {
     }
 
     public List<Customer> getAllCustomers() {
+        logger.info("getAllCustomers service class");
         return customerRepository.findAll();
     }
 
-    public Customer addCustomer(Customer customer, String rawPassword) {
-        // Skapa en Keycloak-användare
-        String keycloakUserId = keycloakUserService.createUserForCustomer(
-                customer.getUsername(),
-                customer.getUsername(), // Använd namn som e-post (eller byt)
-                rawPassword
-        );
+    public CustomerDto addCustomerFromDto(CustomerCreationRequestDto dto) {
+        if (dto == null) throw new IllegalArgumentException("Body är null");
 
-        // Spara användar-ID från Keycloak till kundobjektet (valfritt)
-        customer.setKeycloakUserId(keycloakUserId);
+        Customer customer = new Customer();
+        customer.setUsername(dto.getUsername());
+        customer.setFirstName(dto.getFirstName());
+        customer.setLastName(dto.getLastName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhoneNumber(dto.getPhoneNumber());
 
-        return customerRepository.save(customer);
+        // Skapa Keycloak-user
+        try {
+            String keycloakUserId = keycloakUserService.createUserForCustomer(
+                    customer.getUsername(),
+                    customer.getEmail(),
+                    dto.getRawPassword()
+            );
+            customer.setKeycloakUserId(keycloakUserId);
+        } catch (DataAccessException ex) {
+            logger.error("Failed to update Keycloak profile for customer {} (keycloakId={})",
+                    customer.getId(), customer.getKeycloakUserId(), ex);
+            throw new UnexpectedError("Keycloak update failed " + ex);
+        }
+
+        // Adresser
+        if (dto.getAddresses() != null) {
+            customer.setAddresses(dto.getAddresses().stream().map(addressDto -> {
+                Address address = new Address();
+                address.setStreet(addressDto.getStreet());
+                address.setPostalCode(addressDto.getPostalCode());
+                address.setCity(addressDto.getCity());
+                address.setCustomer(customer);
+                return address;
+            }).toList());
+        }
+
+        // Spara kund
+        Customer savedCustomer = customerRepository.save(customer);
+
+        // Returnera CustomerDto istället för Customer
+        return mapToDto(savedCustomer);
     }
 
     public Customer updateCustomer(Integer customerId, CustomerCreationRequestDto customerDto) {
@@ -45,13 +81,14 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer with id " + customerId + " not found."));
 
         existingCustomer.setUsername(customerDto.getUsername());
-        existingCustomer.setFirstName(customerDto.getName());
-        existingCustomer.setLastName(null);
+        existingCustomer.setFirstName(customerDto.getFirstName());
+        existingCustomer.setLastName(customerDto.getLastName());
 
         return customerRepository.save(existingCustomer);
     }
 
     public void deleteCustomerById(Integer customerId) {
+        logger.info("deleteCustomerById service class");
         if (!customerRepository.existsById(customerId)) {
             throw new ResourceNotFoundException("Customer with id " + customerId + " not found.");
         }
