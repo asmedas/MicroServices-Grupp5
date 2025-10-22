@@ -108,6 +108,10 @@ public class BookingService {
                     return new NoMatchException("Customer not found");
                 });
         log.debug("Updating booking with id: {} for user {}", bookingId, customer.getId());
+        customer.getBookings().stream()
+                .filter(b -> b.getId().equals(bookingId))
+                .findFirst()
+                .orElseThrow(() -> new NoMatchException("Booking not found for customer"));
         Booking existingBooking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> {
                     log.error("Booking not found");
