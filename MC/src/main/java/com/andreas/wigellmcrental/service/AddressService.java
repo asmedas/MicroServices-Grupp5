@@ -25,6 +25,7 @@ public class AddressService {
     }
 
     public List<Address> findAll() {
+        logger.info("Finding all addresses");
         return addressRepo.findAll();
     }
 

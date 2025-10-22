@@ -8,11 +8,15 @@ import com.andreas.wigellmcrental.entity.BookingStatus;
 import com.andreas.wigellmcrental.mapper.Mapper;
 import com.andreas.wigellmcrental.service.BookingService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -24,23 +28,20 @@ public class BookingController {
         this.service = service;
     }
 
-
-    // Admin: lista alla bokningar
+    // ADMIN: lista alla bokningar
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/bookings")
     public List<BookingDto> all() {
         return service.all().stream().map(Mapper::toBookingDto).toList();
     }
 
-
-    // Kund/Admin: lista bokningar för en kund (via query-param, enligt uppgift)
+    // USER/ADMIN: lista bokningar för en kund (via query-param)
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping(value = "/bookings", params = "customerId")
     public List<BookingDto> getBookingsByCustomer(@RequestParam Long customerId, Authentication auth) {
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        // Om användaren inte är admin -> får bara se sina egna bokningar
         if (!isAdmin) {
             String username = auth.getPrincipal() instanceof org.springframework.security.oauth2.jwt.Jwt jwt
                     ? jwt.getClaimAsString("preferred_username")
@@ -56,52 +57,72 @@ public class BookingController {
                 .toList();
     }
 
-
-    // Kund/Admin: lista bokningar för kund
+    // USER/ADMIN: hämta specifik bokning
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/bookings/{id}")
     public BookingDto getBooking(@PathVariable Long id) {
         return Mapper.toBookingDto(service.getBookingById(id));
     }
 
-
-    // Kund/Admin: skapa bokning
+    // USER/ADMIN: skapa bokning
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/bookings")
-    public BookingDto create(@Valid @RequestBody BookingCreateDto in) {
+    public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody BookingCreateDto in) {
         Booking saved = service.create(in.customerId(), in.bikeId(), in.startDate(), in.endDate());
-        return Mapper.toBookingDto(saved);
+        return message("Booking created successfully",
+                Mapper.toBookingDto(saved),
+                HttpStatus.CREATED);
     }
 
-    // Admin: ersätt bokning (PUT)
+    // ADMIN: ersätt bokning (PUT)
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/bookings/{id}")
-    public BookingDto replace(@PathVariable Long id, @Valid @RequestBody BookingCreateDto in) {
+    public ResponseEntity<Map<String, Object>> replace(@PathVariable Long id,
+                                                       @Valid @RequestBody BookingCreateDto in) {
         Booking updated = service.replace(id, in.customerId(), in.bikeId(), in.startDate(), in.endDate());
-        return Mapper.toBookingDto(updated);
+        return message("Booking " + id + " replaced successfully",
+                Mapper.toBookingDto(updated),
+                HttpStatus.OK);
     }
 
-    // Kund/Admin: patch (kund får inte ändra status – det avskiljs i service via isAdmin-flaggan)
+    // USER/ADMIN: patch (kund får inte ändra status)
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PatchMapping("/bookings/{id}")
-    public BookingDto patch(@PathVariable Long id, @RequestBody BookingUpdateDto in, Authentication auth) {
+    public ResponseEntity<Map<String, Object>> patch(@PathVariable Long id,
+                                                     @RequestBody BookingUpdateDto in,
+                                                     Authentication auth) {
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         Booking updated = service.patch(id, in.bikeId(), in.startDate(), in.endDate(), in.status(), isAdmin);
-        return Mapper.toBookingDto(updated);
+        return message("Booking " + id + " updated successfully",
+                Mapper.toBookingDto(updated),
+                HttpStatus.OK);
     }
 
-    // Admin: snabb endpoint för status
+    // ADMIN: snabb endpoint för att ändra status
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/bookings/{id}/status")
-    public BookingDto setStatus(@PathVariable Long id, @RequestParam BookingStatus status) {
-        return Mapper.toBookingDto(service.setStatus(id, status));
+    public ResponseEntity<Map<String, Object>> setStatus(@PathVariable Long id,
+                                                         @RequestParam BookingStatus status) {
+        Booking updated = service.setStatus(id, status);
+        return message("Booking " + id + " status updated to " + status,
+                Mapper.toBookingDto(updated),
+                HttpStatus.OK);
     }
 
-    // Admin: ta bort
+    // ADMIN: ta bort bokning
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/bookings/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id) {
         service.delete(id);
+        return message("Booking " + id + " deleted successfully", null, HttpStatus.OK);
+    }
+
+    // Hjälpmetod för enhetliga svar
+    private ResponseEntity<Map<String, Object>> message(String msg, Object data, HttpStatus status) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", msg);
+        if (data != null) body.put("data", data);
+        return ResponseEntity.status(status).body(body);
     }
 }

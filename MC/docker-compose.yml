@@ -11,25 +11,7 @@ services:
     ports:
       - "6666:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-
-  keycloak:
-    image: quay.io/keycloak/keycloak:26.0.6
-    container_name: keycloak
-    restart: unless-stopped
-    command: start-dev
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HOSTNAME: localhost
-      KC_HOSTNAME_STRICT: false
-      KC_HTTP_ENABLED: true
-      KC_HTTP_PORT: 8081
-      KC_PROXY: edge
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mysql
+      - ./mysql_data:/var/lib/mysql
 
 volumes:
   mysql_data:

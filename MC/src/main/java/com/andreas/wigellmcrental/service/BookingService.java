@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class BookingService {
@@ -24,7 +25,7 @@ public class BookingService {
     private final BikeRepository bikeRepo;
     private final WebClient webClient;
 
-    @Value("${converter.url}")
+    @Value("${converter.service.url}")
     private String converterUrl;
 
     public BookingService(BookingRepository bookingRepo, CustomerRepository customerRepo, BikeRepository bikeRepo) {
@@ -35,10 +36,20 @@ public class BookingService {
     }
 
     public List<Booking> all() {
+        logger.info("Getting all bookings");
+        List<Booking> bookings = bookingRepo.findAll();
+        logger.info("Found {} bookings", bookings.size());
         return bookingRepo.findAll();
     }
 
     public Booking getBookingById(Long id) {
+        logger.info("Getting booking by ID {}", id);
+        Optional<Booking> booking = bookingRepo.findById(id);
+        if (booking.isPresent()) {
+            logger.info("Found booking by ID {}", id);
+            } else {
+            logger.info("Booking not found {}", id);
+        }
         return bookingRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
     }
@@ -199,26 +210,26 @@ public class BookingService {
         try {
             // 👇 Ändring här — tvingar punkt som decimal
             String url = String.format(Locale.US, "%s/api/convert?to=GBP&amount=%.2f", converterUrl, amountSek);
-            logger.info("🔍 Calling converter service: {}", url);
+            logger.info("Calling converter service: {}", url);
 
             Double converted = webClient.get()
                     .uri(url)
                     .header("Authorization", "Bearer 123456789")
                     .retrieve()
                     .bodyToMono(Double.class)
-                    .doOnError(err -> logger.error("❌ Converter call failed: {}", err.getMessage()))
+                    .doOnError(err -> logger.error("Converter call failed: {}", err.getMessage()))
                     .block();
 
             if (converted == null) {
-                logger.error("❌ Converter returned null response");
+                logger.error("Converter returned null response");
                 return 0.0;
             }
 
-            logger.info("💱 Converted {} SEK → {} GBP", amountSek, converted);
+            logger.info("Converted {} SEK → {} GBP", amountSek, converted);
             return converted;
 
         } catch (Exception e) {
-            logger.error("💥 Currency conversion failed for amountSek={}", amountSek, e);
+            logger.error("Currency conversion failed for amountSek={}", amountSek, e);
             return 0.0;
         }
     }

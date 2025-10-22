@@ -26,6 +26,7 @@ public class BikeService {
 
     // Hämta en
     public Bike get(Long id) {
+        logger.debug("Fetching bike with id {}", id);
         return repo.findById(id).orElseThrow(() -> new RuntimeException("Bike not found"));
     }
 
