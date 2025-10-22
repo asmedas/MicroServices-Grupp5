@@ -42,7 +42,18 @@ spring:
           filters:
             - StripPrefix=1
             - AddRequestHeader=Authorization, Bearer 123456789
-
+        - id: travels-service
+          uri: http://localhost:8581
+          predicates:
+            - Path=/travels/**
+          filters:
+            - StripPrefix=1
+        - id: mc-service
+          uri: http://localhost:8585
+          predicates:
+            - Path=/mc/**
+          filters:
+            - StripPrefix=1
 
   security:
     oauth2:
