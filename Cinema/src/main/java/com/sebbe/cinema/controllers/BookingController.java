@@ -53,7 +53,7 @@ public class BookingController {
 
     // släpps endast igenom om customerId stämmer överens med den nuvarande användaren
     @GetMapping(params = "customerId")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Booking> listBookingsByCustomer(@RequestParam Long customerId) {
         return bookingService.getBookingsByCustomerId(customerId);
     }
