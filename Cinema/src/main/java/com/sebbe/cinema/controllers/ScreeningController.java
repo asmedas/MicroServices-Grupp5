@@ -23,7 +23,7 @@ public class ScreeningController {
         this.screeningService = screeningService;
     }
 
-    //api/v1/screenings?filmId=1&date=2025-10-08
+    //cinema/screenings?filmId=1&date=2025-10-08
     @GetMapping(params = {"filmId", "date"})
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<CustomerScreeningDto>> getScreeningsByFilmIdAndDate(
