@@ -32,6 +32,15 @@ public class Booking {
         this.timeSlot = timeSlot;
     }
 
+    public Booking(Long customerId, Long courtId, int numberOfPlayers, LocalDate date, int timeSlot, double totalPrice) {
+        this.customerId = customerId;
+        this.courtId = courtId;
+        this.numberOfPlayers = numberOfPlayers;
+        this.date = date;
+        this.timeSlot = timeSlot;
+        this.totalPrice = totalPrice;
+    }
+
     public Long getId() {
         return id;
     }
