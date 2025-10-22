@@ -26,10 +26,14 @@ public class CustomerService {
     // --- KUNDER ---
 
     public List<Customer> findAll() {
+        logger.info("Finding all customers");
         return customerRepo.findAll();
     }
 
     public Customer get(Long id) {
+        logger.info("Fetching Customer with id: {}", id);
+        List<Customer> customers = customerRepo.findAll();
+        logger.info("Fetching Customer with id: {}", id);
         return customerRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
