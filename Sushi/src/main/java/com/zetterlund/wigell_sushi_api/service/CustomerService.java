@@ -90,7 +90,10 @@ public class CustomerService {
         existing.setEmail(dto.getEmail());
         existing.setPhoneNumber(dto.getPhoneNumber());
 
-        return mapToDto(customerRepository.save(existing));
+        Customer saved = customerRepository.save(existing);
+        logger.info("Customer with id {} successfully updated.", customerId);
+
+        return mapToDto(saved);
     }
 
     public void deleteCustomerById(Integer customerId) {
