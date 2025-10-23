@@ -90,6 +90,21 @@ public class CustomerService {
         existing.setEmail(dto.getEmail());
         existing.setPhoneNumber(dto.getPhoneNumber());
 
+        // Adresshantering
+        if (dto.getAddresses() != null && !dto.getAddresses().isEmpty()) {
+            // Rensa befintliga adresser
+            existing.getAddresses().clear();
+
+            for (AddressDto addressDto : dto.getAddresses()) {
+                Address address = new Address();
+                address.setStreet(addressDto.getStreet());
+                address.setPostalCode(addressDto.getPostalCode());
+                address.setCity(addressDto.getCity());
+                address.setCustomer(existing);
+                existing.getAddresses().add(address);
+            }
+        }
+
         Customer saved = customerRepository.save(existing);
         logger.info("Customer with id {} successfully updated.", customerId);
 
