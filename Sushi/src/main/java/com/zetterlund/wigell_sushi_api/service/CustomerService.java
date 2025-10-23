@@ -76,15 +76,21 @@ public class CustomerService {
         return mapToDto(savedCustomer);
     }
 
-    public Customer updateCustomer(Integer customerId, CustomerCreationRequestDto customerDto) {
-        Customer existingCustomer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer with id " + customerId + " not found."));
+    public CustomerDto updateCustomer(Integer customerId,
+                                      CustomerCreationRequestDto dto) {
+        logger.info("Updating customer with id {}", customerId);
 
-        existingCustomer.setUsername(customerDto.getUsername());
-        existingCustomer.setFirstName(customerDto.getFirstName());
-        existingCustomer.setLastName(customerDto.getLastName());
+        Customer existing = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Customer with id " + customerId + " not found."));
 
-        return customerRepository.save(existingCustomer);
+        existing.setUsername(dto.getUsername());
+        existing.setFirstName(dto.getFirstName());
+        existing.setLastName(dto.getLastName());
+        existing.setEmail(dto.getEmail());
+        existing.setPhoneNumber(dto.getPhoneNumber());
+
+        return mapToDto(customerRepository.save(existing));
     }
 
     public void deleteCustomerById(Integer customerId) {
@@ -105,11 +111,12 @@ public class CustomerService {
         dto.setPhoneNumber(customer.getPhoneNumber());
 
         List<AddressDto> addressDtos = customer.getAddresses().stream().map(address -> {
-            AddressDto adto = new AddressDto();
-            adto.setStreet(address.getStreet());
-            adto.setPostalCode(address.getPostalCode());
-            adto.setCity(address.getCity());
-            return adto;
+            AddressDto adTo = new AddressDto();
+            adTo.setId(address.getId());
+            adTo.setStreet(address.getStreet());
+            adTo.setPostalCode(address.getPostalCode());
+            adTo.setCity(address.getCity());
+            return adTo;
         }).toList();
 
         dto.setAddresses(addressDtos);

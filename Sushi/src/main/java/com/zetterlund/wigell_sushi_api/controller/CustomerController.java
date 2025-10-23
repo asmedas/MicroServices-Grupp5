@@ -2,7 +2,6 @@ package com.zetterlund.wigell_sushi_api.controller;
 
 import com.zetterlund.wigell_sushi_api.dto.CustomerCreationRequestDto;
 import com.zetterlund.wigell_sushi_api.dto.CustomerDto;
-import com.zetterlund.wigell_sushi_api.entity.Customer;
 import com.zetterlund.wigell_sushi_api.exception.BadRequestException;
 import com.zetterlund.wigell_sushi_api.exception.ConflictException;
 import com.zetterlund.wigell_sushi_api.service.CustomerService;
@@ -65,12 +64,9 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{customerId}")
-    public ResponseEntity<Customer> updateCustomer(
-            @PathVariable Integer customerId,
-            @RequestBody CustomerCreationRequestDto customerDto) {
-
-        Customer updatedCustomer = customerService.updateCustomer(customerId, customerDto);
-        return ResponseEntity.ok(updatedCustomer);
+    public CustomerDto updateCustomer(@PathVariable Integer customerId,
+                                      @RequestBody CustomerCreationRequestDto dto) {
+        return customerService.updateCustomer(customerId, dto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
