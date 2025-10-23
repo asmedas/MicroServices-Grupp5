@@ -38,7 +38,7 @@ public class RoomController {
         return ResponseEntity.ok(roomDto);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<RoomResponseDto> addRoom(@RequestBody RoomRequestDto roomDto) {
         Room room = new Room();
@@ -57,7 +57,7 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<RoomResponseDto> getRoomById(@PathVariable Integer id) {
         Room room = roomService.getRoomById(id);
@@ -71,7 +71,7 @@ public class RoomController {
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<RoomResponseDto> updateRoom(
             @PathVariable Integer id,
