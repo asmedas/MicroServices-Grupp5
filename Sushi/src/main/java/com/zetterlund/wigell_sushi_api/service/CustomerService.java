@@ -34,7 +34,7 @@ public class CustomerService {
     }
 
     public CustomerDto addCustomerFromDto(CustomerCreationRequestDto dto) {
-        if (dto == null) throw new IllegalArgumentException("Body är null");
+        if (dto == null) throw new IllegalArgumentException("Body is null");
 
         Customer customer = new Customer();
         customer.setUsername(dto.getUsername());
