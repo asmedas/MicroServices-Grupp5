@@ -1,11 +1,19 @@
 package com.zetterlund.wigell_sushi_api.dto;
 
    public class AddressDto {
+       private Integer id;
        private String street;
        private String postalCode;
        private String city;
 
        // Getters och setters
+       public Integer getId() {
+           return id;
+       }
+       public void setId(Integer id) {
+           this.id = id;
+       }
+
        public String getStreet() {
            return street;
        }
