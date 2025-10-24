@@ -15,12 +15,12 @@ public class Order {
     private Integer id;
 
     @Column(nullable = false)
-    private double totalPriceInSek;
+    private BigDecimal totalPriceInSek;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetails> orderDetails = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
@@ -28,7 +28,7 @@ public class Order {
 
     public Order(Integer id, BigDecimal bigDecimal, Customer customer) {
         this.id = id;
-        this.totalPriceInSek = bigDecimal.doubleValue();
+        this.totalPriceInSek = BigDecimal.valueOf(bigDecimal.doubleValue());
         this.customer = customer;
     }
 
@@ -41,11 +41,11 @@ public class Order {
         this.id = id;
     }
 
-    public double getTotalPriceInSek() {
+    public BigDecimal getTotalPriceInSek() {
         return totalPriceInSek;
     }
 
-    public void setTotalPriceInSek(double totalPriceInSek) {
+    public void setTotalPriceInSek(BigDecimal totalPriceInSek) {
         this.totalPriceInSek = totalPriceInSek;
     }
 

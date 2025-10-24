@@ -80,6 +80,8 @@ public class DatabaseInitializer {
                 // 2 beställningar och orderdetaljer
                 Order order1 = orderRepo.save(new Order(null, new BigDecimal("280.00"), legolas));
                 Order order2 = orderRepo.save(new Order(null, new BigDecimal("195.00"), gimli));
+            System.out.println("LEGOLAS id {" + legolas.getId() + "}, order 1 id - " + order1.getId());
+            System.out.println("GIMLI id {" + gimli.getId() + "}, order 2 id - " + order2.getId());
 
                 orderDetailRepo.save(new OrderDetails(null, order1, sushi, 1));
                 orderDetailRepo.save(new OrderDetails(null, order1, miso, 1));

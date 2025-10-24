@@ -1,9 +1,11 @@
 package com.zetterlund.wigell_sushi_api.dto;
 
-   public class OrderOverviewDto {
+import java.math.BigDecimal;
+
+public class OrderOverviewDto {
        private Integer orderId;
        private String customerName;
-       private double totalPriceInSek;
+       private BigDecimal totalPriceInSek;
 
        // Getters och setters
        public Integer getOrderId() {
@@ -20,10 +22,10 @@ package com.zetterlund.wigell_sushi_api.dto;
            this.customerName = customerName;
        }
 
-       public double getTotalPriceInSek() {
+       public BigDecimal getTotalPriceInSek() {
            return totalPriceInSek;
        }
-       public void setTotalPriceInSek(double totalPriceInSek) {
+       public void setTotalPriceInSek(BigDecimal totalPriceInSek) {
            this.totalPriceInSek = totalPriceInSek;
        }
    }
