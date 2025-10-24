@@ -58,7 +58,7 @@ public class DataInitializer {
                 bookings.save(booking2);
             }
 
-            // 🏠 Lägg till adresser till kunder (om inga finns)
+            // Lägg till adresser till kunder (om inga finns)
             if (addresses.count() == 0) {
                 Customer c1 = customers.findAll().get(0);
                 Customer c2 = customers.findAll().get(1);
@@ -72,7 +72,7 @@ public class DataInitializer {
                 addresses.save(a2);
             }
 
-            System.out.println("✅ Testdata laddad: 5 kunder, 5 hojar, 2 bokningar, 2 adresser");
+            System.out.println("Testdata laddad: 5 kunder, 5 hojar, 2 bokningar, 2 adresser");
         };
     }
 }

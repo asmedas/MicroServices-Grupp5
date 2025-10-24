@@ -1,6 +1,7 @@
 package com.andreas.wigellmcrental.repository;
 
 import com.andreas.wigellmcrental.entity.Booking;
+import com.andreas.wigellmcrental.entity.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +25,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findOverlapping(@Param("bikeId") Long bikeId,
                                   @Param("from") LocalDate from,
                                   @Param("to") LocalDate to);
+
+
+    // Kontrollera om en hoj har en aktiv bokning
+    boolean existsByBike_IdAndStatus(Long bikeId, BookingStatus status);
 }

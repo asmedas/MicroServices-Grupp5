@@ -64,7 +64,17 @@ public class BookingService {
         Bike b = bikeRepo.findById(bikeId)
                 .orElseThrow(() -> new RuntimeException("Bike not found"));
 
-        long days = ChronoUnit.DAYS.between(start, end);
+        // Kontrollera överlappande bokningar
+        List<Booking> overlapping = bookingRepo.findOverlapping(bikeId, start, end);
+        if (!overlapping.isEmpty()) {
+            throw new IllegalStateException(
+                    "Motorcykeln " + b.getModel() + " är redan bokad mellan " +
+                            overlapping.get(0).getStartDate() + " och " + overlapping.get(0).getEndDate()
+            );
+
+        }
+
+        long days = ChronoUnit.DAYS.between(start, end); // för att räkna dagar
         double totalSek = days * b.getPricePerDay();
         double totalGbp = convertToGbp(totalSek);
 

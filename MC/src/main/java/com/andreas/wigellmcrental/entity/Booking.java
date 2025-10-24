@@ -21,7 +21,7 @@ public class Booking {
     private double totalPriceGbp;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status = BookingStatus.ACTIVE;
+    private BookingStatus status = BookingStatus.ACTIVE; // gör den till ACTIVE by default
 
     public Booking() {
     }

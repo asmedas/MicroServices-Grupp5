@@ -1,4 +1,4 @@
-package com.andreas.wigellmcrental.config;
+package com.andreas.wigellmcrental.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
