@@ -33,8 +33,10 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/api/v1/customers/**", "/api/v1/converter/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+
+                        .requestMatchers("/api/v1/orders**").permitAll()
+                        .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
