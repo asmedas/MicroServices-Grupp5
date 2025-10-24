@@ -2,6 +2,7 @@ package com.sebbe.cinema.services;
 
 import com.sebbe.cinema.dtos.customerDtos.UpdateUserProfileDto;
 import com.sebbe.cinema.exceptions.AlreadyExistsError;
+import com.sebbe.cinema.repositories.CustomerRepository;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
@@ -24,13 +25,16 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
 
     private final Keycloak keycloak;
     private final String realm;
+    private final CustomerRepository customerRepository;
     private static final String[] USERS_TO_DELETE = {"gunnar", "ingrid", "gabbi"};
     private static final Logger log = LoggerFactory.getLogger(KeycloakUserServiceImpl.class);
 
     public KeycloakUserServiceImpl(Keycloak keycloak,
-                                   @Value("${keycloak.realm}") String realm){
+                                   @Value("${keycloak.realm}") String realm,
+                                   CustomerRepository customerRepository){
         this.keycloak = keycloak;
         this.realm = realm;
+        this.customerRepository = customerRepository;
     }
 
     /**
@@ -92,6 +96,16 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
                 .map(UserRepresentation::getId)
                 .findFirst()
                 .orElse(null);
+        var existingEmail = users.searchByEmail(email, false).stream()
+                .filter(u -> email.equalsIgnoreCase(u.getEmail()))
+                .map(UserRepresentation::getId)
+                .findFirst()
+                .orElse(null);
+        log.debug("Existing ID: {}, Existing email: {}", existingId, existingEmail);
+        if(existingEmail != null && existingEmail.equals(existingId) && customerRepository.findByKeycloakId(existingId).isEmpty()){
+            log.debug("User already exists in keycloak, but is not linked to a customer, reusing existing ID linking the new customer to the existing user");
+            return existingId;
+        }
         if (existingId != null) {
             log.error("Username already exists");
             throw new AlreadyExistsError("Username already exists: " + username);
