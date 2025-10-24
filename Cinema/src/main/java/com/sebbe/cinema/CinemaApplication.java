@@ -52,7 +52,6 @@ public class CinemaApplication {
                 System.out.println("Database already contains data");
                 return;
             }
-            keycloakUserServiceImpl.initializeUsersOnStartup();
 
 
             // 5 filmer
@@ -112,7 +111,7 @@ public class CinemaApplication {
                     "Gunnar@hotmail.com", new CreateAddressDto("Russvägen 18", "sundsvall", "85752")));
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
                     "Ingrid", "Nordström", 50, "ingrid", "nordstrom",
-                    "Ingrid@hotmail.com", new CreateAddressDto("Kolstavägen 37", "sundsvall", "65233")));
+                    "ingrid@hotmail.com", new CreateAddressDto("Kolstavägen 37", "sundsvall", "65233")));
             customerService.createCustomerWithKeycloakUserAndAddress(new CreateCustomerWithAccountDto(
                     "Tomas", "Wigell", 50, "gabbi", "gabbi",
                     "wigell@hotmail.com", new CreateAddressDto("högomsvägen 13", "sundsvall", "54311")));
