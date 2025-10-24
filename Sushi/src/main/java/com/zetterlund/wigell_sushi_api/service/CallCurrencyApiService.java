@@ -7,28 +7,33 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
+
 @Service
-public class CurrencyConverterService {
-    private static final Logger logger = LoggerFactory.getLogger(CurrencyConverterService.class);
+public class CallCurrencyApiService {
+
+    private static final Logger log = LoggerFactory.getLogger(CallCurrencyApiService.class);
 
     private final RestTemplate restTemplate;
 
-    @Value("${currency.converter.api.url}")
+    @Value("${currency.api.url}")
     private String apiUrl;
 
-    @Value("${currency.converter.api.token}")
-    private String apiToken;
+    @Value("${currency.api-key}")
+    private String apiKey;
 
-    public CurrencyConverterService(RestTemplate restTemplate) {
+    public CallCurrencyApiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public Double convertCurrency(String toCurrency, double amount) {
+    public BigDecimal convertFromSEKToJPY(BigDecimal amount) {
+        log.debug("Converting amount from SEK to JPY with microservice");
         try {
-            String url = String.format("%s?to=%s&amount=%.2f", apiUrl, toCurrency, amount);
+            String url = String.format("%s?to=%s&amount=%s", apiUrl, "JPY", amount.toPlainString());
 
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + apiToken);
+            headers.set("Authorization", "Bearer " + apiKey);
 
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
@@ -40,13 +45,14 @@ public class CurrencyConverterService {
             );
 
             if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
-                logger.error("Unexpected response from currency API");
-                throw new IllegalStateException("Unexpected response from currency API");
+                log.error("Unexpected response from converter API");
+                throw new IllegalStateException("Unexpected response from converter API");
             }
 
-            return response.getBody();
+            return BigDecimal.valueOf(response.getBody());
+
         } catch (Exception e) {
-            logger.error("Error during currency conversion", e);
+            log.error("Error calling converter microservice", e);
             throw new RuntimeException("Currency conversion failed", e);
         }
     }

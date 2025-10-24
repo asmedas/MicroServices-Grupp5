@@ -1,8 +1,10 @@
 package com.zetterlund.wigell_sushi_api.dto;
 
-   public class DishCreationRequestDto {
+import java.math.BigDecimal;
+
+public class DishCreationRequestDto {
        private String name;
-       private Double priceInSek;
+       private BigDecimal priceInSek;
        private String description;
        
        // Getters och setters
@@ -13,10 +15,10 @@ package com.zetterlund.wigell_sushi_api.dto;
            this.name = name;
        }
 
-       public Double getPriceInSek() {
+       public BigDecimal getPriceInSek() {
            return priceInSek;
        }
-       public void setPriceInSek(Double priceInSek) {
+       public void setPriceInSek(BigDecimal priceInSek) {
            this.priceInSek = priceInSek;
        }
 

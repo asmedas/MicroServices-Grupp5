@@ -16,10 +16,10 @@ public class Dish {
     private String name;
 
     @Column(nullable = false)
-    private Double priceInSek;
+    private BigDecimal priceInSek;
 
     @Column(nullable = false)
-    private Double priceInJpy;
+    private BigDecimal priceInJpy;
 
     @Column
     private String description;
@@ -29,8 +29,8 @@ public class Dish {
     public Dish(Integer id, String name, BigDecimal priceInSek, BigDecimal priceInJpy, String description) {
         this.id = id;
         this.name = name;
-        if (priceInSek != null) this.priceInSek = priceInSek.doubleValue();
-        if (priceInJpy != null) this.priceInJpy = priceInJpy.doubleValue();
+        if (priceInSek != null) this.priceInSek = BigDecimal.valueOf(priceInSek.doubleValue());
+        if (priceInJpy != null) this.priceInJpy = BigDecimal.valueOf(priceInJpy.doubleValue());
         this.description = description;
     }
 
@@ -49,17 +49,17 @@ public class Dish {
         this.name = name;
     }
 
-    public Double getPriceInSek() {
+    public BigDecimal getPriceInSek() {
         return priceInSek;
     }
-    public void setPriceInSek(Double priceInSek) {
+    public void setPriceInSek(BigDecimal priceInSek) {
         this.priceInSek = priceInSek;
     }
 
-    public Double getPriceInJpy() {
+    public BigDecimal getPriceInJpy() {
         return priceInJpy;
     }
-    public void setPriceInJpy(Double priceInJpy) {
+    public void setPriceInJpy(BigDecimal priceInJpy) {
         this.priceInJpy = priceInJpy;
     }
 
