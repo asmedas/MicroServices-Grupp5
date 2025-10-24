@@ -27,7 +27,7 @@ public class DishController {
         return ResponseEntity.ok(dishService.getAllDishes());
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Dish> createDish(@RequestBody DishCreationRequestDto dishDto) {
         if (dishDto.getName() == null || dishDto.getName().isEmpty()) {
@@ -43,7 +43,7 @@ public class DishController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDish);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Dish> getDishById(@PathVariable Integer id) {
         Dish dish = dishService.getAllDishes()
