@@ -28,6 +28,7 @@ public class RoomService {
     }
 
     public Room getRoomById(Integer id) {
+        logger.info("Room fetched");
         return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found"));
     }
 

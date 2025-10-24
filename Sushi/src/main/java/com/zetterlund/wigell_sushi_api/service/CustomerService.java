@@ -112,7 +112,7 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Integer customerId) {
-        logger.info("deleteCustomerById service class");
+        logger.info("Customer with id {} has been deleted", customerId);
         if (!customerRepository.existsById(customerId)) {
             throw new ResourceNotFoundException("Customer with id " + customerId + " not found.");
         }
