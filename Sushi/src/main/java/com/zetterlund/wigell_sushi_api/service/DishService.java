@@ -34,11 +34,17 @@ public class DishService {
     }
 
     public Dish addDish(Dish dish) {
-        logger.info("addDish service class");
+        logger.info("New dish has been added");
+
+        BigDecimal convertedPrice = callCurrencyApiService.convertFromSEKToJPY(dish.getPriceInSek());
+        dish.setPriceInJpy(convertedPrice);
+
         return dishRepository.save(dish);
     }
 
     public Dish updateDish(Integer dishId, DishCreationRequestDto dishDto) {
+        logger.info("Dish with id {} has been updated successfully", dishId);
+
         Dish existingDish = dishRepository.findById(dishId)
                 .orElseThrow(() -> new ResourceNotFoundException("Dish with id " + dishId + " not found."));
 
@@ -50,6 +56,8 @@ public class DishService {
     }
 
     public void deleteDishById(Integer dishId) {
+        logger.info("Dish with id {} has been deleted", dishId);
+
         if (!dishRepository.existsById(dishId)) {
             throw new ResourceNotFoundException("Dish with id " + dishId + " not found.");
         }
