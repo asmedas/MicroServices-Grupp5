@@ -61,7 +61,7 @@ logging:
 
 converter:
   service:
-    url: http://localhost:8700/api/convert
+    url: http://localhost:8080/convert/api/convert
 internal:
   api:
     key: 123456789
