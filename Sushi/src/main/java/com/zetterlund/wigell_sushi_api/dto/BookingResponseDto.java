@@ -7,6 +7,8 @@ public class BookingResponseDto {
     private String roomName;
     private LocalDateTime date;
     private int guestCount;
+    private String catering;
+    private boolean technicalEquipment;
 
     // Getters och setters
     public Integer getBookingId() {
@@ -34,5 +36,19 @@ public class BookingResponseDto {
     }
     public void setGuestCount(int guestCount) {
         this.guestCount = guestCount;
+    }
+
+    public String getCatering() {
+        return catering;
+    }
+    public void setCatering(String catering) {
+        this.catering = catering;
+    }
+
+    public boolean isTechnicalEquipment() {
+        return technicalEquipment;
+    }
+    public void setTechnicalEquipment(boolean technicalEquipment) {
+        this.technicalEquipment = technicalEquipment;
     }
 }

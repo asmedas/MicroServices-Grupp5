@@ -6,7 +6,9 @@ public class BookingRequestDto {
     private Integer roomId;
     private Integer customerId;
     private LocalDateTime date;
-    private int guestCount;
+    private Integer guestCount;
+    private String catering; // önskad förtäring
+    private Boolean technicalEquipment;
 
     // Getters och setters
     public Integer getRoomId() {
@@ -30,10 +32,20 @@ public class BookingRequestDto {
         this.date = date;
     }
 
-    public int getGuestCount() {
+    public Integer getGuestCount() {
         return guestCount;
     }
-    public void setGuestCount(int guestCount) {
+    public void setGuestCount(Integer guestCount) {
         this.guestCount = guestCount;
     }
+
+    public String getCatering() {
+        return catering;
+    }
+    public void setCatering(String catering) {
+        this.catering = catering;
+    }
+
+    public Boolean getTechnicalEquipment() { return technicalEquipment; }
+    public void setTechnicalEquipment(Boolean technicalEquipment) { this.technicalEquipment = technicalEquipment; }
 }

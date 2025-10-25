@@ -2,6 +2,7 @@ package com.zetterlund.wigell_sushi_api.controller;
 
 import com.zetterlund.wigell_sushi_api.dto.OrderDto;
 import com.zetterlund.wigell_sushi_api.dto.OrderOverviewDto;
+import com.zetterlund.wigell_sushi_api.dto.OrderRequestDto;
 import com.zetterlund.wigell_sushi_api.entity.Order;
 import com.zetterlund.wigell_sushi_api.service.OrderService;
 import com.zetterlund.wigell_sushi_api.repository.OrderRepository;
@@ -43,9 +44,18 @@ public class OrderController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public ResponseEntity<List<Order>> getOrdersByCustomerId(@RequestParam Long customerId) {
+    public ResponseEntity<List<OrderOverviewDto>> getOrdersByCustomerId(@RequestParam Integer customerId) {
         List<Order> orders = orderService.getOrdersByCustomerId(customerId);
-        return ResponseEntity.ok(orders);
+
+        List<OrderOverviewDto> dtoList = orders.stream().map(order -> {
+            OrderOverviewDto dto = new OrderOverviewDto();
+            dto.setOrderId(order.getId());
+            dto.setCustomerName(order.getCustomer().getFirstName());
+            dto.setTotalPriceInSek(order.getTotalPriceInSek());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(dtoList);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -63,8 +73,14 @@ public class OrderController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.addOrder(order);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+    public ResponseEntity<OrderOverviewDto> createOrder(@RequestBody OrderRequestDto orderDto) {
+        Order createdOrder = orderService.addOrder(orderDto);
+
+        OrderOverviewDto responseDto = new OrderOverviewDto();
+        responseDto.setOrderId(createdOrder.getId());
+        responseDto.setCustomerName(createdOrder.getCustomer().getFirstName());
+        responseDto.setTotalPriceInSek(createdOrder.getTotalPriceInSek());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 }
