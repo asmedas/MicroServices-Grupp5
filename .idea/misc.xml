@@ -5,8 +5,11 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/Sushi/pom.xml" />
+        <option value="$PROJECT_DIR$/Travels/pom.xml" />
+        <option value="$PROJECT_DIR$/dashboard/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="openjdk-24" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="corretto-24" project-jdk-type="JavaSDK" />
 </project>
