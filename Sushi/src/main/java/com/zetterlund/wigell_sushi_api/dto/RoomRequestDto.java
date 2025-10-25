@@ -1,6 +1,5 @@
 package com.zetterlund.wigell_sushi_api.dto;
 
-// För skapande/uppdatering av nya rum
 public class RoomRequestDto {
     private String name;
     private int maxGuests;

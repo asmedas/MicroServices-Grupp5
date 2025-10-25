@@ -34,10 +34,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/**").permitAll()
 
-                        .requestMatchers("/api/v1/orders**").permitAll()
+                        .requestMatchers("/api/v1/bookings", "/api/v1/bookings/**").hasRole( "USER")
+
+                        .requestMatchers("/api/v1/orders**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/v1/dishes/**").hasAnyRole("USER", "ADMIN")
+
                         .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/**").hasRole("USER")
+                        .requestMatchers("/api/v1/rooms/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/addresses/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())))

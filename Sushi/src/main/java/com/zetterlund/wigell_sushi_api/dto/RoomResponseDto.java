@@ -1,6 +1,5 @@
 package com.zetterlund.wigell_sushi_api.dto;
 
-// För utdata, returnerar bara viktig info om rummet
 public class RoomResponseDto {
     private Integer id;
     private String name;

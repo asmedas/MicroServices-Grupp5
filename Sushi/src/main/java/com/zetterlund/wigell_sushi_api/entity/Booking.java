@@ -25,14 +25,20 @@ public class Booking {
     private Customer customer;
 
     @Column(nullable = false)
-    private int guestCount;
+    private Integer guestCount;
+
+    @Column(name = "catering")
+    private String catering; // önskad förtäring
+
+    @Column(name = "technical_equipment", nullable = false)
+    private boolean technicalEquipment;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetails> bookingDetails = new ArrayList<>();
 
     public Booking() {}
 
-    public Booking(Integer id, LocalDateTime date, Room room, Customer customer, int guestCount) {
+    public Booking(Integer id, LocalDateTime date, Room room, Customer customer, Integer guestCount) {
         this.id = id;
         this.date = date;
         this.room = room;
@@ -69,11 +75,25 @@ public class Booking {
         this.customer = customer;
     }
 
-    public int getGuestCount() {
+    public Integer getGuestCount() {
         return guestCount;
     }
-    public void setGuestCount(int guestCount) {
+    public void setGuestCount(Integer guestCount) {
         this.guestCount = guestCount;
+    }
+
+    public String getCatering() {
+        return catering;
+    }
+    public void setCatering(String catering) {
+        this.catering = catering;
+    }
+
+    public boolean isTechnicalEquipment() {
+        return technicalEquipment;
+    }
+    public void setTechnicalEquipment(boolean technicalEquipment) {
+        this.technicalEquipment = technicalEquipment;
     }
 
     public List<BookingDetails> getBookingDetails() {

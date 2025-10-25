@@ -98,6 +98,9 @@ public class DatabaseInitializer {
                 Booking book3 = bookingRepo.save(new Booking(null,
                         LocalDateTime.of(2025,10,10,20,0),
                         vipLounge, pippin, 10));
+            System.out.println("GANDALF id {" + gandalf.getId() + "}, book 1 id - " + book1.getId());
+            System.out.println("MERRY id {" + merry.getId() + "}, book 2 id - " + book2.getId());
+            System.out.println("PIPPIN id {" + pippin.getId() + "}, book3 id - " + book3.getId());
 
                 bookingDetailRepo.save(new BookingDetails(null, book1, sushi, 2));
                 bookingDetailRepo.save(new BookingDetails(null, book1, edamame, 5));
