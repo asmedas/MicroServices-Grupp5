@@ -1,0 +1,64 @@
+server:
+  port: 8581
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:6606/wigell_travel_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:8590/realms/keycloak"
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        username: admin
+        password: admin
+        instance:
+          management-base-url: http://localhost:8581
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.miriam.travel: DEBUG
+
+keycloak:
+  server-url: http://localhost:8590
+  realm: keycloak
+
+keycloak.admin:
+  realm: keycloak
+  client-id: travel-admin
+  client-secret: F6hm7y3oo45kPqr123NXYZ67BcdtJvwL
+
+converter:
+  base-url: http://localhost:8700/api/convert
+  api-key: 123456789
+
+
+application:
+  name: Travels
