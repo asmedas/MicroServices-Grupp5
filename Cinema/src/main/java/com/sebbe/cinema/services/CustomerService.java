@@ -107,13 +107,6 @@ public class CustomerService {
             for (Booking b : new ArrayList<>(customer.getBookings())) {
                 b.removeBookingFromConnections();
             }
-            try{
-                keycloakUserService.deleteUser(customer.getKeycloakId());
-            } catch (DataAccessException ex) {
-                    log.error("Failed to update Keycloak profile for customer {} (keycloakId={})",
-                    customer.getId(), customer.getKeycloakId(), ex);
-                    throw new UnexpectedError("Keycloak update failed " + ex);
-                }
             customerRepository.delete(customer);
 
         } catch (DataAccessException e) {
