@@ -67,12 +67,9 @@ public class CustomerService {
 
             Customer customer = CustomerMapper.buildCustomerFromCreateDto(dto, keycloakId, address);
 
-            customer.addAddress(address);
             return customerRepository.save(customer);
         } catch (DataAccessException | PersistenceException ex) {
-            if (keycloakId != null) {
-                safeDeleteKeycloakUser(keycloakId);
-            }
+            log.error("Database error during customer creation (Keycloak user left intact):", ex);
             throw ex;
         } catch (RuntimeException ex) {
             log.error("Unexpected runtime exception during customer creation (Keycloak user left intact):", ex);
@@ -279,16 +276,6 @@ public class CustomerService {
             keycloakUserService.updateUserProfile(customer.getKeycloakId(), rollbackDto);
         } catch (Exception rollbackEx) {
             log.error("Rollback of Keycloak update failed for customer {}", id, rollbackEx);
-        }
-    }
-
-    private void safeDeleteKeycloakUser(String keycloakId){
-        log.warn("Rolling back Keycloak user due to persistence failure: {}", keycloakId);
-        try {
-            keycloakUserService.deleteUser(keycloakId);
-        } catch (Exception cleanupEx) {
-            log.error("Failed to rollback Keycloak user creation", cleanupEx);
-            throw new UnexpectedError("Failed to rollback Keycloak user creation");
         }
     }
 

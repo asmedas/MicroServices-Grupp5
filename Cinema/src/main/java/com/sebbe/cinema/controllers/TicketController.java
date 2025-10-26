@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class TicketController {
     @PostMapping
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Ticket> buyTicket(@RequestBody @Valid CreateTicketDto dto) {
-        return ResponseEntity.ok(ticketService.createTicket(dto.screeningId()));
+        return ResponseEntity.created(URI.create("api/v1/tickets")).body(ticketService.createTicket(dto.screeningId()));
     }
 
     @GetMapping(params = "customerId")
