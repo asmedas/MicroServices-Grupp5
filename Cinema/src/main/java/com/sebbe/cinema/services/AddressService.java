@@ -4,16 +4,15 @@ import com.sebbe.cinema.dtos.addressDtos.CreateAddressDto;
 import com.sebbe.cinema.entities.Address;
 import com.sebbe.cinema.exceptions.NoMatchException;
 import com.sebbe.cinema.repositories.AddressRepository;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AddressService {
 
     private final AddressRepository addressRepository;

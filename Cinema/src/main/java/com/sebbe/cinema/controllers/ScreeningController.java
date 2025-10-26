@@ -25,14 +25,14 @@ public class ScreeningController {
 
     //cinema/screenings?filmId=1&date=2025-10-08
     @GetMapping(params = {"filmId", "date"})
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CustomerScreeningDto>> getScreeningsByFilmIdAndDate(
             @RequestParam Long filmId, @RequestParam LocalDate date) {
         return ResponseEntity.ok(screeningService.getScreeningsByFilmIdAndDate(filmId, date));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<ScreeningDto> listScreenings() {
         return screeningService.findAll();
     }
@@ -46,13 +46,13 @@ public class ScreeningController {
      * }
      */
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ScreeningDto> createScreening(@RequestBody @Valid CreateScreeningDto dto) {
         return ResponseEntity.created(URI.create("/api/v1/screenings")).body(screeningService.createScreening(dto));
     }
 
     @DeleteMapping("/{screeningId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteScreening(@PathVariable Long screeningId) {
         screeningService.deleteScreening(screeningId);
         return ResponseEntity.noContent().build();

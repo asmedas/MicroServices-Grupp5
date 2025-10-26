@@ -7,7 +7,6 @@ import com.sebbe.cinema.enums.TechnicalEquipment;
 import com.sebbe.cinema.exceptions.NoMatchException;
 import com.sebbe.cinema.exceptions.UnexpectedError;
 import com.sebbe.cinema.repositories.*;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -15,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -42,7 +42,6 @@ public class BookingService {
         this.filmRepository = filmRepository;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     public Booking createBooking(CreateBookingDto createBookingDto) {
         log.debug("Creating booking for customer with keycloakId: {}", SecurityContextHolder.getContext().getAuthentication().getName());
         String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -99,7 +98,6 @@ public class BookingService {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     public Booking patchBookingById(Long bookingId, PatchBookingDto patchBookingDto){
         String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = customerRepository.findByKeycloakId(keycloakId)
@@ -126,7 +124,8 @@ public class BookingService {
         return bookingRepository.save(existingBooking);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') and @ownership.isSelf(authentication, #customerId)")
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Booking> getBookingsByCustomerId(Long customerId){
         log.debug("Fetching bookings by customerId: {}", customerId);
         if(customerRepository.findById(customerId).isEmpty()){

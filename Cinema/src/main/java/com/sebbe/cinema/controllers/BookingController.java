@@ -33,7 +33,7 @@ public class BookingController {
      * }
      */
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Booking> createBooking(@RequestBody @Valid CreateBookingDto bookingRequest) {
         return ResponseEntity.created(URI.create("/api/v1/bookings")).body(bookingService.createBooking(bookingRequest));
     }
@@ -45,7 +45,7 @@ public class BookingController {
      * }
      */
     @PatchMapping("/{bookingId}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Booking> updateBooking(@PathVariable Long bookingId,
                                 @RequestBody @Valid PatchBookingDto dto) {
         return ResponseEntity.ok(bookingService.patchBookingById(bookingId, dto));
@@ -53,7 +53,7 @@ public class BookingController {
 
     // släpps endast igenom om customerId stämmer överens med den nuvarande användaren
     @GetMapping(params = "customerId")
-    @PreAuthorize("hasRole('ROLE_USER') and @ownership.isSelf(authentication, #customerId)")
+    @PreAuthorize("hasRole('USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Booking> listBookingsByCustomer(@RequestParam Long customerId) {
         return bookingService.getBookingsByCustomerId(customerId);
     }

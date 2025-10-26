@@ -44,7 +44,6 @@ public class ScreeningService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<ScreeningDto> findAll(){
         log.debug("Fetching all screenings");
         return screeningRepository.findAll().stream()
@@ -59,7 +58,6 @@ public class ScreeningService {
     }
 
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ROLE_USER')")
     public List<CustomerScreeningDto> getScreeningsByFilmIdAndDate(Long filmId, LocalDate date){
         log.debug("Fetching screenings by filmId: {} and date: {}", filmId, date);
         return screeningRepository.getScreeningsByFilmIdAndDate(filmId, date).stream()
@@ -67,7 +65,6 @@ public class ScreeningService {
                 .toList();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ScreeningDto createScreening(CreateScreeningDto createScreeningDto){
         log.debug("Creating screening with filmId: {}, speakerName: {}, cinemaHallId: {}",
                 createScreeningDto.filmId(), createScreeningDto.speakerName(), createScreeningDto.cinemaHallId());
@@ -101,7 +98,6 @@ public class ScreeningService {
         return ScreeningMapper.toFilmDto(screening);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteScreening(Long id){
         log.debug("Deleting screening with id {}", id);
         Screening screening = screeningRepository.findById(id)

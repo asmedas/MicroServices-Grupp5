@@ -25,13 +25,13 @@ public class FilmController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<FilmDto>> listFilms() {
         return ResponseEntity.ok(filmService.findAll());
     }
 
     @GetMapping("/{movieId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FilmDto> getFilm(@PathVariable Long movieId) {
         return ResponseEntity.ok(filmService.findById(movieId));
     }
@@ -45,7 +45,7 @@ public class FilmController {
      * }
      */
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FilmDto> createFilm(@RequestBody @Valid CreateFilmDto dto) {
         log.info("User tries adding new film {}", dto);
         FilmDto created = filmService.createFilm(dto);
@@ -54,7 +54,7 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFilm(@PathVariable Long id) {
         log.info("User tries deleting film {}", id);
         filmService.deleteFilm(id);

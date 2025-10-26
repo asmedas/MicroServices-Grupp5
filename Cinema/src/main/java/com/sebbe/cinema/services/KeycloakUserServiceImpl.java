@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class KeycloakUserServiceImpl implements KeycloakUserService {
@@ -26,7 +24,6 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
     private final Keycloak keycloak;
     private final String realm;
     private final CustomerRepository customerRepository;
-    private static final String[] USERS_TO_DELETE = {"gunnar", "ingrid", "gabbi"};
     private static final Logger log = LoggerFactory.getLogger(KeycloakUserServiceImpl.class);
 
     public KeycloakUserServiceImpl(Keycloak keycloak,
@@ -38,52 +35,13 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
     }
 
     /**
-     * då jag kör create-drop så är såklart keycloaks databas ej påverkad när min applikation stängs ner.
-     * därför körs denna vid startup så min User data återställs till endast två användare vid startup;
-     * user och admin
+     * Då uppgiften var just att "lägga till kund" och inte "lägga till kund eller admin" så har jag
+     * då skrivit denna fast med en hårdkodad roll som just USER vilket jag tycker är lämpligt i detta fall.
+     * Denna metod återanvänder även keycloak-användare om uppgifterna matchar med en existerande keycloak-användare
+     * då tanken med keycloak var att en keycloak användare skulle komma åt alla microtjänster, inkluderande att
+     * kunna köpa biljetter som då knyts mot den specifikt inloggade kunden.
+     * Detta tillåter oss att använda samma keycloak-användare i allas microtjänster om vi så vill.
      */
-    @Override
-    public void initializeUsersOnStartup() {
-        log.debug("Resetting keycloak user-database to only user and admin");
-        var usersResource = realm().users();
-        var allUsers = usersResource.list();
-
-        log.debug("Found {} total users in Keycloak", allUsers.size());
-
-        var usersToDelete = allUsers.stream()
-                .filter(user -> {
-                    String username = user.getUsername();
-                    return username != null &&
-                            Stream.of(USERS_TO_DELETE)
-                                    .anyMatch(protectedUser -> protectedUser.equalsIgnoreCase(username));
-                })
-                .toList();
-
-        log.debug("Found {} users to delete (excluding protected: {})",
-                usersToDelete.size(), String.join(", ", USERS_TO_DELETE));
-
-        for (UserRepresentation user : usersToDelete) {
-            String username = user.getUsername();
-            String userId = user.getId();
-
-            try {
-                log.debug("Deleting user: {} (ID: {})", username, userId);
-                usersResource.delete(userId);
-                log.info("Successfully deleted user: {}", username);
-            } catch (Exception e) {
-                log.warn("Failed to delete user {} (ID: {}): {}", username, userId, e.getMessage());
-            }
-        }
-
-        var remainingUsers = usersResource.list();
-        var remainingUsernames = remainingUsers.stream()
-                .map(UserRepresentation::getUsername)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        log.info("=== Keycloak initialization complete ===");
-        log.info("Remaining users: {}", String.join(", ", remainingUsernames));
-    }
 
 
     @Override
