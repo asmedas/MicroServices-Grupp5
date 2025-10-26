@@ -22,6 +22,9 @@ spring:
         jwt:
           issuer-uri: "http://localhost:8590/realms/keycloak"
 
+  application:
+    name: Travels
+
   boot:
     admin:
       client:
@@ -60,5 +63,3 @@ converter:
   api-key: 123456789
 
 
-application:
-  name: Travels
