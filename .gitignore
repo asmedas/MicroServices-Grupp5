@@ -16,3 +16,7 @@ out/
 # OS files
 .DS_Store
 Thumbs.db
+
+
+# Ignore MySQL data folder (local DB files)
+keycloak/mysql/
