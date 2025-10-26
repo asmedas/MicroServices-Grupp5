@@ -39,8 +39,8 @@ public class CustomerService {
                         c.getUsername(),
                         c.getFullName(),
                         c.getEmail(),
-                        c.getAddresses() != null ? c.getAddresses().size() : 0,
-                        c.getBookings() != null ? c.getBookings().size() : 0
+                        c.getAddresses(),
+                        c.getBookings()
                 )).toList();
     }
 
