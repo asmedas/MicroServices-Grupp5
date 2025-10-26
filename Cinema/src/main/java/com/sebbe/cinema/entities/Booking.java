@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "booking")
@@ -52,8 +51,8 @@ public class Booking {
     private List<Type> type = new ArrayList<>();
 
     @Positive
-    @Column(name = "seats", nullable = false)
-    private int seats;
+    @Column(name = "guests", nullable = false)
+    private int guests;
 
     @Positive
     @Column(name = "total_price_sek", nullable = false)
@@ -80,7 +79,7 @@ public class Booking {
         this.film = film;
         this.technicalEquipment = technicalEquipment;
         this.type = List.of(Type.FILM);
-        this.seats = cinemaHall.getMaxSeats();
+        this.guests = cinemaHall.getMaxSeats();
         this.createdAt = LocalDateTime.now();
         this.date = date;
     }
@@ -91,7 +90,7 @@ public class Booking {
         this.speaker = speaker;
         this.technicalEquipment = technicalEquipment;
         this.type = List.of(Type.FILM);
-        this.seats = cinemaHall.getMaxSeats();
+        this.guests = cinemaHall.getMaxSeats();
         this.createdAt = LocalDateTime.now();
         this.date = date;
     }
@@ -123,12 +122,12 @@ public class Booking {
         this.cinemaHall = cinemaHall;
     }
 
-    public int getSeats() {
-        return seats;
+    public int getGuests() {
+        return guests;
     }
 
-    public void setSeats(int seats) {
-        this.seats = seats;
+    public void setGuests(int seats) {
+        this.guests = seats;
     }
 
     public BigDecimal getTotalPriceSek() {

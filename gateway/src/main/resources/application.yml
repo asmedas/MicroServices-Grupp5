@@ -63,10 +63,11 @@ spring:
           issuer-uri: "http://localhost:8590/realms/keycloak"
 
 management:
-  endpoint:
-    health:
-      show-details: always
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health, info
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
