@@ -5,6 +5,7 @@ import com.sebbe.cinema.dtos.customerDtos.CreateCustomerWithAccountDto;
 import com.sebbe.cinema.dtos.customerDtos.CustomerDto;
 import com.sebbe.cinema.dtos.customerDtos.CustomerUpdateDto;
 import com.sebbe.cinema.entities.Customer;
+import com.sebbe.cinema.mappers.CustomerMapper;
 import com.sebbe.cinema.services.CustomerService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -53,10 +54,10 @@ public class CustomerController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody @Valid CreateCustomerWithAccountDto createCustomerWithAccountDto) {
+    public ResponseEntity<CustomerDto> createCustomer(@RequestBody @Valid CreateCustomerWithAccountDto createCustomerWithAccountDto) {
         log.info("Creating customer with account: {}", createCustomerWithAccountDto);
         return ResponseEntity.created(URI.create("api/v1/customers"))
-                .body(customerService.createCustomerWithKeycloakUserAndAddress(createCustomerWithAccountDto));
+                .body(CustomerMapper.toDto(customerService.createCustomerWithKeycloakUserAndAddress(createCustomerWithAccountDto)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
