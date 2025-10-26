@@ -30,7 +30,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CustomerService {
 
     private final CustomerRepository customerRepository;

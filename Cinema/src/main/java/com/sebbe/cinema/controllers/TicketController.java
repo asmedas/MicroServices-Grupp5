@@ -21,13 +21,13 @@ public class TicketController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Ticket> buyTicket(@RequestBody @Valid CreateTicketDto dto) {
         return ResponseEntity.ok(ticketService.createTicket(dto.screeningId()));
     }
 
     @GetMapping(params = "customerId")
-    @PreAuthorize("hasRole('ROLE_USER') and @ownership.isSelf(authentication, #customerId)")
+    @PreAuthorize("hasRole('USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Ticket> listTickets(@RequestParam Long customerId) {
         return ticketService.getTicketsByCustomerId(customerId);
     }

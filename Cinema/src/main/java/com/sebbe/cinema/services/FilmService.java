@@ -29,7 +29,6 @@ public class FilmService {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public List<FilmDto> findAll() {
         List<Film> films = filmRepository.findAll();
@@ -39,7 +38,6 @@ public class FilmService {
                 .toList();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public FilmDto findById(Long id) {
         log.debug("Looking up film with id {}", id);
@@ -54,7 +52,6 @@ public class FilmService {
                 });
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public FilmDto createFilm(CreateFilmDto dto) {
         log.debug("Creating new film with title {}", dto.title());
         if(!filmRepository.findByTitleIgnoreCase(dto.title()).isEmpty()){
@@ -87,7 +84,6 @@ public class FilmService {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteFilm(Long id) {
         log.debug("Deleting film with id {}", id);
         Film film = filmRepository.findById(id)

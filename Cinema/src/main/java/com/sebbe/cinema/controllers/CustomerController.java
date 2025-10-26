@@ -30,7 +30,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<CustomerDto>> listCustomers() {
         return ResponseEntity.ok(customerService.listCustomers());
@@ -51,7 +51,7 @@ public class CustomerController {
      *   }
      * }
      */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody @Valid CreateCustomerWithAccountDto createCustomerWithAccountDto) {
         log.info("Creating customer with account: {}", createCustomerWithAccountDto);
@@ -59,7 +59,7 @@ public class CustomerController {
                 .body(customerService.createCustomerWithKeycloakUserAndAddress(createCustomerWithAccountDto));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -76,7 +76,7 @@ public class CustomerController {
      *     "age": 35
      * }
      */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDto> updateCustomer(
             @PathVariable Long customerId,
@@ -93,7 +93,7 @@ public class CustomerController {
      *        }
      * }
      */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{customerId}/addresses")
     public ResponseEntity<CustomerDto> addAddressToCustomer(
             @PathVariable Long customerId,
@@ -101,7 +101,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.addAddress(customerId, addressDto));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{customerId}/addresses/{addressId}")
     public ResponseEntity<?> deleteAddressFromCustomer(@PathVariable Long customerId, @PathVariable Long addressId) {
         customerService.removeAddress(customerId, addressId);

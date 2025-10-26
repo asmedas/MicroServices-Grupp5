@@ -38,7 +38,6 @@ public class TicketService {
         this.screeningRepository = screeningRepository;
     }
 
-    @PreAuthorize("hasRole('USER')")
     public Ticket createTicket(Long screeningId) {
         String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = customerRepository.findByKeycloakId(keycloakId)
@@ -58,6 +57,7 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    @Transactional(readOnly = true)
     @PreAuthorize("hasRole('USER') and @ownership.isSelf(authentication, #customerId)")
     public List<Ticket> getTicketsByCustomerId(Long customerId){
         log.debug("Fetching tickets for current user");
